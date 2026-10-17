@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
 import { test } from 'node:test'
 import { swaras, arohanam, avarohanam, frequency, formatSwara, shrutiKeys, defaultShrutiIndex } from '../src/data/swaras'
 import { adiTalam, kriyas } from '../src/data/talas'
@@ -58,26 +59,30 @@ test('all 14 lessons preserve holds, octave transitions and complete cycles at e
 
 
 
-test('two curriculum chapters preserve all 23 exercises', () => {
-  assert.deepEqual(curriculum.map(chapter => [chapter.id, chapter.lessons.length]), [['sarali', 14], ['janta', 9]])
+test('two curriculum chapters preserve all 26 exercises in printed order', () => {
+  assert.deepEqual(curriculum.map(chapter => [chapter.id, chapter.lessons.length]), [['sarali', 14], ['janta', 12]])
+  assert.deepEqual(jantaVarisai.map(lesson => lesson.label), ['1', '2', '3', '4', '5', '5A', '6', '7', '8', '8A', '9', '10'])
 })
 
-test('Janta 1–9 preserve reference patterns, holds, directions and complete Adi cycles', () => {
+test('Janta reordered patterns, extensions and holds fill complete Adi cycles at every kaalam', () => {
   const firstRows = [
-    's s r r g g m m', 's s r r g g m m', 's s r r g g r r',
-    's s r s s r s r', 's s r r g s r g', 's s , r r , g g',
-    's , s r , r g g', 's s s r r r g g', 's , r g , s r g',
+    's s r r g g m m', 's s r r g g m m', 's s r s s r s r',
+    's s r r g s r g', 's s r r g g r r', 'm m g g r r g g',
+    's s , r r , g g', 's , s r , r g g', 's s s r r r g g',
+    's , s r , r g g', 's s m m g g r r', 's , r g , s r g',
   ]
-  const expectedHolds = [0, 0, 0, 0, 0, 20, 20, 0, 20]
-  const expectedLengths = [32, 80, 160, 160, 160, 160, 160, 160, 160]
+  const expectedHolds = [0, 0, 0, 0, 0, 0, 20, 20, 0, 40, 0, 20]
+  const expectedLengths = [32, 80, 160, 160, 160, 160, 160, 160, 160, 320, 160, 160]
   jantaVarisai.forEach((lesson, index) => {
     assert.equal(lesson.number, index + 1)
     assert.equal(lesson.units.length, expectedLengths[index])
     assert.deepEqual(lesson.units.slice(0, 8), parseNotation(firstRows[index]))
     assert.equal(lesson.units.filter(unit => unit.kind === 'hold').length, expectedHolds[index])
     assert.deepEqual(lesson.sections.flatMap(section => section.units), lesson.units)
-    assert.deepEqual(lesson.sections[1].units[0], { kind: 'note', note: { swara: 'S', octave: 1 } })
-    assert.deepEqual(lesson.units.at(-1), { kind: 'note', note: { swara: 'S', octave: 0 } })
+    if (lesson.label !== '5A') {
+      assert.deepEqual(lesson.sections[1].units[0], { kind: 'note', note: { swara: 'S', octave: 1 } })
+      assert.deepEqual(lesson.units.at(-1), { kind: 'note', note: { swara: 'S', octave: 0 } })
+    }
     lesson.units.forEach(unit => {
       if (unit.kind === 'note') assert.ok(arohanam.some(note => note.swara === unit.note.swara && note.octave === unit.note.octave))
     })
@@ -92,6 +97,67 @@ test('Janta 1–9 preserve reference patterns, holds, directions and complete Ad
     }
   })
   assert.deepEqual(jantaVarisai[0].units, parseNotation('s s r r g g m m / p p d d n n S S / S S n n d d p p / m m g g r r s s'))
+})
+
+test('reordered 3–5, unchanged 6–8 and moved 10 preserve their committed note sequences', () => {
+  // SHA-256 fixtures captured from the full units in commit a067154, before
+  // reordering. These protect every note, register and hold, not just a prefix.
+  const fingerprints = {
+    '3': 'e18063e922d854e323b8d4837da2f0850a1c4f55625c9d61c48f6e94bee54b81',
+    '4': '13fcd1b8207a77cec2fa2629b4c7f65c0eb80e31e303eb770457933973751df0',
+    '5': 'a677e6ba6b0eefde3361db1c2de3e64c2c47d497870213f65c964cb953d35455',
+    '6': '0f2ec73a2e1d368ea0402df5e870c87fd7cdc89aef77400a6495abaa6c083d09',
+    '7': 'ae10a2abde1e23360f82760d1a91eaf94914528217911bb8f5c9403c2fb9552c',
+    '8': 'c232a15cbfcbd630789c1e209398ddd2dd1d62420f7d6da6c21e2620814a0509',
+    '10': '8e2b917c17da3d37ed7490615bc59804992c8baf6a3516785fc06d1393527fa6',
+  }
+  Object.entries(fingerprints).forEach(([label, expected]) => {
+    const lesson = jantaVarisai.find(item => item.label === label)!
+    assert.equal(createHash('sha256').update(JSON.stringify(lesson.units)).digest('hex'), expected, 'Lesson ' + label)
+  })
+})
+
+test('5A is the within-window inverse of 5 across both directions', () => {
+  const forward = jantaVarisai.find(lesson => lesson.label === '5')!
+  const inverse = jantaVarisai.find(lesson => lesson.label === '5A')!
+  assert.deepEqual(inverse.units.slice(0, 16), parseNotation('m m g g r r g g / m m g g r r s s'))
+  const rank = (unit: (typeof forward.units)[number]) => {
+    assert.equal(unit.kind, 'note')
+    if (unit.kind !== 'note') throw Error('Unexpected hold')
+    return arohanam.findIndex(note => note.swara === unit.note.swara && note.octave === unit.note.octave)
+  }
+  forward.sections.forEach((section, direction) => {
+    const mirrored = inverse.sections[direction].units
+    section.units.forEach((unit, index) => {
+      const window = Math.floor(index / 16)
+      assert.equal(rank(unit) + rank(mirrored[index]), direction === 0 ? window * 2 + 3 : 11 - window * 2)
+    })
+  })
+})
+
+test('8A preserves the supplied 32-unit cycles, upper turnaround and symmetric descent', () => {
+  const lesson = jantaVarisai.find(item => item.label === '8A')!
+  const expectedFirstCycles = [
+    's , s r , r g g / s s , r r , g g / s s s r r r g g / s s r r g g m m',
+    'r , r g , g m m / r r , g g , m m / r r r g g g m m / r r g g m m p p',
+    'g , g m , m p p / g g , m m , p p / g g g m m m p p / g g m m p p d d',
+  ]
+  expectedFirstCycles.forEach((phrase, index) => assert.deepEqual(lesson.units.slice(index * 32, (index + 1) * 32), parseNotation(phrase)))
+  assert.deepEqual(lesson.sections[0].units.slice(-32), parseNotation('p , p d , d n n / p p , d d , n n / p p p d d d n n / p p d d n n S S'))
+  assert.deepEqual(lesson.sections[1].units.slice(0, 32), parseNotation('S , S n , n d d / S S , n n , d d / S S S n n n d d / S S n n d d p p'))
+  assert.deepEqual(lesson.sections[1].units.slice(-32), parseNotation('m , m g , g r r / m m , g g , r r / m m m g g g r r / m m g g r r s s'))
+  assert.equal(lesson.kaalams[2].avartanams.length, 20) // two cycles per scalar window
+})
+
+test('new Lesson 9 matches every textbook leap phrase in both directions', () => {
+  const lesson = jantaVarisai.find(item => item.label === '9')!
+  assert.deepEqual(lesson.units, parseNotation(
+    's s m m g g r r / s s r r g g m m / r r p p m m g g / r r g g m m p p / ' +
+    'g g d d p p m m / g g m m p p d d / m m n n d d p p / m m p p d d n n / ' +
+    'p p S S n n d d / p p d d n n S S / S S p p d d n n / S S n n d d p p / ' +
+    'n n m m p p d d / n n d d p p m m / d d g g m m p p / d d p p m m g g / ' +
+    'p p r r g g m m / p p m m g g r r / m m s s r r g g / m m g g r r s s',
+  ))
 })
 
 test('shruti covers all 12 pitch classes and defaults to G sharp', () => {

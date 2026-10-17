@@ -4,7 +4,7 @@ import { curriculum, getChapter } from '../data/curriculum'
 import { createShrutiVoice } from './shrutiVoice'
 import { createWarmVoice } from './voice'
 import type { Voice } from './voice'
-import { cursorAt, DRONE_NOTES, lessonUnits, noteFrequency, notesPerBeat, resolveNote, unitDuration, wrapPosition } from './transport'
+import { cursorAt, DRONE_VOICES, lessonUnits, noteFrequency, notesPerBeat, resolveNote, unitDuration, wrapPosition } from './transport'
 import type { LoopMode, PlaybackSnapshot } from './transport'
 
 export interface EngineRuntime {
@@ -270,10 +270,10 @@ export class CarnaticAudioEngine {
   private startDrone() {
     if (!this.context || !this.destination) return
     const start = this.renderNow() + START_LEAD
-    DRONE_NOTES.forEach((note, index) => {
+    DRONE_VOICES.forEach(({ note, volume, detuneCents }) => {
       let voice: Voice
       voice = createShrutiVoice(this.context!, this.destination!, noteFrequency(note, this.state.baseHz), start,
-        index === 2 ? 0.025 : 0.07, () => this.droneVoices.delete(voice))
+        volume, detuneCents, () => this.droneVoices.delete(voice))
       this.droneVoices.add(voice)
     })
   }

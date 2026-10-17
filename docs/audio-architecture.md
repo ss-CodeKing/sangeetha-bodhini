@@ -10,7 +10,7 @@ The UI cursor follows the same timeline. It uses [getOutputTimestamp](https://de
 
 Every swara uses the audited ratios in `swaras.ts`. A voice mixes 72% sine, 23% triangle and 5% second harmonic through a low-pass filter and a gentle envelope. A comma extends that voice's duration, including across beats. It never inserts a rest or a new attack.
 
-The electronic shruti box in `shrutiVoice.ts` sustains middle Sa (1/1), Pa (3/2) and soft lower Pa (3/4). Each pitch has two additive free reeds detuned by −2/+2 cents, mixed at 56%/44% to avoid complete phase cancellation. Harmonic amplitudes at 1f/2f/3f/5f/7f/9f are 0.46/0.26/0.16/0.065/0.03/0.015. The low-pass filter is 1000 Hz with Q 2.4. A 0.2 Hz LFO modulates amplitude and filter cutoff by 1.2%; it does not modulate the reference pitch. Gain rises over 350 ms, sustains, then fades over 120 ms before all reed and LFO sources stop and disconnect. The release explicitly anchors the current envelope value, including during an attack or a future scheduled stop. There are no plucks or sample-loop seams. Retuning fades old voices and starts the new chord. The hook owns lifecycle; the engine and voice factories own synthesis.
+The shared `DRONE_VOICES` configuration in `transport.ts` defines four sustained reeds: mandra Pa (3/4, gain 0.075), pure tara Sa (2/1, gain 0.045), tara Sa at +3.5 cents (2/1 before detuning, gain 0.035), and madhya Sa (1/1, gain 0.06). The pure and sharpened upper reeds create the chorus; bass and middle tonic remain unison. `shrutiVoice.ts` applies each reed's specified detuning and an additive harmonic profile. Amplitudes at 1f/2f/3f/5f/7f/9f are 0.52/0.23/0.14/0.065/0.03/0.015. The low-pass filter is 1000 Hz with Q 2.4. A 0.2 Hz LFO modulates amplitude and filter cutoff by 1.2%; it does not modulate the reference pitch. Gain rises over 350 ms, sustains, then fades over 120 ms before all reed and LFO sources stop and disconnect. The release explicitly anchors the current envelope value, including during an attack or a future scheduled stop. There are no plucks or sample-loop seams. Retuning fades old voices and starts the new chord. The hook owns lifecycle; the engine and voice factories own synthesis.
 
 Selecting any swarasthana directly auditions its pitch. Each sthayi button auditions Sa in that register, from anumandra through ati-tara; selecting the same button again replays it. Lesson speed buttons use the names Prathama kaalam, Dwithiya kaalam and Thrithiya kaalam.
 
@@ -30,7 +30,7 @@ Melody, drone and audition voices are tracked independently. Cancellation fades 
 
 ## Curriculum
 
-`curriculum.ts` catalogs Sarali (14 exercises) and Janta (9 exercises). A chapter ID and exercise number travel together through engine state, score lookup, seeking, looping and completion. Common parsing and full eight-beat mappings live in `notation.ts`. Both chapters use the same scheduling path. Janta pairs/triples are individual attacks; commas are sustained karvais. Exercises 1–9 follow the reference linked from the Studio, with the mirrored descent of exercise 1 documented in the README. Fixed-pitch playback does not reproduce the full vocal sphurita ornament.
+`curriculum.ts` catalogs Sarali (14 exercises) and Janta (12 exercises, printed as 1–10 plus 5A and 8A). Printed lesson labels are separate from one-based playback ordinals so extensions remain in the requested order. A chapter ID and exercise number travel together through engine state, score lookup, seeking, looping and completion. Common parsing and full eight-beat mappings live in `notation.ts`. Both chapters use the same scheduling path. Janta pairs/triples are individual attacks; commas are sustained karvais. The Janta order and extensions follow the teacher's corrections to the traditional reference linked from the Studio. Lessons 3/4/5 are the former 4/5/3; 6–8 are unchanged; previous 9 is now 10. In 5A, the motif reverses within each four-note window while window positions traverse both directions. The supplied 8A 16-unit lines each fill an eight-beat avartanam at second kaalam; all units, holds and attacks regroup without padding or truncation at first/third kaalam. Five windows reach tara Sa without adding pitches above it. Fixed-pitch playback does not reproduce the full vocal sphurita ornament.
 
 ## Verification
 
@@ -45,7 +45,7 @@ Earlier baseline measurements in the in-app Chromium browser:
 - Live output analyser RMS was nonzero at all speeds; pause froze the cursor.
 - Studio controls were exercised separately: live kaalam switching, 90 BPM, shruti changes, seeking a hold, selecting a lesson, current-cycle looping and independent drone operation.
 
-Reed and chapter verification on 2026-10-17:
+Earlier three-pitch reed and nine-exercise chapter verification on 2026-10-17 (before the corrections below):
 - All 26 deterministic curriculum and engine tests pass; every Janta exercise completes at all three kaalams with the expected individual attacks and held durations.
 - Typecheck, production build and lint pass with zero errors or warnings.
 - Browser OfflineAudioContext checks across all 12 tonics sustain the Sa–Pa–lower-Pa chord, overlap a high Sa audition and release to silence. Raw mixed peaks range from 0.2471 to 0.2742 (full scale = 1); the largest adjacent-sample step is 0.0338. These measurements precede the master compressor.
@@ -55,3 +55,10 @@ Reed and chapter verification on 2026-10-17:
 - The responsive Studio controls and score were inspected in the browser. Subjective timbre approval on the user's audio hardware remains a listening-review step.
 
 These measurements validate scheduled audio and browser output data. Perceived timbre and hardware latency can vary by device.
+
+## Verification after the curriculum and Panchama corrections (2026-10-17)
+
+- All 30 tests pass, including original-data fingerprints for reordered/retained exercises, exact 5A/8A/9 fixtures, every note onset and hold duration at all three kaalams, and the four configured reed pitches/detuning/mix levels. Typecheck, production build and lint pass.
+- The browser audio harness passes for all 12 tonics with the same shared four-reed configuration used by the live engine. Mixed drone/high-Sa peaks are 0.2818–0.3316, below full-scale clipping; maximum adjacent-sample step is 0.0325. Sustained output and release-to-silence checks pass.
+- Live melody onsets remain 1.000/0.500/0.250 seconds apart at 60 BPM, with maximum measured highlight/output lag 11.1/24.9/25.5 ms. The live drone/retuning/Janta check reports nonzero output (peak RMS 0.1531) and an independent stop.
+- The Studio dropdown lists 12 Janta exercises in the requested printed order. The 5A and 8A active headings match their selector labels. Lesson 8A plays at second kaalam, advances its score, displays all 40 karvais and produces nonzero output without alerts. The shared badge and tooltip identify Panchama Shruti: Mandra Pa · Tara Sa · Madhya Sa.

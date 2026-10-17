@@ -23,7 +23,9 @@ export interface KaalamMapping {
   avartanams: readonly Avartanam[]
 }
 export interface CurriculumLesson {
+  // One-based playback ordinal; the printed curriculum label may include A.
   number: number
+  label?: string
   title: string
   objective: string
   sections: readonly { label: string; units: readonly NotationUnit[] }[]

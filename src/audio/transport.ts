@@ -58,8 +58,11 @@ export function cursorAt(position: number, kaalam: Kaalam, length: number) {
   }
 }
 
-// Sa and its pure fifth, with a soft lower Pa for body.
-export const DRONE_NOTES: readonly SwaraNote[] = [
-  { swara: 'S', octave: 0 }, { swara: 'P', octave: 0 },
-  { swara: 'P', octave: -1 },
+// Panchama shruti: bass Pa, pure upper Sa, shimmering upper Sa, middle Sa.
+// Shared by live playback and offline verification so voicing stays identical.
+export const DRONE_VOICES: readonly { note: SwaraNote; detuneCents: number; volume: number }[] = [
+  { note: { swara: 'P', octave: -1 }, detuneCents: 0, volume: 0.075 },
+  { note: { swara: 'S', octave: 1 }, detuneCents: 0, volume: 0.045 },
+  { note: { swara: 'S', octave: 1 }, detuneCents: 3.5, volume: 0.035 },
+  { note: { swara: 'S', octave: 0 }, detuneCents: 0, volume: 0.06 },
 ]

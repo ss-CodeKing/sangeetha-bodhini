@@ -1,7 +1,9 @@
 import { useEffect, useState, useSyncExternalStore } from 'react'
 import { CarnaticAudioEngine } from '../audio/CarnaticAudioEngine'
 
-// Reed synthesis lives in audio/shrutiVoice.ts; this hook owns its lifecycle.
+// Panchama voicing (lower Pa, pure/detuned upper Sa, middle Sa) lives in
+// audio/transport.ts; reed synthesis lives in audio/shrutiVoice.ts.
+// This shared hook owns the engine lifecycle.
 // One shared engine survives Theory/Studio navigation. Context creation/resume
 // happens only in explicit user actions (play, drone toggle, swara audition).
 export function useCarnaticAudio() {

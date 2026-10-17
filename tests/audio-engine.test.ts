@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { CarnaticAudioEngine } from '../src/audio/CarnaticAudioEngine'
 import type { EngineRuntime } from '../src/audio/CarnaticAudioEngine'
-import { DRONE_NOTES, noteFrequency, unitDuration } from '../src/audio/transport'
+import { DRONE_VOICES, noteFrequency, unitDuration } from '../src/audio/transport'
 import type { Kaalam } from '../src/types/carnatic'
 import { BELLOWS_DEPTH, BELLOWS_HZ, REED_HARMONICS, REED_RELEASE } from '../src/audio/shrutiVoice'
 import { jantaVarisai } from '../src/data/jantaVarisai'
@@ -221,27 +221,29 @@ test('lesson and current-avartanam loops wrap on the sample-clock boundary', asy
 })
 
 test('shruti box sustains simultaneous reed tones and stops independently', async () => {
-  const { engine, advance, context, fundamentals } = setup()
-  assert.deepEqual(DRONE_NOTES.map(note => noteFrequency(note, 200)), [200, 300, 150])
+  const { engine, advance, context } = setup()
+  assert.deepEqual(DRONE_VOICES.map(voice => noteFrequency(voice.note, 200)), [150, 400, 400, 200])
   engine.configure({ baseHz: 200 })
   await engine.setDrone(true)
   advance(30)
-  assert.deepEqual(fundamentals().map(node => node.frequency.value), [200, 300, 150])
-  fundamentals().forEach(node => { near(node.startTime, 0.025); assert.equal(node.type, 'custom') })
-  assert.deepEqual(context.oscillators.filter(node => node.type === 'custom').map(node => node.detune.value), [-2, 2, -2, 2, -2, 2])
-  assert.deepEqual(context.oscillators.filter(node => node.type === 'sine').map(node => node.frequency.value), [BELLOWS_HZ, BELLOWS_HZ, BELLOWS_HZ])
+  const reeds = () => context.oscillators.filter(node => node.type === 'custom')
+  assert.deepEqual(reeds().map(node => node.frequency.value), [150, 400, 400, 200])
+  reeds().forEach(node => near(node.startTime, 0.025))
+  assert.deepEqual(reeds().map(node => node.detune.value), [0, 0, 3.5, 0])
+  near(reeds()[2].frequency.value * 2 ** (reeds()[2].detune.value / 1200), 400 * 2 ** (3.5 / 1200))
+  assert.deepEqual(context.oscillators.filter(node => node.type === 'sine').map(node => node.frequency.value), [BELLOWS_HZ, BELLOWS_HZ, BELLOWS_HZ, BELLOWS_HZ])
   assert.ok(BELLOWS_DEPTH < 0.015)
   context.filters.forEach(filter => { assert.equal(filter.frequency.value, 1000); assert.equal(filter.Q.value, 2.4) })
   context.waves.forEach(wave => assert.deepEqual(wave, new Float32Array(REED_HARMONICS)))
   assert.ok(context.oscillators.every(node => node.stopTimes.length === 0))
   const envelopes = context.gains.filter(node => node.gain.events.length > 0)
-  assert.equal(envelopes.length, 3)
+  assert.equal(envelopes.length, 4)
   envelopes.forEach((node, index) => {
     assert.equal(node.gain.events.length, 2) // Only a soft attack, no decay or repeated plucks.
-    assert.deepEqual(node.gain.events.map(event => event.value), [0, index === 2 ? 0.025 : 0.07])
+    assert.deepEqual(node.gain.events.map(event => event.value), [0, [0.075, 0.045, 0.035, 0.06][index]])
   })
   await engine.setDrone(true)
-  assert.equal(fundamentals().length, 3)
+  assert.equal(reeds().length, 4)
   const droneSources = [...context.oscillators]
   await engine.play()
   engine.pause()
@@ -254,15 +256,17 @@ test('shruti box sustains simultaneous reed tones and stops independently', asyn
 })
 
 test('changing shruti replaces the sustained drone and stop cancels every source', async () => {
-  const { engine, context, advance, fundamentals } = setup()
+  const { engine, context, advance } = setup()
   await engine.setDrone(true)
   advance(0.5)
   const oldSources = [...context.oscillators]
   engine.configure({ baseHz: 220 })
   assert.ok(oldSources.every(node => node.stopTimes.at(-1) === 0.5 + REED_RELEASE + 0.005))
-  assert.deepEqual(fundamentals().slice(3).map(node => node.frequency.value), [220, 330, 165])
+  const reeds = () => context.oscillators.filter(node => node.type === 'custom')
+  assert.deepEqual(reeds().slice(4).map(node => node.frequency.value), [165, 440, 440, 220])
+  assert.deepEqual(reeds().slice(4).map(node => node.detune.value), [0, 0, 3.5, 0])
   advance(10)
-  assert.equal(fundamentals().length, 6)
+  assert.equal(reeds().length, 8)
   engine.stopAll()
   assert.ok(context.oscillators.every(node => node.stopTimes.length > 0))
   engine.dispose()
@@ -281,7 +285,7 @@ test('audition plays Sa in all five registers and replaces the previous note', a
 })
 
 for (const kaalam of [1, 2, 3] as Kaalam[]) {
-  test('all nine Janta exercises articulate notes and preserve holds at kaalam ' + kaalam, async () => {
+  test('all twelve Janta exercises articulate notes and preserve holds at kaalam ' + kaalam, async () => {
     for (const lesson of jantaVarisai) {
       const { engine, advance, fundamentals } = setup()
       engine.selectChapter('janta')
@@ -290,11 +294,20 @@ for (const kaalam of [1, 2, 3] as Kaalam[]) {
       await engine.play()
       const mapping = lesson.kaalams[kaalam]
       const units = mapping.avartanams.flatMap(cycle => cycle.beats.flatMap(beat => beat.units))
-      advance(units.length * unitDuration(60, kaalam) + 0.2)
+      const step = unitDuration(60, kaalam)
+      advance(units.length * step + 0.2)
       assert.equal(engine.getSnapshot().status, 'complete')
       assert.equal(fundamentals().length, units.filter(unit => unit.kind === 'note').length)
-      fundamentals().forEach((voice, index) => near(voice.frequency.value,
-        noteFrequency(units.filter(unit => unit.kind === 'note')[index].note, engine.getSnapshot().baseHz)))
+      let voiceIndex = 0
+      units.forEach((unit, index) => {
+        if (unit.kind === 'hold') return
+        const voice = fundamentals()[voiceIndex++]
+        near(voice.frequency.value, noteFrequency(unit.note, engine.getSnapshot().baseHz))
+        near(voice.startTime, 0.025 + index * step)
+        let end = index + 1
+        while (end < units.length && units[end].kind === 'hold') end++
+        near(voice.stopTimes[0], 0.025 + end * step + 0.01)
+      })
       engine.dispose()
     }
   })
@@ -315,9 +328,9 @@ test('chapter changes cancel pending playback, reset the score and retain drone/
   assert.equal(engine.getSnapshot().drone, true)
   assert.equal(engine.getSnapshot().kaalam, 3)
   assert.equal(engine.getSnapshot().bpm, 75)
-  engine.selectLesson(9)
-  engine.selectLesson(10)
-  assert.equal(engine.getSnapshot().lessonNumber, 9)
+  engine.selectLesson(12)
+  engine.selectLesson(13)
+  assert.equal(engine.getSnapshot().lessonNumber, 12)
   engine.selectChapter('sarali')
   engine.selectLesson(14)
   assert.equal(engine.getSnapshot().lessonNumber, 14)

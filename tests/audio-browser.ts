@@ -1,7 +1,7 @@
 import { CarnaticAudioEngine } from '../src/audio/CarnaticAudioEngine'
 import { createWarmVoice } from '../src/audio/voice'
 import { createShrutiVoice } from '../src/audio/shrutiVoice'
-import { DRONE_NOTES, noteFrequency, unitDuration } from '../src/audio/transport'
+import { DRONE_VOICES, noteFrequency, unitDuration } from '../src/audio/transport'
 import { shrutiKeys, defaultShrutiIndex } from '../src/data/swaras'
 import type { Kaalam, SwaraNote } from '../src/types/carnatic'
 
@@ -92,8 +92,8 @@ async function realtimeCheck(kaalam: Kaalam) {
 async function offlineDroneCheck(baseHz: number) {
   const rate = 48000
   const context = new OfflineAudioContext(1, rate * 5, rate)
-  DRONE_NOTES.forEach((note, index) => {
-    const voice = createShrutiVoice(context, context.destination, noteFrequency(note, baseHz), 0.02, index === 2 ? 0.025 : 0.07)
+  DRONE_VOICES.forEach(({ note, volume, detuneCents }) => {
+    const voice = createShrutiVoice(context, context.destination, noteFrequency(note, baseHz), 0.02, volume, detuneCents)
     voice.cancel(4.5)
   })
   // A high register audition overlaps the chord, checking combined headroom.

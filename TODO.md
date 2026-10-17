@@ -44,7 +44,7 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 - [x] Audition Sa from all five sthayi cards, including repeated selections.
 - [x] Display Prathama, Dwithiya and Thrithiya kaalam in lesson controls and metadata.
 
-## Electronic shruti box and Chapter 2 (2026-10-17)
+## Initial electronic shruti box and Chapter 2 (superseded by corrections below)
 - [x] Add a separate additive reed voice with fundamental, second, third and gently diminishing odd overtones.
 - [x] Add ±2 cent double reeds, a resonant 1000 Hz low-pass filter (Q 2.4), and 0.2 Hz bellows modulation at 1.2% depth.
 - [x] Sustain Sa and Pa with a softer lower Pa; add smooth attack, stop and retuning ramps.
@@ -57,7 +57,20 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 - [x] Run 26 automated tests, typecheck, production build and lint.
 - [x] Complete browser audio/UI verification: all 12 tonics sustain without clipping, five octave cards replay, both chapters navigate correctly, Janta playback advances, and the drone stops independently. Measurements are recorded in docs/audio-architecture.md.
 
+## Chapter 2 corrections and Panchama drone (2026-10-17)
+- [x] Follow the explicit 12-item sequence: 1, 2, 3, 4, 5, 5A, 6, 7, 8, 8A, 9, 10. The requested numeric total of 11 conflicts with the named list; all named exercises are retained.
+- [x] Reorder 3/4/5 from former 4/5/3; verify complete note sequences against commit a067154.
+- [x] Add 5A's reverse symmetric four-note windows in both directions.
+- [x] Preserve Lessons 6, 7 and 8 exactly, including notes, registers and karvais.
+- [x] Add 8A's supplied held/paired/triple patterns, five ascending windows through tara Sa and symmetric descent.
+- [x] Add the complete textbook leap-pattern Lesson 9 and move previous 9 unchanged to 10.
+- [x] Keep printed lesson labels separate from playback ordinals; show 5A and 8A in the selector and active heading.
+- [x] Regroup every exercise into complete eight-beat cycles at 1/2/4 units per beat; verify every onset and hold duration without timing drift.
+- [x] Change sustained voicing to mandra Pa, pure tara Sa, tara Sa at +3.5 cents, and madhya Sa; rebalance reed levels and harmonics.
+- [x] Update both shared drone badges/tooltips to P̣ · Ṡ · S (Panchama Shruti: Mandra Pa · Tara Sa · Madhya Sa).
+- [x] Pass all 30 tests, typecheck, build and lint; browser checks pass for all 12 tonics, ordered lesson labels, 5A/8A headings, 8A live playback with 40 holds, and the updated badge/tooltip.
+
 ## Remaining scope
 - [ ] User listening review of the synthesized reed timbre on their own speakers/headphones.
 - [ ] Expressive vocal sphurita/gamaka modeling; current Janta playback uses separately articulated fixed pitches.
-- [ ] Additional curriculum chapters beyond Sarali and Janta 1–9.
+- [ ] Additional curriculum chapters beyond Sarali and Janta 1–10 with 5A/8A.

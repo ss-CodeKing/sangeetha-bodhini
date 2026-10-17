@@ -1,15 +1,15 @@
 import type { Voice } from './voice'
 
-// Normalized harmonic amplitudes, shared by two slightly detuned free reeds.
-// A prominent octave and fifth sit above the fundamental; odd overtones decay.
-export const REED_HARMONICS = [0, 0.46, 0.26, 0.16, 0, 0.065, 0, 0.03, 0, 0.015] as const
+// A grounded fundamental and prominent octave/third harmonic, with soft odd
+// overtones. Separate pure and detuned tara reeds supply the chorus.
+export const REED_HARMONICS = [0, 0.52, 0.23, 0.14, 0, 0.065, 0, 0.03, 0, 0.015] as const
 export const BELLOWS_HZ = 0.2
 export const BELLOWS_DEPTH = 0.012
 export const REED_RELEASE = 0.12
 
 export function createShrutiVoice(
   context: BaseAudioContext, destination: AudioNode, hz: number,
-  start: number, volume: number, onEnd: () => void = () => {},
+  start: number, volume: number, detuneCents = 0, onEnd: () => void = () => {},
 ): Voice {
   const envelope = context.createGain()
   envelope.gain.setValueAtTime(0, start)
@@ -28,18 +28,12 @@ export function createShrutiVoice(
     new Float32Array(REED_HARMONICS.length), new Float32Array(REED_HARMONICS),
     { disableNormalization: true },
   )
-  const reeds = [-2, 2].map((cents, index) => {
-    const source = context.createOscillator()
-    source.setPeriodicWave(wave)
-    source.frequency.setValueAtTime(hz, start)
-    source.detune.setValueAtTime(cents, start)
-    const level = context.createGain()
-    level.gain.value = index === 0 ? 0.56 : 0.44
-    source.connect(level)
-    level.connect(filter)
-    source.start(start)
-    return { source, level }
-  })
+  const reed = context.createOscillator()
+  reed.setPeriodicWave(wave)
+  reed.frequency.setValueAtTime(hz, start)
+  reed.detune.setValueAtTime(detuneCents, start)
+  reed.connect(filter)
+  reed.start(start)
   const bellows = context.createOscillator()
   bellows.frequency.setValueAtTime(BELLOWS_HZ, start)
   const amplitudeDepth = context.createGain()
@@ -52,10 +46,9 @@ export function createShrutiVoice(
   cutoffDepth.connect(filter.frequency)
   bellows.start(start)
 
-  const sources = [...reeds.map(reed => reed.source), bellows]
+  const sources = [reed, bellows]
   sources[0].onended = () => {
     sources.forEach(source => source.disconnect())
-    reeds.forEach(reed => reed.level.disconnect())
     for (const node of [amplitudeDepth, cutoffDepth, filter, pressure, envelope]) node.disconnect()
     onEnd()
   }
