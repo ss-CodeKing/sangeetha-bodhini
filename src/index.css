@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --color-saffron: #D97706;
+  --color-maroon: #7F1D1D;
+  --color-ivory: #FFFDF7;
+  --color-gold: #F59E0B;
+  --color-charcoal: #1F2937;
+  --font-display: 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+  --font-body: 'Segoe UI', Inter, system-ui, sans-serif;
+}
+:root { font-family: var(--font-body); color: var(--color-charcoal); background: var(--color-ivory); font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-weight: 400; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, input, select { font: inherit; }
+button, a, select { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+button:focus-visible, a:focus-visible, select:focus-visible { outline: 3px solid var(--color-saffron); outline-offset: 4px; }
+button { color: inherit; }
+h1, h2, h3, h4, p { margin: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+::selection { background: #f8dfad; color: #641a1a; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
