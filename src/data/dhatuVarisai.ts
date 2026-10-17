@@ -59,8 +59,11 @@ const definitions = [
   },
 ] as const
 
-export const dhatuVarisai = definitions.map(definition => createTextbookLesson({
+// Keep the reference transcription above intact; the user's book teaches
+// source exercise 2 first, followed by source exercise 1.
+export const dhatuVarisai = [definitions[1], definitions[0]].map((definition, index) => createTextbookLesson({
   ...definition,
+  number: index + 1,
   sections: [
     { label: 'Arohanam phrases', rowCount: 10 },
     { label: 'Avarohanam phrases', rowCount: 10 },

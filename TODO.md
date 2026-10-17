@@ -82,6 +82,10 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 
 - [x] Pass all 46 tests, typecheck, lint, production build and a separate TypeScript check of test/browser harness files.
 
+- [x] Use the Sarali and Janta HTML reference pages for Chapter 1/2 notation links, footer and README.
+
+- [x] Swap Dhatu exercises to match the book: alternating steps/skips first, single skips/zigzag returns second; preserve every note and renumber playback lessons.
+
 ## Remaining scope
 - [ ] User listening review of the synthesized reed timbre on their own speakers/headphones.
 - [ ] Expressive vocal sphurita/gamaka modeling; current Janta playback uses separately articulated fixed pitches.

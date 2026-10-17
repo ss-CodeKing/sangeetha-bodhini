@@ -3,7 +3,7 @@ import { mapKaalam, parseNotation } from './notation'
 import { arohanam, avarohanam } from './swaras'
 
 // Teacher-defined chapter order, based on the traditional scalar-window
-// patterns in https://www.shivkumar.org/music/basics/janta-varisai.pdf.
+// patterns in https://www.shivkumar.org/music/basics/janta-varisai.htm.
 // Lowercase is madhya; uppercase S is tara Sa. Commas are held subdivisions.
 // Every source row is eight units. A 16-unit phrase fills eight aksharas in
 // Dwithiya kaalam; the same units regroup at first and third kaalam.

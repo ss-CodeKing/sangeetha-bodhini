@@ -235,9 +235,11 @@ function encodeUnits(units: readonly NotationUnit[]) {
 
 for (const chapter of sourceFixture.chapters) {
   for (const exercise of chapter.exercises) {
-    test(chapter.id + ' ' + exercise.number + ' matches every fetched source row and 4+2+2 grouping', () => {
+    const lessonNumber = chapter.id === 'dhatu' ? 3 - exercise.number : exercise.number
+    test(chapter.id + ' lesson ' + lessonNumber + ' matches source exercise ' + exercise.number + ' and 4+2+2 grouping', () => {
       const catalogChapter = curriculum.find(item => item.id === chapter.id)!
-      const lesson = catalogChapter.lessons[exercise.number - 1]
+      const lesson = catalogChapter.lessons[lessonNumber - 1]
+      assert.equal(lesson.number, lessonNumber)
       assert.equal(catalogChapter.source, chapter.url)
       assert.deepEqual(lesson.notation.split('\n'), exercise.sourceRows.map(row => row.notation))
       const expectedTokens = exercise.sourceRows.flatMap(row => {

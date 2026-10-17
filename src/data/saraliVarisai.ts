@@ -4,7 +4,7 @@ export { mapKaalam, parseNotation } from './notation'
 import { arohanam, avarohanam } from './swaras'
 
 // Traditional public-domain exercises; reference edition:
-// https://www.shivkumar.org/music/basics/sarali-varisai.pdf (exercises 1–14).
+// https://www.shivkumar.org/music/basics/sarali-varisai.htm (exercises 1–14).
 // Lowercase = madhya, uppercase = tara, comma = one unit of sustained sound.
 // Phrase dashes in the reference are separators, never extra durations.
 // Correct obvious case slips in exercises 3/4 to preserve their scalar contour.
