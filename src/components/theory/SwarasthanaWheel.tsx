@@ -3,6 +3,7 @@ import { ArrowRight, Info, MousePointer2 } from 'lucide-react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { arohanam, avarohanam, formatSwara, frequency, swaras } from '../../data/swaras'
 import { Swara } from '../common/Swara'
+import { ScaleDirections } from './ScaleDirections'
 
 export function SwarasthanaWheel({ baseHz }: { baseHz: number }) {
   const [selected, setSelected] = useState(0)
@@ -25,7 +26,6 @@ export function SwarasthanaWheel({ baseHz }: { baseHz: number }) {
       <p className="subtle-note"><Info size={14} /> Ratios are a teaching model; tuning and gamakas vary in performance. Swara audition arrives with the audio engine.</p>
     </div>
     <div className="raga-strip"><div><p className="eyebrow">YOUR FIRST RAGA · MELAKARTA 15</p><h3>Mayamalavagowla</h3><p>Traditionally used for the foundational lessons associated with Purandara Dasa.</p></div><div className="scales"><div><span>AROHANAM <ArrowRight size={12} /></span>{arohanam.map((note, i) => <Swara key={i} note={note} />)}</div><div><span>AVAROHANAM <ArrowRight size={12} /></span>{avarohanam.map((note, i) => <Swara key={i} note={note} />)}</div></div></div>
+    <ScaleDirections />
   </section>
 }
-
-

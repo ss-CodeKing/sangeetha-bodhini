@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { swaras, arohanam, avarohanam, frequency, formatSwara } from '../src/data/swaras'
+import { swaras, arohanam, avarohanam, frequency, formatSwara, shrutiKeys, defaultShrutiIndex } from '../src/data/swaras'
 import { adiTalam, kriyas } from '../src/data/talas'
 import { saraliVarisai, parseNotation } from '../src/data/saraliVarisai'
 import type { Kaalam } from '../src/types/carnatic'
@@ -55,3 +55,12 @@ test('all 14 lessons preserve holds, octave transitions and complete cycles at e
 
 
 
+
+test('shruti covers all 12 pitch classes and defaults to G sharp', () => {
+  assert.equal(shrutiKeys.length, 12)
+  assert.equal(shrutiKeys[defaultShrutiIndex].label, 'G♯3 / A♭3')
+  assert.equal(shrutiKeys[defaultShrutiIndex].hz, 207.65)
+  assert.ok(shrutiKeys.every((key, i) => i === 0 || key.hz > shrutiKeys[i - 1].hz))
+  assert.equal(formatSwara({ swara: 'S', octave: -2 }), 'S\u0324')
+  assert.equal(formatSwara({ swara: 'S', octave: 2 }), 'S\u0308')
+})

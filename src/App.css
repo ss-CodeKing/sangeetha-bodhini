@@ -257,3 +257,86 @@ h4 { font-size: 13px; font-weight: 600; color: #5b3b27; }
   .register p, .register small { font-size: 9px; }
   .register-frequency { font-size: 9px; }
 }
+/* Foundation review: larger chapter labels, clear octave marks and concept guides. */
+.chapter-nav { gap: 25px; flex-wrap: wrap; }
+.chapter-nav > span { font-size: 12px; font-weight: 600; color: #7e6b52; }
+.chapter-nav a { font-size: 15px; gap: 10px; padding: 4px 0; }
+.chapter-nav a > span { font-size: 17px; color: #946a39; }
+.section-number { width: 40px; height: 40px; font-size: 18px; }
+.swara-letter { position: relative; display: inline-block; line-height: 1.15; }
+.swara-variant { font-size: .62em; position: relative; bottom: -.15em; vertical-align: baseline; }
+.octave-dots { display: flex; flex-direction: row; gap: .085em; position: absolute; left: 50%; transform: translateX(-50%); }
+.octave-dots.above { top: -.13em; }
+.octave-dots.below { bottom: -.13em; }
+.octave-dots i { display: block; width: .11em; height: .11em; border-radius: 50%; background: currentColor; }
+.scale-directions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 20px; }
+.scale-card { margin: 0; padding: 24px; }
+.scale-card figcaption { display: flex; align-items: center; justify-content: space-between; color: #a16b33; }
+.scale-card figcaption h3 { font-size: 23px; }
+.scale-card figcaption span { display: block; font-size: 12px; margin-top: 5px; }
+.scale-staircase { position: relative; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); height: 170px; margin: 10px 0 15px; color: #b18147; }
+.scale-staircase > svg { position: absolute; inset: 20px 0 0; width: 100%; height: 150px; }
+.scale-tone { display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; align-self: end; color: #7f1d1d; }
+.scale-tone .swara { font-size: 23px; background: #fffefa; padding: 3px 1px; }
+.scale-tone-dot { width: 6px; height: 6px; border-radius: 50%; background: #b18147; }
+.scale-card > p { font-size: 13px; line-height: 1.8; color: #75634d; }
+.scale-card > small { display: block; font-size: 10px; color: #8c765a; margin-top: 9px; }
+.kaalam-panel { padding: 24px; }
+.kaalam-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.kaalam-option { padding: 20px 16px; border: 1px solid #e5d8c0; background: #fcf8ef; border-radius: 6px; text-align: left; }
+.kaalam-option.selected { background: #f8ecd7; border-color: #a97136; box-shadow: inset 0 0 0 1px #a97136; }
+.kaalam-option > span { font-size: 12px; color: #8b663a; }
+.kaalam-option h3 { font-size: 20px; margin-top: 7px; }
+.kaalam-option strong { display: block; font-family: var(--font-display); font-size: 30px; color: var(--color-maroon); font-weight: 400; margin-top: 12px; }
+.kaalam-option strong small { font-family: var(--font-body); font-size: 12px; color: #806345; }
+.kaalam-demo { padding: 22px; background: #f8f3e9; border-radius: 6px; margin-top: 20px; }
+.kaalam-demo-heading { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+.kaalam-demo-heading > span { font-size: 12px; color: #8b7152; }
+.kaalam-beats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 22px; }
+.kaalam-beat { border-right: 1px solid #d9c9ac; padding: 0 14px; text-align: center; }
+.kaalam-beat:last-child { border-right: 0; }
+.kaalam-beat-label { color: #987449; font-size: 10px; letter-spacing: 1px; }
+.kaalam-beat-notes { display: flex; align-items: center; justify-content: space-around; min-height: 65px; gap: 4px; color: var(--color-maroon); }
+.kaalam-duration { color: #8d7658; font-size: 11px; }
+.kaalam-demo > p { font-size: 13px; line-height: 1.8; color: #75634d; margin-top: 20px; }
+.shruti-select select { width: 240px; font-size: 13px; }
+@media (max-width: 760px) {
+  .chapter-nav { gap: 12px 18px; justify-content: flex-start; }
+  .chapter-nav > span { display: block; width: 100%; font-size: 12px; }
+  .chapter-nav a { font-size: 14px; gap: 7px; }
+  .chapter-nav a > span { font-size: 16px; }
+  .section-number { width: 36px; height: 36px; font-size: 17px; }
+  .scale-directions { grid-template-columns: 1fr; }
+  .scale-card { padding: 20px 15px; }
+  .scale-tone .swara { font-size: 21px; }
+  .kaalam-panel { padding: 16px; }
+  .kaalam-options { grid-template-columns: 1fr; gap: 10px; }
+  .kaalam-option { display: grid; grid-template-columns: 1fr auto; padding: 14px; align-items: center; }
+  .kaalam-option > span { grid-column: 1; }
+  .kaalam-option h3 { grid-column: 1; font-size: 19px; }
+  .kaalam-option strong { grid-row: 1 / span 2; grid-column: 2; font-size: 25px; margin: 0; }
+  .kaalam-option strong small { font-size: 10px; }
+  .kaalam-demo { padding: 18px 9px; }
+  .kaalam-demo-heading { flex-direction: column; align-items: flex-start; padding-inline: 4px; }
+  .kaalam-beat { padding-inline: 3px; }
+  .kaalam-beat-notes { gap: 0; flex-wrap: wrap; padding-block: 10px; }
+  .kaalam-beat-notes .swara { font-size: 16px; }
+  .shruti-select select { width: 100%; }
+}
+.heritage { align-items: flex-start; }
+.master { margin: 0; }
+.portrait-frame { display: block; width: 100%; max-width: 140px; height: 168px; margin: 0 auto 13px; background: #fffaf0; border: 1px solid #d6bd96; padding: 5px; border-radius: 5px; overflow: hidden; }
+.portrait-frame img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.master figcaption h3 { font-size: 15px; line-height: 1.4; }
+.master figcaption > span { display: block; font-size: 8px; letter-spacing: 1px; margin-top: 6px; }
+.image-credits { margin-top: 18px; font-size: 11px; color: #785c3e; line-height: 1.8; }
+.image-credits summary { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.image-credits ul { padding-left: 18px; margin-block: 12px; }
+.image-credits a { text-decoration: underline; }
+.image-credits p { font-size: 10px; }
+@media (max-width: 760px) {
+  .masters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 25px 16px; }
+  .portrait-frame { max-width: 150px; height: 180px; }
+  .master figcaption h3 { font-size: 15px; }
+  .master figcaption > span { font-size: 8px; }
+}

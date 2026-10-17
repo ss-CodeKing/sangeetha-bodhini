@@ -24,16 +24,21 @@ export const arohanam: readonly SwaraNote[] = [
   { swara: 'N3', octave: 0 }, { swara: 'S', octave: 1 },
 ]
 export const avarohanam = [...arohanam].reverse()
+// All 12 chromatic tonics in octave 3; western key names identify the base only.
 export const shrutiKeys = [
-  { label: 'C3', hz: 130.81 }, { label: 'C♯3', hz: 138.59 },
-  { label: 'D3', hz: 146.83 }, { label: 'D♯3', hz: 155.56 },
+  { label: 'C3', hz: 130.81 }, { label: 'C♯3 / D♭3', hz: 138.59 },
+  { label: 'D3', hz: 146.83 }, { label: 'D♯3 / E♭3', hz: 155.56 },
+  { label: 'E3', hz: 164.81 }, { label: 'F3', hz: 174.61 },
+  { label: 'F♯3 / G♭3', hz: 185.00 }, { label: 'G3', hz: 196.00 },
+  { label: 'G♯3 / A♭3', hz: 207.65 }, { label: 'A3', hz: 220.00 },
+  { label: 'A♯3 / B♭3', hz: 233.08 }, { label: 'B3', hz: 246.94 },
 ] as const
+export const defaultShrutiIndex = 8
 export function frequency(ratio: number, baseHz: number, octave = 0) {
   return baseHz * ratio * 2 ** octave
 }
 export function formatSwara(note: SwaraNote): string {
   const [letter, variant = ''] = note.swara
-  const dot = note.octave > 0 ? '\u0307' : '\u0323'
-  return letter + (note.octave === 0 ? '' : dot.repeat(Math.abs(note.octave))) + variant.replace('1', '₁').replace('2', '₂').replace('3', '₃')
+  const dot = Math.abs(note.octave) === 2 ? (note.octave > 0 ? '\u0308' : '\u0324') : (note.octave > 0 ? '\u0307' : '\u0323')
+  return letter + (note.octave === 0 ? '' : dot) + variant.replace('1', '₁').replace('2', '₂').replace('3', '₃')
 }
-

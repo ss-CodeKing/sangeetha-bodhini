@@ -24,3 +24,10 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 
 
 
+## Introduction review refinements
+- [x] Enlarge first-step navigation and section numbers.
+- [x] Add ascending/descending scale diagrams and explanations.
+- [x] Explain three kaalams with an interactive subdivision comparison.
+- [x] Render both octave dots horizontally above/below the swara.
+- [x] Offer all 12 shruti keys with G♯3 as the default.
+- [x] Replace symbolic silhouettes with attributed internet images.

@@ -35,6 +35,8 @@ npm run preview
 
 The project uses Vite + React + TypeScript, Tailwind v4's Vite plugin, Lucide React, Framer Motion and the Vite template's Oxlint. Fonts use local Palatino/Georgia and Segoe UI/system fallbacks, so rendering has no font network dependency.
 
+The chapter labels are enlarged. Arohanam/avarohanam diagrams explain pitch direction, and the kaalam guide compares 1, 2 and 4 swaras per steady beat. Double octave dots are rendered side by side using explicit visual marks. Shruti offers all 12 chromatic tonics from C3 to B3 (including flat aliases), defaulting to G♯3 / A♭3 (207.65 Hz).
+
 Select any pitch, toggle the raga highlights, step through the eight kriyas, compare sthayis and change the tonic. The Practice Studio navigation shows a curriculum preview. There is no audio playback yet: note audition, drone synthesis, the scheduler and synchronized three-speed player belong to Step 2.
 
 ## Curriculum conventions and sources
@@ -50,9 +52,8 @@ The traditional 14-exercise sequence is checked against [Shivkumar Kalyanaraman'
 - Octave offsets are -2 to +2; displayed dots go below/above. These lessons use madhya and tara; the model supports lower-register Dha/Ni.
 - Frequencies are illustrative just-intonation ratios. The seven Mayamalavagowla values follow the plan exactly, including D1 = 8/5. [Kuyil's tuning documentation](https://kuyil.org/shruti/faq/) supplies a comparison for the 12-position model and uses a different D1 (128/81). These ratios do not model gamaka or claim universal performance intonation.
 - Adi Talam is Chatusra Jathi Triputa: one four-count laghu and two two-count dhrithams. The finger illustrations are schematic; the names and text describe the movement.
-- The heritage figures are symbolic artistic tributes, not historical portraits.
+- The heritage section uses Wikimedia images: a Purandara Dasa statue photograph, a historical Thyagaraja painting, and India Post stamps for Dikshitar and Syama Sastri. Sources and licences appear on the page and in `public/portraits/CREDITS.md`.
 
 ## Review boundary
 
 Review the three data files and Introduction page before implementing the Web Audio engine and the synchronized notation studio. See `TODO.md` for completed and deferred tasks.
-
