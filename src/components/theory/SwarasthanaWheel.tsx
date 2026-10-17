@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { ArrowRight, Info, MousePointer2 } from 'lucide-react'
+import { ArrowRight, Info, MousePointer2, Volume2 } from 'lucide-react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { arohanam, avarohanam, formatSwara, frequency, swaras } from '../../data/swaras'
 import { Swara } from '../common/Swara'
 import { ScaleDirections } from './ScaleDirections'
+import type { SwaraNote } from '../../types/carnatic'
 
-export function SwarasthanaWheel({ baseHz }: { baseHz: number }) {
+export function SwarasthanaWheel({ baseHz, onAudition }: { baseHz: number; onAudition: (note: SwaraNote) => Promise<void> }) {
   const [selected, setSelected] = useState(0)
   const [ragaOnly, setRagaOnly] = useState(false)
   const reducedMotion = useReducedMotion()
@@ -21,9 +22,9 @@ export function SwarasthanaWheel({ baseHz }: { baseHz: number }) {
       </div>
       <div className="keyboard-caption"><span><span className="legend-dot" /> Mayamalavagowla swaras</span><span><MousePointer2 size={13} /> Select any note to explore</span></div>
       <motion.div key={selected} initial={reducedMotion ? false : { opacity: 0.92 }} animate={{ opacity: 1 }} className="pitch-detail" aria-live="polite">
-        <div className="selected-swara">{current.names.map(n => formatSwara({ swara: n.id, octave: 0 })).join(' / ')}</div><div className="note-description"><h4>{current.names.map(n => n.name).join(' / ')}</h4><p>{current.names.length > 1 ? 'One pitch position, two names. The raga determines which name we use.' : current.position === 1 ? 'The tonic. Every other note finds its place in relation to Sa.' : 'A distinct pitch position measured in relation to your chosen Sa.'}</p></div><div className="pitch-value"><strong>{frequency(current.ratio, baseHz).toFixed(2)} <small>Hz</small></strong><span>{current.ratioLabel} × your Sa</span></div>
+        <div className="selected-swara">{current.names.map(n => formatSwara({ swara: n.id, octave: 0 })).join(' / ')}</div><div className="note-description"><h4>{current.names.map(n => n.name).join(' / ')}</h4><p>{current.names.length > 1 ? 'One pitch position, two names. The raga determines which name we use.' : current.position === 1 ? 'The tonic. Every other note finds its place in relation to Sa.' : 'A distinct pitch position measured in relation to your chosen Sa.'}</p></div><button className="audition-button" onClick={() => void onAudition({ swara: current.names[0].id, octave: 0 })}><Volume2 size={16} /> Play swara</button><div className="pitch-value"><strong>{frequency(current.ratio, baseHz).toFixed(2)} <small>Hz</small></strong><span>{current.ratioLabel} × your Sa</span></div>
       </motion.div>
-      <p className="subtle-note"><Info size={14} /> Ratios are a teaching model; tuning and gamakas vary in performance. Swara audition arrives with the audio engine.</p>
+      <p className="subtle-note"><Info size={14} /> Ratios are a teaching model; tuning and gamakas vary in performance. Select Play swara to hear the chosen pitch.</p>
     </div>
     <div className="raga-strip"><div><p className="eyebrow">YOUR FIRST RAGA · MELAKARTA 15</p><h3>Mayamalavagowla</h3><p>Traditionally used for the foundational lessons associated with Purandara Dasa.</p></div><div className="scales"><div><span>AROHANAM <ArrowRight size={12} /></span>{arohanam.map((note, i) => <Swara key={i} note={note} />)}</div><div><span>AVAROHANAM <ArrowRight size={12} /></span>{avarohanam.map((note, i) => <Swara key={i} note={note} />)}</div></div></div>
     <ScaleDirections />

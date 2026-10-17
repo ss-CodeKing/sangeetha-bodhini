@@ -9,7 +9,9 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test:data": "tsx --test tests/curriculum.test.ts",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "test:audio": "tsx --test tests/audio-engine.test.ts",
+    "test": "tsx --test tests/curriculum.test.ts tests/audio-engine.test.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

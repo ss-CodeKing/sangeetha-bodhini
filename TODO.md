@@ -12,15 +12,15 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 - [x] Build responsive Theory page: pitch explorer, gestures, sthayis, shruti setup and heritage tribute.
 - [x] Document sources, notation and local run instructions.
 - [x] Verify data, TypeScript, lint, build and running Vite server.
-- [ ] User review of data and Introduction page (waiting).
+- [x] User review of data and Introduction page; tuning audit accepted.
 
 ## Step 2 — after review
-- [ ] Web Audio synthesis, swara audition and tanpura drone.
-- [ ] Look-ahead scheduler, talam clock and 45–90 BPM controls.
-- [ ] Studio lesson selector and notation grid.
-- [ ] Three-kaalam playback with synchronized notes and kriyas.
-- [ ] Pause/reset, speed changes and lesson/avartanam loops.
-- [ ] Browser audio/timing verification and static deployment readiness.
+- [x] Web Audio synthesis, swara audition and tanpura drone.
+- [x] Look-ahead scheduler, talam clock and 45–90 BPM controls.
+- [x] Studio lesson selector and notation grid.
+- [x] Three-kaalam playback with synchronized notes and kriyas.
+- [x] Pause/reset, speed changes and lesson/avartanam loops.
+- [x] Browser audio/timing verification and static deployment readiness.
 
 
 

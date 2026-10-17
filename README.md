@@ -1,6 +1,6 @@
 # Sangeetha Bodhini
 
-An interactive Carnatic music foundation for students and teachers. Step 1 implements the theory page and typed curriculum; audio synthesis and the notation player are intentionally deferred pending review.
+An interactive Carnatic music foundation for students and teachers. The Theory page and 14-lesson Practice Studio include synthesized swaras, a Panchama tanpura drone, three-kaalam playback and synchronized Adi Talam guidance.
 
 ## Run locally in WSL
 
@@ -15,7 +15,9 @@ npm run dev
 Open the localhost URL printed by Vite, normally http://localhost:5173. WSL localhost forwarding allows access from Windows. Stop with Ctrl+C. The lockfile pins the installed versions; use `npm ci` for reproducible clean installs.
 
 ```bash
+npm test
 npm run test:data
+npm run test:audio
 npm run typecheck
 npm run lint
 npm run build
@@ -29,7 +31,11 @@ npm run preview
 - `src/data/talas.ts`: Adi's 4 + 2 + 2 angas, all eight beats and five kriyas.
 - `src/data/saraliVarisai.ts`: all 14 lessons with objectives, directional or mixed sections, and complete eight-akshara mappings for three kaalams.
 - `src/components/theory/`: swarasthana matrix, manual gesture guide and five-register chart.
-- `src/components/common/`: navigation, swara notation and heritage tribute.
+- `src/components/common/`: navigation, swara notation, shared shruti/drone controls and heritage tribute.
+- `src/components/studio/`: lesson selector, controls, live talam tracker and clickable notation grid.
+- `src/hooks/useCarnaticAudio.ts`: shared audio engine lifecycle and external-store subscription.
+- `src/hooks/useTalamTimer.ts`: beat/kriya derived from the audio-clock cursor.
+- `src/audio/`: sample-clock scheduling, warm voices, holds and transport math.
 - `src/index.css`: Tailwind v4 `@theme` palette and typography tokens.
 - `src/assets/Tanpura.tsx`: original vector illustration, no remote asset dependency.
 
@@ -37,7 +43,7 @@ The project uses Vite + React + TypeScript, Tailwind v4's Vite plugin, Lucide Re
 
 The chapter labels are enlarged. Arohanam/avarohanam diagrams explain pitch direction, and the kaalam guide compares 1, 2 and 4 swaras per steady beat. Double octave dots are rendered side by side using explicit visual marks. Shruti offers all 12 chromatic tonics from C3 to B3 (including flat aliases), defaulting to G♯3 / A♭3 (207.65 Hz).
 
-Select any pitch, toggle the raga highlights, step through the eight kriyas, compare sthayis and change the tonic. The Practice Studio navigation shows a curriculum preview. There is no audio playback yet: note audition, drone synthesis, the scheduler and synchronized three-speed player belong to Step 2.
+Select any pitch, toggle the raga highlights, step through the eight kriyas, compare sthayis and change the tonic. Use Play swara to audition a selected pitch, or Start tanpura for the drone. In Practice Studio, select any of the 14 lessons, choose 1x/2x/4x and press Play. Adjust tempo between 45 and 90 BPM, click a note to seek, and loop a whole lesson or the current avartanam. Pause preserves your place; Reset returns to the beginning. The drone has an independent toggle.
 
 ## Curriculum conventions and sources
 
@@ -54,6 +60,8 @@ The traditional 14-exercise sequence is checked against [Shivkumar Kalyanaraman'
 - Adi Talam is Chatusra Jathi Triputa: one four-count laghu and two two-count dhrithams. The finger illustrations are schematic; the names and text describe the movement.
 - The heritage section uses Wikimedia images: a Purandara Dasa statue photograph, a historical Thyagaraja painting, and India Post stamps for Dikshitar and Syama Sastri. Sources and licences appear on the page and in `public/portraits/CREDITS.md`.
 
-## Review boundary
+## Audio behavior and verification
 
-Review the three data files and Introduction page before implementing the Web Audio engine and the synchronized notation studio. See `TODO.md` for completed and deferred tasks.
+Step 1 and its tuning audit were reviewed before Step 2. Live speed changes preserve phrase position and regroup the notation; switching lessons stops playback. All audio stops when the browser tab is hidden. The tanpura is synthesized with the lower-Pa, upper-Sa, Sa, Sa pattern.
+
+See [audio architecture and measured verification](docs/audio-architecture.md) for scheduling, lifecycle and transport details. To run real offline-render and live audio-clock checks, open `http://localhost:5173/tests/audio-browser.html` while Vite runs, then click Run audio checks. This test harness is not included in the production build.
