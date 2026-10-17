@@ -1,3 +1,4 @@
+import { lessonTala } from '../data/lessonMetadata'
 import { defaultShrutiIndex, shrutiKeys } from '../data/swaras'
 import type { ChapterId, Kaalam, SwaraNote } from '../types/carnatic'
 import { curriculum, getChapter } from '../data/curriculum'
@@ -57,6 +58,7 @@ export class CarnaticAudioEngine {
   subscribe = (listener: () => void) => { this.listeners.add(listener); return () => { this.listeners.delete(listener) } }
   getSnapshot = () => this.state
 
+  private get lesson() { return getChapter(this.state.chapterId).lessons[this.state.lessonNumber - 1] }
   private get units() { return lessonUnits(this.state.lessonNumber, this.state.kaalam, this.state.chapterId) }
   private get step() { return unitDuration(this.state.bpm, this.state.kaalam) }
   private renderNow() { return this.context?.currentTime ?? 0 }
@@ -82,7 +84,7 @@ export class CarnaticAudioEngine {
   }
   private publish(patch: Partial<PlaybackSnapshot> = {}) {
     const position = patch.position ?? this.position()
-    const cursor = cursorAt(position, this.state.kaalam, this.units.length)
+    const cursor = cursorAt(position, this.state.kaalam, this.units.length, lessonTala(this.lesson).aksharas)
     const note = resolveNote(this.units, cursor.unitIndex)
     let outputLevel = 0
     if (this.analyser && this.context?.state === 'running' && ((patch.status ?? this.state.status) === 'playing' || (patch.drone ?? this.state.drone) || this.auditionVoices.size > 0)) {
@@ -90,7 +92,7 @@ export class CarnaticAudioEngine {
       outputLevel = Math.sqrt(this.samples.reduce((sum, sample) => sum + sample * sample, 0) / this.samples.length)
     }
     this.state = {
-      ...this.state, ...cursor, note, hz: noteFrequency(note, this.state.baseHz),
+      ...this.state, ...cursor, note, hz: noteFrequency(note, this.state.baseHz, this.lesson.ragaId),
       outputLevel, contextState: this.context?.state ?? 'uninitialized', ...patch,
     }
     this.listeners.forEach(listener => listener())
@@ -133,7 +135,7 @@ export class CarnaticAudioEngine {
     group.add(voice)
   }
   private updateRange(position: number) {
-    const cycle = 8 * notesPerBeat(this.state.kaalam)
+    const cycle = lessonTala(this.lesson).aksharas * notesPerBeat(this.state.kaalam)
     this.rangeStart = this.state.loopMode === 'avartanam' ? Math.floor(position / cycle) * cycle : 0
     this.rangeEnd = this.state.loopMode === 'avartanam' ? this.rangeStart + cycle : this.units.length
   }
@@ -179,14 +181,18 @@ export class CarnaticAudioEngine {
   selectLesson = (number: number) => {
     if (number < 1 || number > getChapter(this.state.chapterId).lessons.length || !Number.isInteger(number)) return
     this.reset()
-    this.state = { ...this.state, lessonNumber: number }
+    ++this.auditionRequest
+    this.cancel(this.auditionVoices)
+    this.state = { ...this.state, lessonNumber: number, bpm: 60, loopMode: 'off' }
     this.updateRange(0)
     this.publish({ status: 'idle', position: 0 })
   }
   selectChapter = (chapterId: ChapterId) => {
     if (chapterId === this.state.chapterId || !curriculum.some(chapter => chapter.id === chapterId)) return
     this.reset()
-    this.state = { ...this.state, chapterId, lessonNumber: 1 }
+    ++this.auditionRequest
+    this.cancel(this.auditionVoices)
+    this.state = { ...this.state, chapterId, lessonNumber: 1, bpm: 60, loopMode: 'off' }
     this.updateRange(0)
     this.publish({ status: 'idle', position: 0 })
   }
@@ -263,7 +269,7 @@ export class CarnaticAudioEngine {
       while (end < this.rangeEnd && units[end].kind === 'hold') end++
       const endTime = when + (end - local) * this.step
       const start = Math.max(when, now + 0.002)
-      this.voice(noteFrequency(resolveNote(units, index), this.state.baseHz), start, endTime - start, this.melodyVoices)
+      this.voice(noteFrequency(resolveNote(units, index), this.state.baseHz, this.lesson.ragaId), start, endTime - start, this.melodyVoices)
       this.scheduleCursor = raw + end - local
     }
   }

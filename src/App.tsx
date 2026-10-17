@@ -39,7 +39,7 @@ function App() {
           <section id="shruti" className="theory-section shruti-section"><div className="section-heading"><span className="section-number">05</span><div><p className="eyebrow">THE ANCHOR</p><h2>Come home to your Sa.</h2><p>Shruti is your reference pitch. Let every swara grow from it.</p></div></div>
             <ShrutiDrone audio={audio} shruti={shruti} onShrutiChange={changeShruti} />
           </section>
-          <section className="next-chapter"><span className="next-icon"><Music2 size={28} strokeWidth={1.4} /></span><div><p className="eyebrow">FROM UNDERSTANDING TO PRACTICE</p><h2>Four chapters. A growing practice.</h2><p>Sarali, Janta, Melsthayi and Dhatu. 33 exercises in Mayamalavagowla.</p></div><button className="outline-button" onClick={() => changePage('studio')}>Enter the practice studio <ArrowRight size={16} /></button></section>
+          <section className="next-chapter"><span className="next-icon"><Music2 size={28} strokeWidth={1.4} /></span><div><p className="eyebrow">FROM UNDERSTANDING TO PRACTICE</p><h2>Six chapters. A growing practice.</h2><p>From Sarali to Geethams. 50 lessons across seven ragams and varied talas.</p></div><button className="outline-button" onClick={() => changePage('studio')}>Enter the practice studio <ArrowRight size={16} /></button></section>
         </div>
       </> : <Studio audio={audio} shruti={shruti} onShrutiChange={changeShruti} onTheory={() => changePage('theory')} />}
       <Heritage />

@@ -1,0 +1,571 @@
+{
+  "fetched": "2026-10-17",
+  "geethams": [
+    {
+      "slug": "lambodara",
+      "url": "https://www.shivkumar.org/music/varnams/lambodara-geetham.htm",
+      "rows": [
+        {
+          "sourceSwara": "M P | D S S R || R S | D P M P ||",
+          "swara": "m p | d S S R || R S | d p m p ||",
+          "sourceSahityam": "Sree - | Ga na na tha || sin dhu | - ra var na ||"
+        },
+        {
+          "sourceSwara": "R M | P D M P || D P | M G R S ||",
+          "swara": "r m | p d m p || d p | m g r s ||",
+          "sourceSahityam": "Ka ru | na Sa ga ra || ka ri | va dha - na ||"
+        },
+        {
+          "sourceSwara": "S - | R M G R || S R | G R S , ||",
+          "swara": "s - | r m g r || s r | g r s , ||",
+          "sourceSahityam": "Lam - | bo - dha ra || la ku | mi ka ra - ||"
+        },
+        {
+          "sourceSwara": "R M | P D M P || D P | M G R S ||",
+          "swara": "r m | p d m p || d p | m g r s ||",
+          "sourceSahityam": "Am - | ba - su tha || a ma | ra vi nu tha ||"
+        },
+        {
+          "sourceSwara": "S - | R M G R || S R | G R S , ||",
+          "swara": "s - | r m g r || s r | g r s , ||",
+          "sourceSahityam": "Lam - | bo - dha ra || la ku | mi ka ra - ||"
+        },
+        {
+          "sourceSwara": "M P | D S S R || R S | D P M P ||",
+          "swara": "m p | d S S R || R S | d p m p ||",
+          "sourceSahityam": "Sid dha | cha - ra na || ga na | se - vi tha ||"
+        },
+        {
+          "sourceSwara": "R M | P D M P || D P | M G R S ||",
+          "swara": "r m | p d m p || d p | m g r s ||",
+          "sourceSahityam": "Sid dhi | vi na ya ka || the - | na mo na mo ||"
+        },
+        {
+          "sourceSwara": "M P | D S S R || R S | D P M P ||",
+          "swara": "m p | d S S R || R S | d p m p ||",
+          "sourceSahityam": "Sa ka | la vi dya - || - dhi | pu - ji tha ||"
+        },
+        {
+          "sourceSwara": "R M | P D M P || D P | M G R S ||",
+          "swara": "r m | p d m p || d p | m g r s ||",
+          "sourceSahityam": "Sa - | rvo - tha ma || the - | na mo na mo ||"
+        }
+      ]
+    },
+    {
+      "slug": "kundagoura",
+      "url": "https://www.shivkumar.org/music/varnams/kundagoura-geetham.htm",
+      "rows": [
+        {
+          "sourceSwara": "D P | M G R S || R M | P D M P ||",
+          "swara": "d p | m g r s || r m | p d m p ||",
+          "sourceSahityam": "Kun da | Gou - - ra || Gou - | Ri - va ra ||"
+        },
+        {
+          "sourceSwara": "D R | R S D P || D P | M G R S ||",
+          "swara": "d R | R S d p || d p | m g r s ||",
+          "sourceSahityam": "Man di | - ra - ya || ma - | na ma ku ta ||"
+        },
+        {
+          "sourceSwara": "S - | R - R - || D P | M G R S ||",
+          "swara": "s - | r - r - || d p | m g r s ||",
+          "sourceSahityam": "Man - | da - ra - || ku su | ma - ka ra ||"
+        },
+        {
+          "sourceSwara": "S R | M - G R || S R | G R S - ||",
+          "swara": "s r | m - g r || s r | g r s - ||",
+          "sourceSahityam": "Ma ka | ran - dam - || va - | si thu va - ||"
+        },
+        {
+          "sourceSwara": "D P | M G R S || R M | P D M P ||",
+          "swara": "d p | m g r s || r m | p d m p ||",
+          "sourceSahityam": "He ma | ku - - ta || sim - | ha - sa na||"
+        },
+        {
+          "sourceSwara": "D R | R S D P || D P | M G R S ||",
+          "swara": "d r | r s d p || d p | m g r s ||",
+          "sourceSahityam": "Vi ru | pa ra - ksha|| ka ru | na - ka ra ||"
+        },
+        {
+          "sourceSwara": "D P | M G R S || R M | P D M P ||",
+          "swara": "d p | m g r s || r m | p d m p ||",
+          "sourceSahityam": "Chan da | ma - - ma || man - | da - gi ni ||"
+        },
+        {
+          "sourceSwara": "D R | R S D P || D P | M G R S ||",
+          "swara": "d R | R S d p || d p | m g r s ||",
+          "sourceSahityam": "Man - | di ra - ya || ma - | na ma ku ta ||"
+        }
+      ]
+    },
+    {
+      "slug": "kerayaneeranu",
+      "url": "https://www.shivkumar.org/music/varnams/kerayaneeranu-geetham.htm",
+      "rows": [
+        {
+          "sourceSwara": "D S S | D P | M P || D D P | M M | P P ||",
+          "swara": "d S S | d p | m p || d d p | m m | p p ||",
+          "sourceSahityam": "Ke re ya | Nee - | ra nu || Ke re ge | chal - | li - ||"
+        },
+        {
+          "sourceSwara": "D D S | D P | M P || D D P | M G | R S ||",
+          "swara": "d d S | d p | m p || d d p | m g | r s ||",
+          "sourceSahityam": "Va ra va | pa de | da va || ran - te | Kaa - | ni ro ||"
+        },
+        {
+          "sourceSwara": "S R R | S R | S R || D D P | M G | R S ||",
+          "swara": "s r r | s r | s r || d d p | m g | r s ||",
+          "sourceSahityam": "Ha ri ya | ka ru | na do || laa - da | bha - | gya va ||"
+        },
+        {
+          "sourceSwara": "D P D | S - | D P || D D P | M G | R S ||",
+          "swara": "d p d | S - | d p || d d p | m g | r s ||",
+          "sourceSahityam": "Ha ri sa | ma - | rpa ne || ma - di | ba du | ki ro ||"
+        },
+        {
+          "sourceSwara": "S R R | S R | S R || D D P | M G | R S ||",
+          "swara": "s r r | s r | s r || d d p | m g | r s ||",
+          "sourceSahityam": "Ha ri ya | ka ru | na da || la - ya | bha - | gya va ||"
+        },
+        {
+          "sourceSwara": "D S S | D P | M P || D D P | M M | P P ||",
+          "swara": "d S S | d p | m p || d d p | m m | p p ||",
+          "sourceSahityam": "Sree - pu | ran - | da ra || vi ta la | ra - | ya - ||"
+        },
+        {
+          "sourceSwara": "D D S | D P | M P || D D P | M G | R S ||",
+          "swara": "d d S | d p | m p || d d p | m g | r s ||",
+          "sourceSahityam": "Cha ra na | ka ma | la va || no - di | ba du | ki ro ||"
+        },
+        {
+          "sourceSwara": "S R R | S R | S R || D D P | M G | R S ||",
+          "swara": "s r r | s r | s r || d d p | m g | r s ||",
+          "sourceSahityam": "Ha ri ya | ka ru | na do || la - da | bha - | gya va ||"
+        },
+        {
+          "sourceSwara": "D P D | S - | D P || D D P | M G | R S ||",
+          "swara": "d p d | S - | d p || d d p | m g | r s ||",
+          "sourceSahityam": "Ha ri sa | ma - | rpa ne || ma - di | ba du | ki ro ||"
+        },
+        {
+          "sourceSwara": "S R R | S R | S R || D D P | M G | R S ||",
+          "swara": "s r r | s r | s r || d d p | m g | r s ||",
+          "sourceSahityam": "Ha ri ya | ka ru | na do || la - da | bha - | gya va ||"
+        }
+      ]
+    },
+    {
+      "slug": "padumanabha",
+      "url": "https://www.shivkumar.org/music/varnams/padumanabha-geetham.htm",
+      "rows": [
+        {
+          "sourceSwara": "R S d | S - | S - || M G R | M M | P - ||",
+          "swara": "r s d. | s - | s - || m g r | m m | p - ||",
+          "sourceSahityam": "Pa du ma | na - | bha - || pa ra ma | pu ru | sha - ||"
+        },
+        {
+          "sourceSwara": "S D D | D P | M P || D D P | M G | R S ||",
+          "swara": "s d d | d p | m p || d d p | m g | r s ||",
+          "sourceSahityam": "Pa ram - | jo - | - thi || swa ru - | pa - | - - ||"
+        },
+        {
+          "sourceSwara": "R S d | S - | S - || M G R | M M | P - ||",
+          "swara": "r s d. | s - | s - || m g r | m m | p - ||",
+          "sourceSahityam": "Vi du ra | van - | dhia - || vi ma la | cha ri | tha - ||"
+        },
+        {
+          "sourceSwara": "S D D | D P | M P || D D P | M G | R S ||",
+          "swara": "s d d | d p | m p || d d p | m g | r s ||",
+          "sourceSahityam": "Vi hang - | ga - | - di || ro - ha | na - | - - ||"
+        },
+        {
+          "sourceSwara": "P M P | D S | D S || R S D | D S | D P ||",
+          "swara": "p m p | d S | d S || R S d | d S | d p ||",
+          "sourceSahityam": "U dha dhi | ni va | - sa || u ra ga | sa ya | - na ||"
+        },
+        {
+          "sourceSwara": "D D P | P - | P M || R M M | P - | P - ||",
+          "swara": "d d p | p - | p m || r m m | p - | p - ||",
+          "sourceSahityam": "U - nna | tho - | nna tha || ma hi - | ma - | - - ||"
+        },
+        {
+          "sourceSwara": "D D P | P - | P M || R - M | M G | R S ||",
+          "swara": "d d p | p - | p m || r - m | m g | r s ||",
+          "sourceSahityam": "Ya du ku | lo - | ttha ma || ye - gna | ra - | kshaka ||"
+        },
+        {
+          "sourceSwara": "S - S | D D | D P || P - P | M G | R S ||",
+          "swara": "s - s | d d | d p || p - p | m g | r s ||",
+          "sourceSahityam": "A - gna | si - | ksha ka || ra - ma | na - | - ma ||"
+        },
+        {
+          "sourceSwara": "D S - | D P | M P || D D P | M G | R S ||",
+          "swara": "d S - | d p | m p || d d p | m g | r s ||",
+          "sourceSahityam": "Vi bhee - | sha na | pa - || la ka - | na mo | na mo ||"
+        },
+        {
+          "sourceSwara": "D S - | D P | M P || D D P | M G | R S ||",
+          "swara": "d S - | d p | m p || d d p | m g | r s ||",
+          "sourceSahityam": "I bha - | va ra | da - || ya ka - | na mo | na mo ||"
+        },
+        {
+          "sourceSwara": "P M P | D S | D S || R S D | D S | D P ||",
+          "swara": "p m p | d s | d s || r s d | d s | d p ||",
+          "sourceSahityam": "Su bha - | Pra da | Su ma || no - ra | da - | - Su ||"
+        },
+        {
+          "sourceSwara": "D D P | P - | P M || R - M | P - | - - ||",
+          "swara": "d d p | p - | p m || r - m | p - | - - ||",
+          "sourceSahityam": "Re - ndra | Ma - | no - || ran - ja | na - | - - ||"
+        },
+        {
+          "sourceSwara": "D D P | P - | P M || R - M | M G | R S ||",
+          "swara": "d d p | p - | p m || r - m | m g | r s ||",
+          "sourceSahityam": "A bhi - | na - | va pu || ran - da | ra - | - vi ||"
+        },
+        {
+          "sourceSwara": "S - S | D D | D P || P - P | M G | R S ||",
+          "swara": "s - s | d d | d p || p - p | m g | r s ||",
+          "sourceSahityam": "tal - la | bhal - | la re || ra - ma | na - | - ma ||"
+        }
+      ]
+    },
+    {
+      "slug": "analekara",
+      "url": "https://www.shivkumar.org/music/varnams/analekara-geetham.htm",
+      "rows": [
+        {
+          "sourceSwara": "R M R | R S | D S || S , S | D P | M P ||",
+          "swara": "r m r | r s | d s || s , s | d p | m p ||",
+          "sourceSahityam": "A - na | le - | ka ra || un - ni | po - | la di ||"
+        },
+        {
+          "sourceSwara": "D D S | D , | D P || P M R | D D | D P ||",
+          "swara": "d d s | d , | d p || p m r | d d | d p ||",
+          "sourceSahityam": "sa ka la | sha - | sthrapu || ra - na | di - | nam - ||"
+        },
+        {
+          "sourceSwara": "P , P | D D | D P || P , P | M P | D P ||",
+          "swara": "p , p | d d | d p || p , p | m p | d p ||",
+          "sourceSahityam": "tha - la | di - | nam - || tha - la | pa ri | ga thu ||"
+        },
+        {
+          "sourceSwara": "P M R | S R | S R || P M P | S R | S R ||",
+          "swara": "p m r | s r | s r || p m p | s r | s r ||",
+          "sourceSahityam": "re - re | a - | - - || a - - | a - | - - ||"
+        },
+        {
+          "sourceSwara": "P P D | P P | M R || R S R | M , | M , ||",
+          "swara": "p p d | p p | m r || r s r | m , | m , ||",
+          "sourceSahityam": "a - - | a - | - - || se - thu | va - | ha - ||"
+        },
+        {
+          "sourceSwara": "D P D | S , | S , || R R S | D P | M P ||",
+          "swara": "d p d | s , | s , || r r s | d p | m p ||",
+          "sourceSahityam": "pa ri ga | tham - | nam - || ja ta - | ju - | - ta ||"
+        },
+        {
+          "sourceSwara": "D D S | D , | D P || P M R | D D | D P ||",
+          "swara": "d d s | d , | d p || p m r | d d | d p ||",
+          "sourceSahityam": "sa ka la | sha - | sthrapu || ra - na | di - | nam - ||"
+        },
+        {
+          "sourceSwara": "P , P | D D | D P || P , P | M P | D P ||",
+          "swara": "p , p | d d | d p || p , p | m p | d p ||",
+          "sourceSahityam": "Tha - la | di - | nam - || tha - la | pa ri | ga thu ||"
+        },
+        {
+          "sourceSwara": "P M R | S R | S R || P M P | S R | S R ||",
+          "swara": "p m r | s r | s r || p m p | s r | s r ||",
+          "sourceSahityam": "re - re | a - | - - || a - - | a - | a - ||"
+        },
+        {
+          "sourceSwara": "P P D | P P | M R || R S R | M , | M , ||",
+          "swara": "p p d | p p | m r || r s r | m , | m , ||",
+          "sourceSahityam": "a - - | a - | - - || se - thu | va - | ha - ||"
+        },
+        {
+          "sourceSwara": "D P D | S , | S , ||",
+          "swara": "d p d | s , | s , ||",
+          "sourceSahityam": "pa ri ga | tham - | nam - ||"
+        }
+      ]
+    },
+    {
+      "slug": "varaveena",
+      "url": "https://www.shivkumar.org/music/varnams/varaveena-geetham.htm",
+      "rows": [
+        {
+          "sourceSwara": "G G | P , P , | D P || S , S , ||",
+          "swara": "g g | p , p , | d p || s , s , ||",
+          "sourceSahityam": "Va ra | vee - na - | Mru du || Pa - ni - ||"
+        },
+        {
+          "sourceSwara": "R S | D D P , | D P || G G R , ||",
+          "swara": "r s | d d p , | d p || g g r , ||",
+          "sourceSahityam": "Va na | ru ha Lo - | cha na || Raa - ni - ||"
+        },
+        {
+          "sourceSwara": "G P | D S D , | D P || G G R , ||",
+          "swara": "g p | d s d , | d p || g g r , ||",
+          "sourceSahityam": "Su ru | chi ra Bam - | bha ra || Ve - ni - ||"
+        },
+        {
+          "sourceSwara": "G G | D P G , | P G || G R S , ||",
+          "swara": "g g | d p g , | p g || g r s , ||",
+          "sourceSahityam": "Su ra | nu tha Kal - | ya - || - - ni - ||"
+        },
+        {
+          "sourceSwara": "G G | G G R G | P G || P , P , ||",
+          "swara": "g g | g g r g | p g || p , p , ||",
+          "sourceSahityam": "Ni ru | pa ma Shu bha | Gu na || Lo - la - ||"
+        },
+        {
+          "sourceSwara": "G G | D P D , | D P || S , S , ||",
+          "swara": "g g | d p d , | d p || s , s , ||",
+          "sourceSahityam": "Ni ra | thi Ja ya - | Pra da || See - la - ||"
+        },
+        {
+          "sourceSwara": "D G | R R S S | D S || D D D P ||",
+          "swara": "d g | r r s s | d s || d d d p ||",
+          "sourceSahityam": "Va ra | da - Pri ya | Ran ga || naa - ya ki ||"
+        },
+        {
+          "sourceSwara": "G P | D S D P | D P || G G R S ||",
+          "swara": "g p | d s d p | d p || g g r s ||",
+          "sourceSahityam": "Vaa - | nchitha Pha la | Daa - || - - ya ki ||"
+        },
+        {
+          "sourceSwara": "S R | G , G , | G R || P G R , ||",
+          "swara": "s r | g , g , | g r || p g r , ||",
+          "sourceSahityam": "Sa ra | si - ja - | sa na || Ja na ni - ||"
+        },
+        {
+          "sourceSwara": "S R | S G R S ||",
+          "swara": "s r | s g r s ||",
+          "sourceSahityam": "Ja ya | ja ya ja ya ||"
+        }
+      ]
+    },
+    {
+      "slug": "kamalajathala-kalyani",
+      "url": "https://www.shivkumar.org/music/varnams/kamalajathala-kalyani-geetham.htm",
+      "rows": [
+        {
+          "sourceSwara": "S S S | N D N S || N D P | D P M P ||",
+          "swara": "s s s | n d n s || n d p | d p m p ||",
+          "sourceSahityam": "Ka mala jaa - da la Vi ma la Su- na ya na"
+        },
+        {
+          "sourceSwara": "G M P | P D D N || D P M | P G R S ||",
+          "swara": "g m p | p d d n || d p m | p g r s ||",
+          "sourceSahityam": "Ka ri Va ra da Ka ru naa- mbu dhe - - -"
+        },
+        {
+          "sourceSwara": "D D D | G G G , || M P , | M G R S ||",
+          "swara": "d d d | g g g , || m p , | m g r s ||",
+          "sourceSahityam": "Ka ru na Sha ra dhe - Ka ma - laa - - -"
+        },
+        {
+          "sourceSwara": "R , , | S , , , || , , , | , , , , ||",
+          "swara": "r , , | s , , , || , , , | , , , , ||",
+          "sourceSahityam": "Kaan- - - thaa - - - - - - - - - -"
+        },
+        {
+          "sourceSwara": "G M P | M P D P || N D P | D P M P ||",
+          "swara": "g m p | m p d p || n d p | d p m p ||",
+          "sourceSahityam": "Ke - shi Na ra kaa - (a)su ra Vi bhe - da na"
+        },
+        {
+          "sourceSwara": "G M P | P D D N || D P - M | P G R S ||",
+          "swara": "g m p | p d d n || d p - m | p g r s ||",
+          "sourceSahityam": "Va ra dha Ve - la a pu ra Su ro - tta ma"
+        }
+      ]
+    },
+    {
+      "slug": "reresrirama-arabhi",
+      "url": "https://www.shivkumar.org/music/varnams/reresrirama-arabhi-geetham.htm",
+      "rows": [
+        {
+          "sourceSwara": "P - P | M M | P - || M G R | S R | M G ||",
+          "swara": "p - p | m m | p - || m g r | s r | m g ||",
+          "sourceSahityam": "Re - re | Shree - | ra - || - -- ma | chan - | - - ||"
+        },
+        {
+          "sourceSwara": "R R S | S D | R S || R - - | R - | S R ||",
+          "swara": "r r s | s d | r s || r - - | r - | s r ||",
+          "sourceSahityam": "- - - | - - | - - || ndra - - | - - | Ra ghu ||"
+        },
+        {
+          "sourceSwara": "M G R | R S | S - || P M M | P - | P - ||",
+          "swara": "m g r | r s | s - || p m m | p - | p - ||",
+          "sourceSahityam": "Vam - sha | Ti la | ka - || Ra - gha | ven - | dra - ||"
+        },
+        {
+          "sourceSwara": "P M P | M G | R R || M G R | S R | S S ||",
+          "swara": "p m p | m g | r r || m g r | s r | s s ||",
+          "sourceSahityam": "A - - | - - | - - || a - - | - - | - - ||"
+        },
+        {
+          "sourceSwara": "S d R | S R | S S || d S - | d d | d p ||",
+          "swara": "s d. r | s r | s s || d. s - | d. d. | d. p. ||",
+          "sourceSahityam": "A - - | - - | - - || a - - | Sri tha | ja na ||"
+        },
+        {
+          "sourceSwara": "p m p | d S | S - || R S R | M G | R R ||",
+          "swara": "p. m. p. | d. s | s - || r s r | m g | r r ||",
+          "sourceSahityam": "Po - sha | ku - | re - || See - - | tha - | - Ma ||"
+        },
+        {
+          "sourceSwara": "M G R | M M | P M || P - P | P - | P - ||",
+          "swara": "m g r | m m | p m || p - p | p - | p - ||",
+          "sourceSahityam": "no - - | ran - | ja nu || Re - re | Dhee - | ra - ||"
+        },
+        {
+          "sourceSwara": "P M P | D S | S R || M G R | S R | S S ||",
+          "swara": "p m p | d S | S R || M G R | S R | S S ||",
+          "sourceSahityam": "Ra - va | na - | su ra || An - tha | ku - | re - ||"
+        },
+        {
+          "sourceSwara": "S D R | S R | S S || D S - | D D | D P ||",
+          "swara": "S D R | S R | S S || d S - | d d | d p ||",
+          "sourceSahityam": "A - - | yi ya | yi ya || a -- - | yi ya | yi ya ||"
+        },
+        {
+          "sourceSwara": "P M P | D S | S - || S - S | D D | D P ||",
+          "swara": "p m p | d S | S - || S - S | d d | d p ||",
+          "sourceSahityam": "A - - | yi ya | re - || Dhee - na | Ja na | Man - ||"
+        },
+        {
+          "sourceSwara": "P M P | M G | R R ||",
+          "swara": "p m p | m g | r r ||",
+          "sourceSahityam": "daa - ru | Maa - | ma va ||"
+        }
+      ]
+    },
+    {
+      "slug": "srirama-bhairavi",
+      "url": "https://www.shivkumar.org/music/varnams/srirama-bhairavi-geetham.htm",
+      "rows": [
+        {
+          "sourceSwara": "G R G M | P , | M G R G | M P M , ||",
+          "swara": "g r g m | p , | m g r g | m p m , ||",
+          "sourceSahityam": "Shree - Raa - | ma - | chan - draa - | Sri tha Paa - ||"
+        },
+        {
+          "sourceSwara": "P D2 N N | D1 P | M N D1 P | M G R S ||",
+          "swara": "p d2 n n | d1 p | m n d1 p | m g r s ||",
+          "sourceSahityam": "- ri jaa - | - tha | Sa ma - - | - - - stha ||"
+        },
+        {
+          "sourceSwara": "S R S P | M P | G R G M | G G R S ||",
+          "swara": "s r s p | m p | g r g m | g g r s ||",
+          "sourceSahityam": "Kal - - ya | - na | Gu na - bhi | raa - - ma ||"
+        },
+        {
+          "sourceSwara": "R R G G | M M | G G R G | M P M M ||",
+          "swara": "r r g g | m m | g g r g | m p m m ||",
+          "sourceSahityam": "See - tha - | Mu kha | Am - - - | bo - ru ha ||"
+        },
+        {
+          "sourceSwara": "P D2 D2 N | N S | P D2 N S | R G R S ||",
+          "swara": "p d2 d2 n | n S | p d2 n S | R G R S ||",
+          "sourceSahityam": "San - - - | - cha | ree - - - | - - - ka ||"
+        },
+        {
+          "sourceSwara": "N R S G | R S | N N D1 M | P D2 N S ||",
+          "swara": "n R S G | R S | n n d1 m | p d2 n S ||",
+          "sourceSahityam": "Ni ran - tha | ram - | Man - ga la | Ma - - ta ||"
+        },
+        {
+          "sourceSwara": "P D1 P S | N S | P D1 M P | G , R S ||",
+          "swara": "p d1 p S | n S | p d1 m p | g , r s ||",
+          "sourceSahityam": "No - - tu | - - | - - - - | - - - - ||"
+        }
+      ]
+    }
+  ],
+  "alankaras": [
+    "s r g m | g r | s r g r | s r g m ||",
+    "r g m p | m g | r g m g | r g m p ||",
+    "g m p d | p m | g m p m | g m p d ||",
+    "m p d n | d p | m p d p | m p d n ||",
+    "p d n S | n d | p d n d | p d n S ||",
+    "S n d p | d n | S n d n | S n d p ||",
+    "n d p m | p d | n d p d | n d p m ||",
+    "d p m g | m p | d p m p | d p m g ||",
+    "p m g r | g m | p m g m | p m g r ||",
+    "m g r s | r g | m g r g | m g r s ||",
+    "s r g r | s r | s r g m ||",
+    "r g m g | r g | r g m p ||",
+    "g m p m | g m | g m p d ||",
+    "m p d p | m p | m p d n ||",
+    "p d n d | p d | p d n S ||",
+    "S n d n | S n | S n d p ||",
+    "n d p d | n d | n d p m ||",
+    "d p m p | d p | d p m g ||",
+    "p m g m | p m | p m g r ||",
+    "m g r g | m g | m g r s ||",
+    "s r | s r g m ||",
+    "r g | r g m p ||",
+    "g m | g m p d ||",
+    "m p | m p d n ||",
+    "p d | p d n S ||",
+    "S n | S n d p ||",
+    "n d | n d p m ||",
+    "d p | d p m g ||",
+    "p m | p m g r ||",
+    "m g | m g r s ||",
+    "s r g s r s r | g | m , ||",
+    "r g m r g r g | m | p , ||",
+    "g m p g m g m | p | d , ||",
+    "m p d m p m p | d | n , ||",
+    "p d n p d p d | n | S , ||",
+    "S n d S n S n | d | p , ||",
+    "n d p n d n d | p | m , ||",
+    "d p m d p d p | m | g , ||",
+    "p m g p m p m | g | r , ||",
+    "m g r m g m g | r | s , ||",
+    "s r g | s r | g m ||",
+    "r g m | r g | m p ||",
+    "g m p | g m | p d ||",
+    "m p d | m p | d n ||",
+    "p d n | p d | n S ||",
+    "S n d | S n | d p ||",
+    "n d p | n d | p m ||",
+    "d p m | d p | m g ||",
+    "p m g | p m | g r ||",
+    "m g r | m g | r s ||",
+    "s r , g , | s , r g , | m , | m , ||",
+    "r g , m , | r , g m , | p , | p , ||",
+    "g m , p , | g , m p , | d , | d , ||",
+    "m p , d , | m , p d , | n , | n , ||",
+    "p d , n , | p , d n , | S , | S , ||",
+    "S n , d , | S , n d , | p , | p , ||",
+    "n d , p , | n , d p , | m , | m , ||",
+    "d p , m , | d , p m , | g , | g , ||",
+    "p m , g , | p , m g , | r , | r , ||",
+    "m g , r , | m , g r , | s , | s , ||",
+    "s r g m ||",
+    "r g m p ||",
+    "g m p d ||",
+    "m p d n ||",
+    "p d n S ||",
+    "S n d p ||",
+    "n d p m ||",
+    "d p m g ||",
+    "p m g r ||",
+    "m g r s ||",
+    "s , r , g , m p d ||",
+    "r , g , m , p d n ||",
+    "g , m , p , d n S ||",
+    "S , n , d , p m g ||",
+    "n , d , p , m g r ||",
+    "d , p , m , g r s ||",
+    "s r , g m , p d n ||",
+    "r g , m p , d n S ||",
+    "S n , d p , m g r ||",
+    "n d , p m , g r s ||"
+  ]
+}

@@ -284,7 +284,7 @@ test('audition plays Sa in all five registers and replaces the previous note', a
   engine.dispose()
 })
 
-for (const chapterId of ['janta', 'melsthayi', 'dhatu'] as const) {
+for (const chapterId of ['janta', 'melsthayi', 'dhatu', 'alankaras', 'geethams'] as const) {
   for (const kaalam of [1, 2, 3] as Kaalam[]) {
     test(chapterId + ' exercises articulate notes and preserve holds at kaalam ' + kaalam, async () => {
       for (const lesson of getChapter(chapterId).lessons) {
@@ -315,7 +315,7 @@ for (const chapterId of ['janta', 'melsthayi', 'dhatu'] as const) {
   }
 }
 
-test('chapter changes cancel pending playback, reset the score and retain drone/settings', async () => {
+test('chapter changes cancel pending playback, reset the score/tempo/loop and retain drone/shruti/kaalam', async () => {
   const { engine } = setup()
   engine.selectLesson(14)
   engine.configure({ kaalam: 3, bpm: 75, loopMode: 'avartanam' })
@@ -329,7 +329,8 @@ test('chapter changes cancel pending playback, reset the score and retain drone/
   assert.equal(engine.getSnapshot().unitIndex, 0)
   assert.equal(engine.getSnapshot().drone, true)
   assert.equal(engine.getSnapshot().kaalam, 3)
-  assert.equal(engine.getSnapshot().bpm, 75)
+  assert.equal(engine.getSnapshot().bpm, 60)
+  assert.equal(engine.getSnapshot().loopMode, 'off')
   engine.selectLesson(12)
   engine.selectLesson(13)
   assert.equal(engine.getSnapshot().lessonNumber, 12)
@@ -392,6 +393,35 @@ test('every chapter transition resets the audio clock, cursor and active note wi
       assert.equal(context.oscillators.length, count)
       await engine.play()
       near(context.oscillators[count].startTime, context.currentTime + 0.025)
+      engine.dispose()
+    }
+  }
+})
+
+test('non-Adi cursor and avartanam loops follow the active tala at every kaalam', async () => {
+  for (const [chapterId, lessonNumber, beats] of [
+    ['alankaras',1,14], ['alankaras',3,6], ['alankaras',5,7], ['alankaras',6,14], ['alankaras',8,9], ['geethams',9,14],
+  ] as const) {
+    for (const kaalam of [1,2,3] as const) {
+      const { engine, advance, context } = setup()
+      engine.selectChapter(chapterId)
+      engine.selectLesson(lessonNumber)
+      engine.configure({ kaalam, loopMode: 'avartanam' })
+      await engine.play()
+      advance(beats - 0.1)
+      assert.equal(engine.getSnapshot().beat, beats)
+      assert.equal(engine.getSnapshot().avartanam, 1)
+      advance(0.25)
+      assert.equal(engine.getSnapshot().beat, 1)
+      assert.equal(engine.getSnapshot().avartanam, 1)
+      assert.ok(engine.getSnapshot().position < 2 ** (kaalam - 1))
+      engine.configure({ bpm: 90 })
+      const oldSources = [...context.oscillators]
+      engine.selectLesson(1)
+      assert.equal(engine.getSnapshot().status, 'idle')
+      assert.equal(engine.getSnapshot().bpm, 60)
+      assert.equal(engine.getSnapshot().position, 0)
+      assert.ok(oldSources.every(s => s.stopTimes.at(-1)! <= context.currentTime + 0.02))
       engine.dispose()
     }
   }

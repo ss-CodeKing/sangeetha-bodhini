@@ -137,7 +137,7 @@ async function liveDroneCheck() {
   } finally { unsubscribe(); engine.dispose() }
 }
 
-async function offlineCurriculumCheck(chapterId: 'melsthayi' | 'dhatu', kaalam: Kaalam) {
+async function offlineCurriculumCheck(chapterId: 'melsthayi' | 'dhatu' | 'alankaras' | 'geethams', kaalam: Kaalam) {
   const chapter = getChapter(chapterId)
   let maxPeak = 0, maxStep = 0
   for (const lesson of chapter.lessons) {
@@ -150,7 +150,7 @@ async function offlineCurriculumCheck(chapterId: 'melsthayi' | 'dhatu', kaalam: 
       if (unit.kind === 'hold') return
       let end = index + 1
       while (end < units.length && units[end].kind === 'hold') end++
-      createWarmVoice(context, context.destination, noteFrequency(unit.note, shrutiKeys.at(-1)!.hz), 0.02 + index * step, (end - index) * step, 0.23)
+      createWarmVoice(context, context.destination, noteFrequency(unit.note, shrutiKeys.at(-1)!.hz, lesson.ragaId), 0.02 + index * step, (end - index) * step, 0.23)
     })
     const samples = (await context.startRendering()).getChannelData(0)
     let peak = 0, jump = 0
@@ -173,10 +173,10 @@ button.addEventListener('click', async () => {
   try {
     for (const note of [
       { swara: 'S', octave: 0 }, { swara: 'R1', octave: 0 }, { swara: 'G2', octave: 0 },
-      { swara: 'G3', octave: 0 }, { swara: 'P', octave: -1 }, { swara: 'N2', octave: 0 }, { swara: 'S', octave: 1 },
+      { swara: 'G3', octave: 0 }, { swara: 'R2', octave: 0 }, { swara: 'M2', octave: 0 }, { swara: 'D2', octave: 0 }, { swara: 'P', octave: -1 }, { swara: 'N2', octave: 0 }, { swara: 'S', octave: 1 },
     ] as SwaraNote[]) await offlineCheck(note)
     for (const swara of ['S', 'R1', 'G3', 'M1', 'P'] as const) await offlineCheck({ swara, octave: 1 }, shrutiKeys.at(-1)!.hz)
-    for (const chapter of ['melsthayi', 'dhatu'] as const) {
+    for (const chapter of ['melsthayi', 'dhatu', 'alankaras', 'geethams'] as const) {
       for (const kaalam of [1, 2, 3] as Kaalam[]) await offlineCurriculumCheck(chapter, kaalam)
     }
     for (const key of shrutiKeys) await offlineDroneCheck(key.hz)

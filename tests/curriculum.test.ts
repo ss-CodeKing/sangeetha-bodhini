@@ -30,7 +30,7 @@ test('Adi cycle contains the complete 4 + 2 + 2 gesture sequence', () => {
   assert.deepEqual(adiTalam.angas.map(a => a.beats.length), [4, 2, 2])
   assert.deepEqual(adiTalam.beats.map(b => b.kriya), ['thattu', 'kanishta', 'anamika', 'madhyama', 'thattu', 'veechu', 'thattu', 'veechu'])
   assert.deepEqual(adiTalam.angas.flatMap(a => a.beats), [1,2,3,4,5,6,7,8])
-  assert.equal(kriyas.length, 5)
+  assert.equal(kriyas.length, 6)
 })
 
 test('all 14 lessons preserve holds, octave transitions and complete cycles at every speed', () => {
@@ -64,8 +64,8 @@ test('all 14 lessons preserve holds, octave transitions and complete cycles at e
 
 
 
-test('four curriculum chapters preserve all 33 exercises in printed order', () => {
-  assert.deepEqual(curriculum.map(chapter => [chapter.id, chapter.lessons.length]), [['sarali', 14], ['janta', 12], ['melsthayi', 5], ['dhatu', 2]])
+test('six curriculum chapters preserve all 50 exercises in printed order', () => {
+  assert.deepEqual(curriculum.map(chapter => [chapter.id, chapter.lessons.length]), [['sarali', 14], ['janta', 12], ['melsthayi', 5], ['dhatu', 2], ['alankaras', 8], ['geethams', 9]])
   assert.deepEqual(jantaVarisai.map(lesson => lesson.label), ['1', '2', '3', '4', '5', '5A', '6', '7', '8', '8A', '9', '10'])
 })
 
@@ -305,3 +305,112 @@ test('upper-register parsing, diacritics and frequencies preserve the textbook r
   assert.throws(() => parseAdiRow(', r g m | p d | n S ||'))
   assert.throws(() => parseAdiRow('s r g x | p d | n S ||'))
 })
+
+import { alankaras } from '../src/data/alankaras'
+import { geethams } from '../src/data/geethams'
+import { talas } from '../src/data/talas'
+import { ragas, swaraRatios } from '../src/data/ragas'
+import { lessonTala } from '../src/data/lessonMetadata'
+import { parseRagaNotation, parseTalaRow } from '../src/data/composition'
+import type { RagaId } from '../src/types/carnatic'
+
+const advancedSource = JSON.parse(readFileSync(new URL('./fixtures/advanced-notation.json', import.meta.url), 'utf8')) as {
+  alankaras: string[]
+  geethams: { slug: string; url: string; rows: { swara: string; sourceSwara: string; sourceSahityam: string }[] }[]
+}
+test('Sapta tala angas generate exact cycles and kriyas, including nine-count Eka', () => {
+  const expected = { dhruva: [4,2,4,4], matya: [4,2,4], rupaka: [2,4], jhampa: [7,1,2],
+    triputa: [3,2,2], ata: [5,5,2,2], eka: [4], sankeernaEka: [9] }
+  Object.entries(expected).forEach(([id, lengths]) => {
+    const tala = talas[id]
+    assert.deepEqual(tala.angas.map(a => a.beats.length), lengths)
+    assert.equal(tala.aksharas, lengths.reduce((a,b) => a+b))
+    assert.deepEqual(tala.beats.map(b => b.akshara), Array.from({ length: tala.aksharas }, (_, i) => i + 1))
+    tala.angas.forEach(anga => {
+      const gestures = anga.beats.map(b => tala.beats[b-1].kriya)
+      assert.equal(gestures[0], 'thattu')
+      if (anga.symbol === 'O') assert.deepEqual(gestures, ['thattu', 'veechu'])
+      if (anga.symbol === 'I') assert.ok(gestures.slice(1).every(k => k !== 'thattu' && k !== 'veechu'))
+    })
+    assert.ok(tala.beats.every(b => kriyas.some(k => k.id === b.kriya)))
+  })
+  assert.throws(() => parseTalaRow('s r | g m ||', 'rupaka'))
+  assert.throws(() => parseRagaNotation('n', 'malahari'))
+  assert.throws(() => parseRagaNotation('d3', 'bhairavi'))
+  assert.deepEqual(parseRagaNotation('s , ; _ -', 'malahari').map(u => u.kind), ['note','hold','hold','hold','hold','hold'])
+})
+
+const expectedRagas: Record<RagaId, [SwaraId[], SwaraId[]]> = {
+  mayamalavagowla: [['S','R1','G3','M1','P','D1','N3','S'], ['S','N3','D1','P','M1','G3','R1','S']],
+  malahari: [['S','R1','M1','P','D1','S'], ['S','D1','P','M1','G3','R1','S']],
+  mohanam: [['S','R2','G3','P','D2','S'], ['S','D2','P','G3','R2','S']],
+  suddhaSaveri: [['S','R2','M1','P','D2','S'], ['S','D2','P','M1','R2','S']],
+  kalyani: [['S','R2','G3','M2','P','D2','N3','S'], ['S','N3','D2','P','M2','G3','R2','S']],
+  arabhi: [['S','R2','M1','P','D2','S'], ['S','N3','D2','P','M1','G3','R2','S']],
+  bhairavi: [['S','G2','R2','G2','M1','P','D2','S'], ['S','N2','D1','P','M1','G2','R2','S']],
+}
+const expectedRatios: Partial<Record<SwaraId, number>> = { S: 1, R1: 16/15, R2: 9/8, G2: 6/5, G3: 5/4, M1: 4/3, M2: 45/32, P: 3/2, D1: 8/5, D2: 5/3, N2: 9/5, N3: 15/8 }
+for (const id of Object.keys(expectedRagas) as RagaId[]) {
+  test(id + ' preserves asymmetric scales, correct variants and octave-scaled JI frequencies', () => {
+    const raga = ragas[id]
+    assert.deepEqual(raga.arohanam.map(n => n.swara), expectedRagas[id][0])
+    assert.deepEqual(raga.avarohanam.map(n => n.swara), expectedRagas[id][1])
+    for (const note of [...raga.arohanam, ...raga.avarohanam]) {
+      assert.equal(swaraRatios[note.swara], expectedRatios[note.swara])
+      for (const octave of [-1,0,1] as const) assert.equal(noteFrequency({ ...note, octave }, 200, id), 200 * expectedRatios[note.swara]! * 2 ** octave)
+    }
+    assert.equal(raga.arohanam.at(-1)!.octave, 1)
+    assert.equal(raga.avarohanam[0].octave, 1)
+  })
+}
+
+alankaras.forEach((lesson, i) => {
+  test('Alankaram ' + (i + 1) + ' matches every source bar, hold and direction', () => {
+    const rows = advancedSource.alankaras.slice(i * 10, i * 10 + (i === 7 ? 6 : 10))
+    assert.equal(lesson.notation, rows.join('\n'))
+    assert.deepEqual(lesson.units, rows.flatMap(row => parseTalaRow(row, lesson.talaId!)))
+    assert.equal(lesson.sections[0].units.length, lesson.sections[1].units.length)
+    assert.deepEqual(lesson.units[0], { kind: 'note', note: { swara: 'S', octave: 0 } })
+    assert.equal(lesson.units.filter(u => u.kind === 'hold').length, [0,0,0,10,0,60,0,18][i])
+  })
+})
+const geethamTitles = ['Sri Gananatha (Lambodara)','Kunda Goura','Keraya Neeranu','Padumanabha','Analekara','Vara Veena','Kamalajadala','Re Re Srirama Chandra','Sri Ramachandra']
+geethams.forEach((lesson, i) => {
+  test(lesson.title + ' retains every source note, register and aligned lyric', () => {
+    const source = advancedSource.geethams[i]
+    assert.equal(lesson.number, i + 1)
+    assert.equal(lesson.title, geethamTitles[i])
+    assert.equal(lesson.source, source.url)
+    const rows = source.rows.map((row, rowIndex) => i === 6 && rowIndex === 5 ? row.swara.replace('d p - m', 'd p m') : row.swara)
+    assert.equal(lesson.notation, rows.join('\n'))
+    assert.deepEqual(lesson.units, rows.flatMap(row => parseRagaNotation(row, lesson.ragaId!)))
+    const lyrics = source.rows.flatMap((row, rowIndex) => {
+      let text = row.sourceSahityam
+      if (i === 3 && rowIndex === 6) text = text.replace('kshaka', 'ksha ka')
+      if (i === 4) text = text.replace('sthrapu', 'sthra pu')
+      if (i === 5) text = text.replace('nchitha', 'nchi tha')
+      if (i === 6 && rowIndex === 0) text = text.replace('mala', 'ma la')
+      if (i === 6 && rowIndex === 1) text = text.replace('naa-', 'naa -')
+      return text.replace(/\|/g, ' ').trim().split(/\s+/).map(t => /^-+$/.test(t) ? '-' : t.replace(/-$/, ''))
+    })
+    assert.deepEqual(lesson.sahityam, lyrics)
+    assert.equal(lesson.sahityam!.length, lesson.units.length)
+    assert.equal(lesson.units.length / lessonTala(lesson).aksharas, [18,16,20,28,21,19,12,21,7][i])
+    assert.ok(lesson.composer)
+  })
+})
+for (const lesson of [...alankaras, ...geethams]) {
+  test(lesson.title + ' fits its own tala in all three kaalams without padding or dropping units', () => {
+    const tala = lessonTala(lesson)
+    for (const kaalam of [1,2,3] as const) {
+      const mapping = lesson.kaalams[kaalam]
+      for (const cycle of mapping.avartanams) {
+        assert.equal(cycle.beats.length, tala.aksharas)
+        assert.deepEqual(cycle.beats.map(b => b.akshara), tala.beats.map(b => b.akshara))
+        assert.ok(cycle.beats.every(b => b.units.length === 2 ** (kaalam - 1)))
+      }
+      assert.deepEqual(mapping.avartanams.flatMap(c => c.beats.flatMap(b => b.units)),
+        Array.from({ length: mapping.repetitions }, () => lesson.units).flat())
+    }
+  })
+}

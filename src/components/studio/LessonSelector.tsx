@@ -9,7 +9,7 @@ export function LessonSelector({ chapterId, onChapterChange, selected, kaalam, o
   return <aside className="surface lesson-selector" aria-label={chapter.name + ' lessons'}>
     <div className="lesson-selector-heading"><label className="eyebrow" htmlFor="curriculum-chapter">THE CURRICULUM</label>
       <select id="curriculum-chapter" value={chapterId} onChange={event => onChapterChange(event.target.value as ChapterId)}>{curriculum.map(item => <option key={item.id} value={item.id}>Chapter {item.number}: {item.name} ({item.lessons.length})</option>)}</select>
-      <h2>{chapter.lessons.length} small steps.</h2><p>Mayamalavagowla · Adi Talam</p>
+      <h2>{chapter.lessons.length} small steps.</h2><p>{chapterId === 'alankaras' ? 'Mayamalavagowla · eight tala studies' : chapterId === 'geethams' ? 'Six ragams · swara and sahityam' : 'Mayamalavagowla · Adi Talam'}</p>
       {chapterId === 'janta' && <p>Sing each pair with a clear second attack. Learn sphurita articulation with your teacher.</p>}
       <a href={chapter.source} target="_blank" rel="noreferrer">Chapter notation reference ↗</a>
     </div>

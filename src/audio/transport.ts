@@ -1,6 +1,9 @@
 import { getChapter } from '../data/curriculum'
-import { frequency, swaras } from '../data/swaras'
+import { frequency } from '../data/swaras'
 import type { ChapterId, Kaalam, NotationUnit, SwaraNote } from '../types/carnatic'
+
+import { ragas, swaraRatios } from '../data/ragas'
+import type { RagaId } from '../types/carnatic'
 
 export type LoopMode = 'off' | 'lesson' | 'avartanam'
 export type PlaybackStatus = 'idle' | 'loading' | 'playing' | 'paused' | 'complete'
@@ -38,22 +41,26 @@ export function resolveNote(units: readonly NotationUnit[], index: number): Swar
   }
   throw new Error('A phrase must begin with a swara.')
 }
-export function noteFrequency(note: SwaraNote, baseHz: number) {
-  const position = swaras.find(s => s.names.some(name => name.id === note.swara))
-  if (!position) throw new Error('Unknown swara: ' + note.swara)
-  return frequency(position.ratio, baseHz, note.octave)
+export function noteFrequency(note: SwaraNote, baseHz: number, ragaId?: RagaId) {
+  if (ragaId) {
+    const raga = ragas[ragaId]
+    if (![...raga.arohanam, ...raga.avarohanam].some(n => n.swara === note.swara)) throw new Error('Swara outside active ragam: ' + note.swara)
+  }
+  const ratio = swaraRatios[note.swara]
+  if (!ratio) throw new Error('Unknown swara: ' + note.swara)
+  return frequency(ratio, baseHz, note.octave)
 }
 export function wrapPosition(position: number, start: number, end: number) {
   return start + ((position - start) % (end - start) + end - start) % (end - start)
 }
-export function cursorAt(position: number, kaalam: Kaalam, length: number) {
+export function cursorAt(position: number, kaalam: Kaalam, length: number, aksharas = 8) {
   const perBeat = notesPerBeat(kaalam)
   const unitIndex = Math.min(Math.floor(position + 1e-8), length - 1)
   return {
     unitIndex, position,
-    beat: Math.floor(unitIndex / perBeat) % 8 + 1,
+    beat: Math.floor(unitIndex / perBeat) % aksharas + 1,
     subdivision: unitIndex % perBeat,
-    avartanam: Math.floor(unitIndex / (8 * perBeat)) + 1,
+    avartanam: Math.floor(unitIndex / (aksharas * perBeat)) + 1,
     beatProgress: (position / perBeat) % 1,
   }
 }

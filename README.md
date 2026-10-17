@@ -1,6 +1,6 @@
 # Sangeetha Bodhini
 
-An interactive Carnatic music foundation for students and teachers. The Theory page and Practice Studio include 14 Sarali, 12 Janta, 5 Melsthayi and 2 Dhatu Varisai exercises, direct swara audition, a sustained harmonium-style electronic shruti box, three-kaalam playback and synchronized Adi Talam guidance.
+An interactive Carnatic music foundation for students and teachers. The Theory page and Practice Studio include 50 lessons: 14 Sarali, 12 Janta, 5 Melsthayi, 2 Dhatu, 8 Sapta Tala Alankaras and 9 Geethams, direct swara audition, a sustained harmonium-style electronic shruti box, three-kaalam playback and seven ragam profiles, synchronized multi-tala guidance and aligned Geetham lyrics.
 
 ## Run locally in WSL
 
@@ -28,13 +28,17 @@ npm run preview
 
 - `src/types/carnatic.d.ts`: shared domain types.
 - `src/data/swaras.ts`: 12 positions, 16 names, raga scales, relative ratios, shruti keys.
-- `src/data/talas.ts`: Adi's 4 + 2 + 2 angas, all eight beats and five kriyas.
+- `src/data/talas.ts`: Adi plus Dhruva, Matya, Rupaka, Jhampa, Triputa, Ata and two Eka jatis; generated angas and six gesture types.
 - `src/data/curriculum.ts`: shared chapter catalog and lookup; chapter identity is carried by the audio transport and score.
 - `src/data/saraliVarisai.ts`: Chapter 1, all 14 Sarali exercises with holds and directional or mixed sections.
 - `src/data/jantaVarisai.ts`: Chapter 2, 12 Janta exercises labelled 1–10 plus 5A and 8A, with paired/triple attacks, holds and explicit directional sections.
 - `src/data/melsthayiVarisai.ts`: Chapter 3, five exact textbook exercises reaching upper Pa, including upper-Sa holds.
 - `src/data/dhatuVarisai.ts`: Chapter 4, both exact textbook step/skip sequences and descending phrases.
-- `src/data/notation.ts` and `textbook.ts`: shared parsing, strict 4 + 2 + 2 source-row validation, and complete eight-akshara mappings for all three kaalams.
+- `src/data/notation.ts`, `textbook.ts` and `composition.ts`: foundation/source parsers, raga-aware swara variants, mandra/tara notation, hold durations, strict tala-bar validation, and complete variable-length cycles at all three kaalams.
+- `src/data/ragas.ts` and `lessonMetadata.ts`: seven asymmetric scale profiles, audited JI ratios, and foundation defaults.
+- `src/data/alankaras.ts` / `alankaraScores.json`: Chapter 5, eight source exercises; Sankeerna Eka uses Version 1 only.
+- `src/data/geethams.ts` / `geethamScores.json`: Chapter 6, nine ordered compositions, metadata, source notes and one aligned lyric token per notation unit.
+- `tests/fixtures/advanced-notation.json`: raw source swaras/sahityam and HTML-derived registers. `scripts/fetch-curriculum.py` refreshes the review fixture using Python 3 and curl in WSL; production transcriptions require review before updating.
 - `tests/fixtures/textbook-notation.json`: fetched reference notation with source URLs and text-view line numbers.
 - `src/components/theory/`: swarasthana matrix, manual gesture guide and five-register chart.
 - `src/components/common/`: navigation, swara notation, shared shruti/drone controls and heritage tribute.
@@ -64,18 +68,44 @@ Chapters 3 and 4 transcribe all rows from the [Melsthayi reference](https://www.
 - Dataset lowercase symbols are madhya; uppercase are tara. A comma is one unit of continuation (karvai), never a rest. Slashes separate eight-unit first-speed cycles.
 - In Sarali, obvious case slips in exercises 3 (descending phrase restarts) and 4 (ascent ending) are normalized to upper Sa.
 - In Sarali, ascent/descent phrases are explicit for exercises 1–9. Exercises 10–14 contain mixed phrases, so they retain phrase sections. Every lesson also includes the full raga reference scales.
-- First, second and third kaalam group 1, 2 and 4 notation units per beat. Each mapping has eight beats per avartanam. When needed, a complete lesson repeats to finish a cycle; lesson 1 repeats twice at third speed. No rests are inserted and notes are never truncated. Holds remain continuations across beat and cycle boundaries.
-- Octave offsets are -2 to +2; displayed dots go below/above. These lessons use madhya and tara; the model supports lower-register Dha/Ni.
+- First, second and third kaalam group 1, 2 and 4 notation units per beat. Each mapping follows the lesson's tala: 4, 6, 7, 8, 9, 10 or 14 beats per avartanam. When needed, a complete lesson repeats to finish a cycle; lesson 1 repeats twice at third speed. No rests are inserted and notes are never truncated. Holds remain continuations across beat and cycle boundaries.
+- Octave offsets are -2 to +2; displayed dots go below/above. Geethams also include mandra notes; printed register marks are retained.
 - Tuning uses the selected 12-position just-intonation profile checked against Sambamoorthy, Book IV, Table V: R3/G2 = 6/5, D3/N2 = 9/5, and M2 = 45/32. Mayamalavagowla is unchanged. Western A440 anchors retain full precision, with display-only rounding. See [the tuning audit](docs/tuning-audit.md) for all ratios, historical naming differences, sources and octave checks. These fixed pitches do not model gamakas or claim universal performance intonation.
 - Adi Talam is Chatusra Jathi Triputa: one four-count laghu and two two-count dhrithams. The finger illustrations are schematic; the names and text describe the movement.
 - The heritage section uses Wikimedia images: a Purandara Dasa statue photograph, a historical Thyagaraja painting, and India Post stamps for Dikshitar and Syama Sastri. Sources and licences appear on the page and in `public/portraits/CREDITS.md`.
 
 ## Audio behavior and verification
 
-Live kaalam changes preserve phrase position and regroup the notation. Switching exercises or chapters stops and resets the score, while retaining tonic, kaalam, tempo, looping preference and the independent drone. All audio stops when the browser tab is hidden.
+Live kaalam changes preserve phrase position and regroup the notation. Switching exercises or chapters stops and resets the score, and restores tempo to 60 BPM with looping off, while retaining tonic, kaalam and the independent drone. Pending melody and audition voices are cancelled. All audio stops when the browser tab is hidden.
 
 The electronic shruti box uses four additive reeds: mandra Pa (3/4), pure tara Sa (2/1), tara Sa sharpened by 3.5 cents, and madhya Sa (1/1). Their gain levels are 0.075, 0.045, 0.035 and 0.06 respectively, balancing bass body, upper-tonic shimmer and the centered tonic. The badge reads P̣ · Ṡ · S (Panchama Shruti: Mandra Pa · Tara Sa · Madhya Sa). Harmonics include the fundamental, prominent second and third harmonics, and diminishing fifth, seventh and ninth overtones. A 1000 Hz low-pass filter with Q 2.4 shapes the reeds. A 0.2 Hz bellows LFO modulates amplitude and cutoff by 1.2%. A 350 ms attack and 120 ms release avoid abrupt starts/stops. The sound sustains until stopped, with no plucks or looping sample seams. It is synthesized rather than a recording of a particular instrument.
 
-Current automated checks cover 46 tests, including all Janta, Melsthayi and Dhatu exercises at all three kaalams, chapter switching, reed detuning/modulation, sustained audio, retuning and source cancellation. Typecheck, production build and lint pass.
+Current automated checks cover 95 tests, including all Janta, Melsthayi, Dhatu, Alankaram and Geetham lessons at all three kaalams, chapter switching, reed detuning/modulation, sustained audio, retuning and source cancellation. Typecheck, production build and lint pass.
 
 See [audio architecture and measured verification](docs/audio-architecture.md) for scheduling, lifecycle and transport details. To run real offline-render and live audio-clock checks, open `http://localhost:5173/tests/audio-browser.html` while Vite runs, then click Run audio checks. This test harness is not included in the production build.
+
+## Sapta Tala Alankaras and Geethams
+
+Chapter 5 follows the [Alankaram reference](https://www.shivkumar.org/music/basics/alankaram.htm): Dhruva 14, Matya 10, Rupaka 6, Mishra Jhampa 10, Tisra Triputa 7, Khanda Ata 14, Chatushra Eka 4 and Sankeerna Eka 9. All 76 selected source rows retain their exact anga groupings and holds.
+
+Chapter 6 preserves the written notation and lyric lines from the nine supplied references in this order:
+
+| Lesson | Composition / notation reference | Ragam | Tala angas |
+| --- | --- | --- | --- |
+| 1 | [Sri Gananatha (Lambodara)](https://www.shivkumar.org/music/varnams/lambodara-geetham.htm) | Malahari | Rupaka 2 + 4 |
+| 2 | [Kunda Goura](https://www.shivkumar.org/music/varnams/kundagoura-geetham.htm) | Malahari | Rupaka 2 + 4 |
+| 3 | [Keraya Neeranu](https://www.shivkumar.org/music/varnams/kerayaneeranu-geetham.htm) | Malahari | Triputa 3 + 2 + 2 |
+| 4 | [Padumanabha](https://www.shivkumar.org/music/varnams/padumanabha-geetham.htm) | Malahari | Triputa 3 + 2 + 2 |
+| 5 | [Analekara](https://www.shivkumar.org/music/varnams/analekara-geetham.htm) | Suddha Saveri | Triputa 3 + 2 + 2 |
+| 6 | [Vara Veena](https://www.shivkumar.org/music/varnams/varaveena-geetham.htm) | Mohanam | Rupaka 2 + 4 |
+| 7 | [Kamalajadala](https://www.shivkumar.org/music/varnams/kamalajathala-kalyani-geetham.htm) | Kalyani | Triputa 3 + 2 + 2 |
+| 8 | [Re Re Srirama Chandra](https://www.shivkumar.org/music/varnams/reresrirama-arabhi-geetham.htm) | Arabhi | Triputa 3 + 2 + 2 |
+| 9 | [Sri Ramachandra](https://www.shivkumar.org/music/varnams/srirama-bhairavi-geetham.htm) | Bhairavi | Dhruva 4 + 2 + 4 + 4 |
+
+Sri Ramachandra uses the source's Dhruva grouping, explicitly confirmed for this project. Keraya/Padumanabha headings say Chathurasra but their notation groups 3 + 2 + 2. Kamalajadala's source calls it Misra Chapu (Triputa), printing 3 + 4; this Studio uses the requested Tisra Triputa teaching count. The score regroups sequential units without changing durations.
+
+The Geetham HTML convention differs from the exercise pages: plain capitals are madhya, bold capitals are tara, and lowercase letters are mandra. Import preserves that formatting before normalization. Some repeated phrases omit register styling in the source; these remain as printed rather than silently inferred. Scale metadata follows the requested modern profiles (Malahari G3, Mohanam G3, Arabhi N3/G3, Bhairavi M1), correcting conflicting scale-header subscripts. Bhairavi D1/D2 remains explicit per score note.
+
+Merged lyric syllables are split only where needed for beat alignment: Padumanabha's ksha-ka, Analekara's sthra-pu, Vara Veena's nchi-tha, and Kamalajadala's ma-la / naa-extension. Kamalajadala's final D P–M dash separates a phrase without adding a beat. The raw source fixture preserves these original forms. Parenthesized textual return cues are documented but not automatically expanded into a performed reprise.
+
+Swara and lyric tokens share one clickable highlighted cell; holds continue the preceding synthesized voice across tala boundaries. Composer attributions absent from the notation pages are cross-checked against linked karnATik references; Analekara remains unspecified. Ragam scales, composer metadata, tala formula and composition-specific source notes appear above the tracker.

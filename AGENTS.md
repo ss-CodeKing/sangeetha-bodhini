@@ -5,7 +5,7 @@
 Sangeetha Bodhini is a React + TypeScript Carnatic learning application built with Vite.
 
 - `src/components/`: Theory, Studio, and shared UI components.
-- `src/data/`: chapter catalog, Sarali/Janta/Melsthayi/Dhatu exercises, notation parsing, tuning, and talam definitions.
+- `src/data/`: chapter catalog, six curriculum chapters, raga profiles, notation parsing, tuning, and talam definitions.
 - `src/audio/`: Web Audio engine, transport calculations, melody voices, and shruti reed synthesis.
 - `src/hooks/`: shared engine lifecycle and talam subscriptions; keep synthesis in `src/audio/`.
 - `src/types/carnatic.d.ts`: shared musical domain types.
@@ -33,7 +33,7 @@ Follow existing TypeScript conventions: two-space indentation, single quotes, no
 
 Tests use `node:test` and `node:assert/strict`, executed through `tsx`. Keep tests in `tests/*.test.ts` with descriptive behavior names. No percentage coverage threshold is configured; add regressions for changed behavior.
 
-Preserve karvais, octave registers, complete eight-beat cycles, and all three kaalams. Printed Janta labels such as `5A` differ from playback ordinals. Schedule audio against the AudioContext clock, not timer callback counts. For synthesis changes, run `/tests/audio-browser.html` through Vite and check sustain, release, pitch, and clipping.
+Preserve karvais, octave registers, complete cycles for each active tala, and all three kaalams. Printed Janta labels such as `5A` differ from playback ordinals. Schedule audio against the AudioContext clock, not timer callback counts. For synthesis changes, run `/tests/audio-browser.html` through Vite and check sustain, release, pitch, and clipping.
 
 ## Commit & Pull Request Guidelines
 

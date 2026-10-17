@@ -1,0 +1,118 @@
+[
+  {
+    "rows": [
+      "s r g m | g r | s r g r | s r g m ||",
+      "r g m p | m g | r g m g | r g m p ||",
+      "g m p d | p m | g m p m | g m p d ||",
+      "m p d n | d p | m p d p | m p d n ||",
+      "p d n S | n d | p d n d | p d n S ||",
+      "S n d p | d n | S n d n | S n d p ||",
+      "n d p m | p d | n d p d | n d p m ||",
+      "d p m g | m p | d p m p | d p m g ||",
+      "p m g r | g m | p m g m | p m g r ||",
+      "m g r s | r g | m g r g | m g r s ||"
+    ],
+    "talaId": "dhruva"
+  },
+  {
+    "rows": [
+      "s r g r | s r | s r g m ||",
+      "r g m g | r g | r g m p ||",
+      "g m p m | g m | g m p d ||",
+      "m p d p | m p | m p d n ||",
+      "p d n d | p d | p d n S ||",
+      "S n d n | S n | S n d p ||",
+      "n d p d | n d | n d p m ||",
+      "d p m p | d p | d p m g ||",
+      "p m g m | p m | p m g r ||",
+      "m g r g | m g | m g r s ||"
+    ],
+    "talaId": "matya"
+  },
+  {
+    "rows": [
+      "s r | s r g m ||",
+      "r g | r g m p ||",
+      "g m | g m p d ||",
+      "m p | m p d n ||",
+      "p d | p d n S ||",
+      "S n | S n d p ||",
+      "n d | n d p m ||",
+      "d p | d p m g ||",
+      "p m | p m g r ||",
+      "m g | m g r s ||"
+    ],
+    "talaId": "rupaka"
+  },
+  {
+    "rows": [
+      "s r g s r s r | g | m , ||",
+      "r g m r g r g | m | p , ||",
+      "g m p g m g m | p | d , ||",
+      "m p d m p m p | d | n , ||",
+      "p d n p d p d | n | S , ||",
+      "S n d S n S n | d | p , ||",
+      "n d p n d n d | p | m , ||",
+      "d p m d p d p | m | g , ||",
+      "p m g p m p m | g | r , ||",
+      "m g r m g m g | r | s , ||"
+    ],
+    "talaId": "jhampa"
+  },
+  {
+    "rows": [
+      "s r g | s r | g m ||",
+      "r g m | r g | m p ||",
+      "g m p | g m | p d ||",
+      "m p d | m p | d n ||",
+      "p d n | p d | n S ||",
+      "S n d | S n | d p ||",
+      "n d p | n d | p m ||",
+      "d p m | d p | m g ||",
+      "p m g | p m | g r ||",
+      "m g r | m g | r s ||"
+    ],
+    "talaId": "triputa"
+  },
+  {
+    "rows": [
+      "s r , g , | s , r g , | m , | m , ||",
+      "r g , m , | r , g m , | p , | p , ||",
+      "g m , p , | g , m p , | d , | d , ||",
+      "m p , d , | m , p d , | n , | n , ||",
+      "p d , n , | p , d n , | S , | S , ||",
+      "S n , d , | S , n d , | p , | p , ||",
+      "n d , p , | n , d p , | m , | m , ||",
+      "d p , m , | d , p m , | g , | g , ||",
+      "p m , g , | p , m g , | r , | r , ||",
+      "m g , r , | m , g r , | s , | s , ||"
+    ],
+    "talaId": "ata"
+  },
+  {
+    "rows": [
+      "s r g m ||",
+      "r g m p ||",
+      "g m p d ||",
+      "m p d n ||",
+      "p d n S ||",
+      "S n d p ||",
+      "n d p m ||",
+      "d p m g ||",
+      "p m g r ||",
+      "m g r s ||"
+    ],
+    "talaId": "eka"
+  },
+  {
+    "rows": [
+      "s , r , g , m p d ||",
+      "r , g , m , p d n ||",
+      "g , m , p , d n S ||",
+      "S , n , d , p m g ||",
+      "n , d , p , m g r ||",
+      "d , p , m , g r s ||"
+    ],
+    "talaId": "sankeernaEka"
+  }
+]

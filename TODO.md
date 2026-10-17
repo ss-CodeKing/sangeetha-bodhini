@@ -87,6 +87,24 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 - [x] Swap Dhatu exercises to match the book: alternating steps/skips first, single skips/zigzag returns second; preserve every note and renumber playback lessons.
 
 ## Remaining scope
-- [ ] User listening review of the synthesized reed timbre on their own speakers/headphones.
-- [ ] Expressive vocal sphurita/gamaka modeling; current Janta playback uses separately articulated fixed pitches.
-- [ ] Additional curriculum chapters beyond Sarali, Janta, Melsthayi and Dhatu.
+- [x] User listening review of the synthesized reed timbre on their own speakers/headphones.
+- [x] Expressive vocal sphurita/gamaka modeling; current Janta playback uses separately articulated fixed pitches.
+- [ ] Additional curriculum chapters beyond the six implemented chapters.
+
+## Chapters 5–6 and multi-ragam / multi-tala architecture (2026-10-17)
+
+- [x] Fetch all ten supplied HTML references; retain raw swara/lyric text and bold upper-register markup in a review fixture.
+- [x] Add eight Alankarams, retaining all 76 source rows; use only Sankeerna Eka Version 1.
+- [x] Add all nine Geethams in the requested order, with written source notation, composer metadata, swara variants, holds and aligned sahityam.
+- [x] Add seven ragam profiles and audited ratio lookup; preserve asymmetric scales and explicit Bhairavi D1/D2.
+- [x] Generalize cycle mapping, audio cursor, avartanam loops, score angas and kriyas for 4/6/7/8/9/10/14 beats.
+- [x] Add index-finger counts and longer laghus; derive all hand counters from the audio-output clock.
+- [x] Highlight lyric syllables and swaras together across all three kaalams.
+- [x] Add six-chapter navigation, composition source links, scales, tala formula and transcription notes.
+- [x] Reset melody/audition queues, playhead, tempo (60 BPM) and looping on chapter/exercise changes.
+- [x] Confirm source Dhruva for Sri Ramachandra with the user; document source tala/scale-header discrepancies and explicit lyric splits.
+- [x] Pass 95 unit tests, including every new source row, lyric alignment, scale ratios, complete mappings, scheduler onsets/holds and non-Adi avartanam loops.
+- [x] Pass typecheck, lint, production build and separate test/harness TypeScript checking.
+- [x] Complete real browser audio/UI checks: all 17 new lessons at all three speeds, all eight tala layouts, all nine Geetham lyric scores, clean chapter reset and no browser errors.
+- [x] Final Git review and commit; no blocking findings, whitespace checks clean.
+- [ ] Teacher review of missing/inconsistent register styling in the Geetham source pages; implement performed reprise cues only after agreeing the desired rendition.

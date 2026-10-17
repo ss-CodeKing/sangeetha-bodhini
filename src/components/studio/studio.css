@@ -34,7 +34,7 @@
 .tracker-beat-row { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
 .tracker-count { min-height: 30px; display: grid; place-items: center; font: 16px var(--font-display); color: #9a794f; border: 1px solid #e7dac4; border-radius: 4px; }
 .tracker-count.selected { background: var(--color-maroon); color: #fff1d5; border-color: var(--color-maroon); }
-.tracker-count:nth-child(4), .tracker-count:nth-child(6) { margin-right: 4px; }
+
 .beat-progress { height: 3px; margin-top: 9px; background: #eee4d2; overflow: hidden; border-radius: 2px; }
 .beat-progress > span { display: block; height: 100%; background: #c48a38; transform-origin: left; }
 .live-beats > p { font-size: 9px; color: #987e5c; margin-top: 7px; }
@@ -81,7 +81,7 @@
 .cycle-label { font-size: 8px; color: #a18b6c; letter-spacing: 1px; margin: 0 16px 10px; }
 .notation-row { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); }
 .notation-beat { display: flex; align-items: center; justify-content: space-evenly; min-height: 57px; border-right: 1px solid #eee4d4; padding: 4px 2px; gap: 1px; }
-.notation-beat:nth-child(4), .notation-beat:nth-child(6) { border-right: 2px solid #cfb48e; }
+.notation-beat.anga-end { border-right: 2px solid #cfb48e; }
 .notation-beat.current-beat { background: #f6eacf; }
 .notation-note { background: none; border: 1px solid transparent; color: #78522f; border-radius: 4px; padding: 8px 2px; min-width: 0; flex: 1; position: relative; }
 .notation-note .swara { font-size: 20px; white-space: nowrap; }
@@ -155,3 +155,17 @@
 .live-talam { position: sticky; top: 99px; z-index: 5; background: #fffefa; box-shadow: 0 4px 16px #6c4b1910; }
 @media (max-width: 760px) { .live-talam { top: 125px; } .score-scroll { max-height: 390px; } }
 .score-grid.density-4 { min-width: 880px; }
+
+/* Tala dimensions come from the active composition, including 14- and 9-beat cycles. */
+.score-grid, .score-grid.density-4 { min-width: var(--score-width, 590px); }
+.score-angas { grid-template-columns: var(--anga-columns, 4fr 2fr 2fr); }
+.score-counts, .notation-row { grid-template-columns: repeat(var(--beats, 8), minmax(0, 1fr)); }
+.sahityam { display: block; font-size: 10px; line-height: 1.5; margin-top: 7px; overflow-wrap: anywhere; }
+.notation-note:has(.sahityam) { align-self: stretch; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.raga-scale { margin: -8px 0 20px; padding: 12px 15px; border: 1px solid #e6d7bd; border-radius: 7px; background: #fcf7ec; font-size: 11px; color: #806443; line-height: 1.9; }
+.raga-scale strong { color: #754a30; margin-right: 6px; }
+.raga-scale a { color: var(--color-maroon); }
+.raga-scale details { margin-top: 5px; }
+.raga-scale summary { cursor: pointer; }
+.tracker-angas span { overflow: hidden; text-overflow: ellipsis; }
+.tracker-count { min-width: 0; }
