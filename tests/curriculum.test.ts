@@ -59,8 +59,58 @@ test('all 14 lessons preserve holds, octave transitions and complete cycles at e
 test('shruti covers all 12 pitch classes and defaults to G sharp', () => {
   assert.equal(shrutiKeys.length, 12)
   assert.equal(shrutiKeys[defaultShrutiIndex].label, 'G♯3 / A♭3')
-  assert.equal(shrutiKeys[defaultShrutiIndex].hz, 207.65)
+  assert.equal(shrutiKeys[defaultShrutiIndex].hz.toFixed(2), '207.65')
   assert.ok(shrutiKeys.every((key, i) => i === 0 || key.hz > shrutiKeys[i - 1].hz))
   assert.equal(formatSwara({ swara: 'S', octave: -2 }), 'S\u0324')
   assert.equal(formatSwara({ swara: 'S', octave: 2 }), 'S\u0308')
+})
+
+test('all modern aliases use the audited JI ratios and matching rational labels', () => {
+  const expected = [
+    [['S'], 1, '1/1'], [['R1'], 16/15, '16/15'], [['R2', 'G1'], 9/8, '9/8'],
+    [['R3', 'G2'], 6/5, '6/5'], [['G3'], 5/4, '5/4'], [['M1'], 4/3, '4/3'],
+    [['M2'], 45/32, '45/32'], [['P'], 3/2, '3/2'], [['D1'], 8/5, '8/5'],
+    [['D2', 'N1'], 5/3, '5/3'], [['D3', 'N2'], 9/5, '9/5'], [['N3'], 15/8, '15/8'],
+  ] as const
+  swaras.forEach((position, i) => {
+    assert.deepEqual(position.names.map(name => name.id), expected[i][0])
+    assert.equal(position.ratio, expected[i][1])
+    assert.equal(position.ratioLabel, expected[i][2])
+    const [numerator, denominator] = position.ratioLabel.split('/').map(Number)
+    assert.equal(position.ratio, numerator / denominator)
+  })
+})
+
+test('Mayamalavagowla resolves every note and octave to the required ratios', () => {
+  const resolve = (note: (typeof arohanam)[number], baseHz: number) => {
+    const position = swaras.find(s => s.names.some(name => name.id === note.swara))
+    assert.ok(position)
+    return frequency(position.ratio, baseHz, note.octave)
+  }
+  assert.deepEqual(arohanam.map(note => resolve(note, 1)), [1, 16/15, 5/4, 4/3, 3/2, 8/5, 15/8, 2])
+  // Independent Hz fixtures at the 240 Hz reference used in Sambamoorthy's chart.
+  assert.deepEqual(arohanam.map(note => resolve(note, 240)), [240, 256, 300, 320, 360, 384, 450, 480])
+  assert.deepEqual(avarohanam.map(note => resolve(note, 240)), [480, 450, 384, 360, 320, 300, 256, 240])
+})
+
+test('all twelve unrounded A440 anchors and octave transpositions match reference frequencies', () => {
+  const referenceHz = [
+    130.8127826502993, 138.59131548843604, 146.8323839587038, 155.56349186104043,
+    164.81377845643496, 174.61411571650194, 184.9972113558172, 195.99771799087463,
+    207.65234878997256, 220, 233.08188075904496, 246.94165062806206,
+  ]
+  const near = (actual: number, expected: number) => assert.ok(Math.abs(actual - expected) < 1e-9, actual + ' ≠ ' + expected)
+  shrutiKeys.forEach((anchor, i) => {
+    near(anchor.hz, referenceHz[i])
+    near(frequency(1, anchor.hz, -1), referenceHz[i] / 2)
+    near(frequency(1, anchor.hz, 0), referenceHz[i])
+    near(frequency(1, anchor.hz, 1), referenceHz[i] * 2)
+    // Ratio and register compose: lower Pa and upper Pa remain pure fifths.
+    near(frequency(3/2, anchor.hz, -1), referenceHz[i] * 3/4)
+    near(frequency(3/2, anchor.hz, 1), referenceHz[i] * 3)
+  })
+  const baseHz = shrutiKeys[defaultShrutiIndex].hz
+  near(frequency(1, baseHz, -1), 103.82617439498628)
+  near(frequency(1, baseHz, 0), 207.65234878997256)
+  near(frequency(1, baseHz, 1), 415.3046975799451)
 })

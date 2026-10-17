@@ -31,3 +31,10 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 - [x] Render both octave dots horizontally above/below the swara.
 - [x] Offer all 12 shruti keys with G♯3 as the default.
 - [x] Replace symbolic silhouettes with attributed internet images.
+
+## Tuning audit
+- [x] Check the selected 12-position JI profile against Sambamoorthy's 22-shruti chart.
+- [x] Correct R3/G2 to 6/5 and D3/N2 to 9/5; document M2 and historical naming variants.
+- [x] Verify Mayamalavagowla through Tara Sa at 2/1.
+- [x] Calculate full-precision C3–B3 anchors from A440; retain G♯3 default.
+- [x] Add ratio, frequency and octave regression tests plus source notes.
