@@ -5,6 +5,9 @@
 .studio-layout { display: grid; grid-template-columns: 235px minmax(0, 1fr); gap: 27px; align-items: start; }
 .lesson-selector { overflow: hidden; }
 .lesson-selector-heading { padding: 24px 18px; border-bottom: 1px solid #e7dcc7; background: #f8f1e5; }
+.lesson-selector-heading select { display: block; width: 100%; margin-top: 12px; padding: 9px 5px; background: #fffbf3; border: 1px solid #ddcaad; border-radius: 4px; color: #685139; font-size: 11px; }
+.lesson-selector-heading p { font-size: 11px; line-height: 1.6; margin-top: 8px; color: #876c4c; }
+.lesson-selector-heading a { display: inline-block; margin-top: 10px; font-size: 10px; color: var(--color-maroon); }
 .lesson-selector-heading h2 { font: 23px var(--font-display); margin-top: 10px; color: #5d3e29; }
 .lesson-selector-heading > p:last-child { font-size: 10px; color: #876c4c; margin-top: 8px; }
 .lesson-buttons { padding: 8px; }

@@ -1,6 +1,7 @@
 import { CarnaticAudioEngine } from '../src/audio/CarnaticAudioEngine'
 import { createWarmVoice } from '../src/audio/voice'
-import { noteFrequency, unitDuration } from '../src/audio/transport'
+import { createShrutiVoice } from '../src/audio/shrutiVoice'
+import { DRONE_NOTES, noteFrequency, unitDuration } from '../src/audio/transport'
 import { shrutiKeys, defaultShrutiIndex } from '../src/data/swaras'
 import type { Kaalam, SwaraNote } from '../src/types/carnatic'
 
@@ -88,6 +89,53 @@ async function realtimeCheck(kaalam: Kaalam) {
   }
 }
 
+async function offlineDroneCheck(baseHz: number) {
+  const rate = 48000
+  const context = new OfflineAudioContext(1, rate * 5, rate)
+  DRONE_NOTES.forEach((note, index) => {
+    const voice = createShrutiVoice(context, context.destination, noteFrequency(note, baseHz), 0.02, index === 2 ? 0.025 : 0.07)
+    voice.cancel(4.5)
+  })
+  // A high register audition overlaps the chord, checking combined headroom.
+  createWarmVoice(context, context.destination, baseHz * 4, 1, 0.9, 0.23)
+  const samples = (await context.startRendering()).getChannelData(0)
+  let peak = 0, jump = 0
+  for (let i = 1; i < samples.length; i++) {
+    peak = Math.max(peak, Math.abs(samples[i]))
+    jump = Math.max(jump, Math.abs(samples[i] - samples[i - 1]))
+  }
+  check(peak > 0.03 && peak < 0.85, 'Missing or clipping reed drone / audition mix')
+  check(jump < 0.12, 'Discontinuity in reed activation / release')
+  for (let offset = 2; offset < 4.5; offset += 0.25) {
+    const window = samples.subarray(offset * rate, (offset + 0.2) * rate)
+    const rms = Math.sqrt(window.reduce((sum, value) => sum + value * value, 0) / window.length)
+    check(rms > 0.002, 'Drone decayed or stopped during sustain at ' + offset + ' s: RMS ' + rms + ', tonic ' + baseHz)
+  }
+  check(samples.subarray(4.7 * rate).every(sample => Math.abs(sample) < 1e-6), 'Drone leaked after release')
+  report('Reed drone + high Sa at ' + baseHz.toFixed(2) + ' Hz: peak ' + peak.toFixed(4) + ', max sample step ' + jump.toFixed(4) + '; continuous sustain and clean release pass.')
+}
+
+async function liveDroneCheck() {
+  const engine = new CarnaticAudioEngine()
+  let peakRms = 0
+  const unsubscribe = engine.subscribe(() => { peakRms = Math.max(peakRms, engine.getSnapshot().outputLevel) })
+  try {
+    await engine.setDrone(true)
+    await delay(1500)
+    check(peakRms > 0.003, 'No live reed output')
+    engine.configure({ baseHz: 220 })
+    engine.selectChapter('janta')
+    engine.configure({ kaalam: 3 })
+    await engine.play()
+    await delay(1800)
+    check(engine.getSnapshot().unitIndex > 3, 'Janta playback did not advance')
+    engine.pause()
+    check(engine.getSnapshot().drone, 'Pausing Janta stopped the drone')
+    await engine.setDrone(false)
+    report('Live reed drone: nonzero output, retuning, Janta playback and independent stop pass; peak RMS ' + peakRms.toFixed(4) + '.')
+  } finally { unsubscribe(); engine.dispose() }
+}
+
 button.addEventListener('click', async () => {
   button.disabled = true
   results.replaceChildren()
@@ -97,7 +145,9 @@ button.addEventListener('click', async () => {
       { swara: 'S', octave: 0 }, { swara: 'R1', octave: 0 }, { swara: 'G2', octave: 0 },
       { swara: 'G3', octave: 0 }, { swara: 'P', octave: -1 }, { swara: 'N2', octave: 0 }, { swara: 'S', octave: 1 },
     ] as SwaraNote[]) await offlineCheck(note)
+    for (const key of shrutiKeys) await offlineDroneCheck(key.hz)
     for (const kaalam of [1, 2, 3] as Kaalam[]) await realtimeCheck(kaalam)
+    await liveDroneCheck()
     status.textContent = 'All audio checks passed'
     status.dataset.result = 'passed'
   } catch (error) {

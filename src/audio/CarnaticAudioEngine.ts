@@ -1,8 +1,10 @@
 import { defaultShrutiIndex, shrutiKeys } from '../data/swaras'
-import type { Kaalam, SwaraNote } from '../types/carnatic'
+import type { ChapterId, Kaalam, SwaraNote } from '../types/carnatic'
+import { curriculum, getChapter } from '../data/curriculum'
+import { createShrutiVoice } from './shrutiVoice'
 import { createWarmVoice } from './voice'
 import type { Voice } from './voice'
-import { cursorAt, DRONE_STRINGS, lessonUnits, noteFrequency, notesPerBeat, resolveNote, unitDuration, wrapPosition } from './transport'
+import { cursorAt, DRONE_NOTES, lessonUnits, noteFrequency, notesPerBeat, resolveNote, unitDuration, wrapPosition } from './transport'
 import type { LoopMode, PlaybackSnapshot } from './transport'
 
 export interface EngineRuntime {
@@ -39,13 +41,11 @@ export class CarnaticAudioEngine {
   private scheduleCursor = 0
   private rangeStart = 0
   private rangeEnd = 16
-  private droneAnchor = 0
-  private dronePluck = 0
   private playRequest = 0
   private droneRequest = 0
   private auditionRequest = 0
   private state: PlaybackSnapshot = {
-    status: 'idle', lessonNumber: 1, kaalam: 1, bpm: 60,
+    status: 'idle', chapterId: 'sarali', lessonNumber: 1, kaalam: 1, bpm: 60,
     baseHz: shrutiKeys[defaultShrutiIndex].hz, loopMode: 'off', drone: false,
     unitIndex: 0, position: 0, beat: 1, subdivision: 0, avartanam: 1,
     beatProgress: 0, note: { swara: 'S', octave: 0 },
@@ -57,7 +57,7 @@ export class CarnaticAudioEngine {
   subscribe = (listener: () => void) => { this.listeners.add(listener); return () => { this.listeners.delete(listener) } }
   getSnapshot = () => this.state
 
-  private get units() { return lessonUnits(this.state.lessonNumber, this.state.kaalam) }
+  private get units() { return lessonUnits(this.state.lessonNumber, this.state.kaalam, this.state.chapterId) }
   private get step() { return unitDuration(this.state.bpm, this.state.kaalam) }
   private renderNow() { return this.context?.currentTime ?? 0 }
   private audibleNow() {
@@ -126,10 +126,10 @@ export class CarnaticAudioEngine {
     voices.forEach(voice => voice.cancel(now))
     voices.clear()
   }
-  private voice(hz: number, start: number, duration: number, group: Set<Voice>, drone = false) {
+  private voice(hz: number, start: number, duration: number, group: Set<Voice>) {
     if (!this.context || !this.destination || duration < 0.005) return
     let voice: Voice
-    voice = createWarmVoice(this.context, this.destination, hz, start, duration, drone ? 0.075 : 0.23, drone, () => group.delete(voice))
+    voice = createWarmVoice(this.context, this.destination, hz, start, duration, 0.23, () => group.delete(voice))
     group.add(voice)
   }
   private updateRange(position: number) {
@@ -177,9 +177,16 @@ export class CarnaticAudioEngine {
     this.publish({ status: 'idle', position: 0, error: null })
   }
   selectLesson = (number: number) => {
-    if (number < 1 || number > 14 || !Number.isInteger(number)) return
+    if (number < 1 || number > getChapter(this.state.chapterId).lessons.length || !Number.isInteger(number)) return
     this.reset()
     this.state = { ...this.state, lessonNumber: number }
+    this.updateRange(0)
+    this.publish({ status: 'idle', position: 0 })
+  }
+  selectChapter = (chapterId: ChapterId) => {
+    if (chapterId === this.state.chapterId || !curriculum.some(chapter => chapter.id === chapterId)) return
+    this.reset()
+    this.state = { ...this.state, chapterId, lessonNumber: 1 }
     this.updateRange(0)
     this.publish({ status: 'idle', position: 0 })
   }
@@ -202,9 +209,7 @@ export class CarnaticAudioEngine {
     else this.publish({ position: mapped })
     if (patch.baseHz !== undefined && this.state.drone) {
       this.cancel(this.droneVoices)
-      this.droneAnchor = this.renderNow() + START_LEAD
-      this.dronePluck = 0
-      this.tick()
+      this.startDrone()
     }
     if (patch.baseHz !== undefined) this.cancel(this.auditionVoices)
   }
@@ -216,11 +221,11 @@ export class CarnaticAudioEngine {
       this.keepTimer()
       return
     }
+    if (this.state.drone) return
     try {
       await this.unlock()
       if (request !== this.droneRequest) return
-      this.droneAnchor = this.renderNow() + START_LEAD
-      this.dronePluck = 0
+      this.startDrone()
       this.publish({ drone: true, error: null })
       this.tick()
     } catch (error) {
@@ -262,16 +267,15 @@ export class CarnaticAudioEngine {
       this.scheduleCursor = raw + end - local
     }
   }
-  private scheduleDrone(now: number) {
-    const interval = 0.85
-    if (this.droneAnchor + this.dronePluck * interval < now - 0.04) {
-      this.dronePluck = Math.ceil((now + 0.005 - this.droneAnchor) / interval)
-    }
-    while (this.droneAnchor + this.dronePluck * interval < now + LOOK_AHEAD) {
-      const when = this.droneAnchor + this.dronePluck * interval
-      this.voice(noteFrequency(DRONE_STRINGS[this.dronePluck % 4], this.state.baseHz), Math.max(when, now + 0.002), 3.25, this.droneVoices, true)
-      this.dronePluck++
-    }
+  private startDrone() {
+    if (!this.context || !this.destination) return
+    const start = this.renderNow() + START_LEAD
+    DRONE_NOTES.forEach((note, index) => {
+      let voice: Voice
+      voice = createShrutiVoice(this.context!, this.destination!, noteFrequency(note, this.state.baseHz), start,
+        index === 2 ? 0.025 : 0.07, () => this.droneVoices.delete(voice))
+      this.droneVoices.add(voice)
+    })
   }
   // setTimeout only wakes the scheduler. Every onset is calculated from an
   // AudioContext epoch, never from the number/timing of JS timer callbacks.
@@ -284,7 +288,6 @@ export class CarnaticAudioEngine {
         this.state = { ...this.state, status: 'complete' }
       } else this.scheduleMelody(now)
     }
-    if (this.state.drone && this.context?.state === 'running') this.scheduleDrone(now)
     this.publish()
     this.keepTimer()
   }

@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { saraliVarisai } from '../../data/saraliVarisai'
+import { getChapter } from '../../data/curriculum'
 import { formatSwara } from '../../data/swaras'
 import { notesPerBeat } from '../../audio/transport'
 import type { PlaybackSnapshot } from '../../audio/transport'
 import { Swara } from '../common/Swara'
 
 export function NotationGrid({ snapshot, onSeek }: { snapshot: PlaybackSnapshot; onSeek: (index: number) => void }) {
-  const mapping = useMemo(() => saraliVarisai[snapshot.lessonNumber - 1].kaalams[snapshot.kaalam], [snapshot.lessonNumber, snapshot.kaalam])
+  const mapping = useMemo(() => getChapter(snapshot.chapterId).lessons[snapshot.lessonNumber - 1].kaalams[snapshot.kaalam], [snapshot.chapterId, snapshot.lessonNumber, snapshot.kaalam])
   const activeRow = useRef<HTMLDivElement>(null)
   const scrollArea = useRef<HTMLDivElement>(null)
   const playing = snapshot.status === 'playing'

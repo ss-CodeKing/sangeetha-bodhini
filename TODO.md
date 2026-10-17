@@ -1,7 +1,7 @@
 # Sangeetha Bodhini
 Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 
-## Step 1 — current review scope
+## Step 1 — foundations (complete)
 - [x] Read architecture and verify WSL Node/npm.
 - [x] Scaffold Vite, React, TypeScript, Tailwind, Lucide and Framer Motion.
 - [x] Configure palette and typography tokens.
@@ -14,8 +14,8 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 - [x] Verify data, TypeScript, lint, build and running Vite server.
 - [x] User review of data and Introduction page; tuning audit accepted.
 
-## Step 2 — after review
-- [x] Web Audio synthesis, swara audition and tanpura drone.
+## Step 2 — practice studio (complete)
+- [x] Web Audio synthesis and swara audition; drone upgraded to an electronic shruti box below.
 - [x] Look-ahead scheduler, talam clock and 45–90 BPM controls.
 - [x] Studio lesson selector and notation grid.
 - [x] Three-kaalam playback with synchronized notes and kriyas.
@@ -38,3 +38,26 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 - [x] Verify Mayamalavagowla through Tara Sa at 2/1.
 - [x] Calculate full-precision C3–B3 anchors from A440; retain G♯3 default.
 - [x] Add ratio, frequency and octave regression tests plus source notes.
+
+## Direct playback and kalam labels (complete)
+- [x] Play swaras directly when clicking explorer notes; remove the separate Play swara button.
+- [x] Audition Sa from all five sthayi cards, including repeated selections.
+- [x] Display Prathama, Dwithiya and Thrithiya kaalam in lesson controls and metadata.
+
+## Electronic shruti box and Chapter 2 (2026-10-17)
+- [x] Add a separate additive reed voice with fundamental, second, third and gently diminishing odd overtones.
+- [x] Add ±2 cent double reeds, a resonant 1000 Hz low-pass filter (Q 2.4), and 0.2 Hz bellows modulation at 1.2% depth.
+- [x] Sustain Sa and Pa with a softer lower Pa; add smooth attack, stop and retuning ramps.
+- [x] Introduce shared curriculum types, chapter catalog, notation parsing and kaalam mapping.
+- [x] Preserve Chapter 1's 14 Sarali exercises and add Chapter 2's 9 sourced Janta exercises.
+- [x] Preserve paired attacks, triple-note patterns and karvais in ascending and descending sections.
+- [x] Add Studio chapter navigation, chapter-aware score and transport; reset safely when changing chapters.
+- [x] Update landing-page curriculum copy, chapter source links and README.
+- [x] Add tests for every Janta exercise in all three kaalams, chapter switching and reed lifecycle.
+- [x] Run 26 automated tests, typecheck, production build and lint.
+- [x] Complete browser audio/UI verification: all 12 tonics sustain without clipping, five octave cards replay, both chapters navigate correctly, Janta playback advances, and the drone stops independently. Measurements are recorded in docs/audio-architecture.md.
+
+## Remaining scope
+- [ ] User listening review of the synthesized reed timbre on their own speakers/headphones.
+- [ ] Expressive vocal sphurita/gamaka modeling; current Janta playback uses separately articulated fixed pitches.
+- [ ] Additional curriculum chapters beyond Sarali and Janta 1–9.

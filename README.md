@@ -1,6 +1,6 @@
 # Sangeetha Bodhini
 
-An interactive Carnatic music foundation for students and teachers. The Theory page and 14-lesson Practice Studio include synthesized swaras, a Panchama tanpura drone, three-kaalam playback and synchronized Adi Talam guidance.
+An interactive Carnatic music foundation for students and teachers. The Theory page and Practice Studio include 14 Sarali Varisai exercises, 9 Janta Varisai exercises, direct swara audition, a sustained harmonium-style electronic shruti box, three-kaalam playback and synchronized Adi Talam guidance.
 
 ## Run locally in WSL
 
@@ -29,13 +29,16 @@ npm run preview
 - `src/types/carnatic.d.ts`: shared domain types.
 - `src/data/swaras.ts`: 12 positions, 16 names, raga scales, relative ratios, shruti keys.
 - `src/data/talas.ts`: Adi's 4 + 2 + 2 angas, all eight beats and five kriyas.
-- `src/data/saraliVarisai.ts`: all 14 lessons with objectives, directional or mixed sections, and complete eight-akshara mappings for three kaalams.
+- `src/data/curriculum.ts`: shared chapter catalog and lookup; chapter identity is carried by the audio transport and score.
+- `src/data/saraliVarisai.ts`: Chapter 1, all 14 Sarali exercises with holds and directional or mixed sections.
+- `src/data/jantaVarisai.ts`: Chapter 2, Janta exercises 1–9 with paired/triple attacks, holds and explicit ascent/descent sections.
+- `src/data/notation.ts`: common notation parser and complete eight-akshara mappings for all three kaalams.
 - `src/components/theory/`: swarasthana matrix, manual gesture guide and five-register chart.
 - `src/components/common/`: navigation, swara notation, shared shruti/drone controls and heritage tribute.
 - `src/components/studio/`: lesson selector, controls, live talam tracker and clickable notation grid.
 - `src/hooks/useCarnaticAudio.ts`: shared audio engine lifecycle and external-store subscription.
 - `src/hooks/useTalamTimer.ts`: beat/kriya derived from the audio-clock cursor.
-- `src/audio/`: sample-clock scheduling, warm voices, holds and transport math.
+- `src/audio/`: sample-clock scheduling, warm melody voices, separate additive double-reed synthesis in `shrutiVoice.ts`, holds and chapter-aware transport math.
 - `src/index.css`: Tailwind v4 `@theme` palette and typography tokens.
 - `src/assets/Tanpura.tsx`: original vector illustration, no remote asset dependency.
 
@@ -43,13 +46,15 @@ The project uses Vite + React + TypeScript, Tailwind v4's Vite plugin, Lucide Re
 
 The chapter labels are enlarged. Arohanam/avarohanam diagrams explain pitch direction, and the kaalam guide compares 1, 2 and 4 swaras per steady beat. Double octave dots are rendered side by side using explicit visual marks. Shruti offers all 12 chromatic tonics from C3 to B3 (including flat aliases), defaulting to G♯3 / A♭3 (207.65 Hz).
 
-Select any pitch, toggle the raga highlights, step through the eight kriyas, compare sthayis and change the tonic. Use Play swara to audition a selected pitch, or Start tanpura for the drone. In Practice Studio, select any of the 14 lessons, choose 1x/2x/4x and press Play. Adjust tempo between 45 and 90 BPM, click a note to seek, and loop a whole lesson or the current avartanam. Pause preserves your place; Reset returns to the beginning. The drone has an independent toggle.
+Click any swarasthana button to hear that pitch immediately; click a sthayi card to hear Sa in that register (Anumandra, Mandra, Madhya, Tara or Ati-Tara). Clicking a selected card replays it. Toggle raga highlights, step through the eight kriyas, and change the tonic. Use Start shruti box for the sustained drone. In Practice Studio, choose Sarali Varisai (14 exercises) or Janta Varisai (9 exercises), select an exercise, choose Prathama, Dwithiya or Thrithiya kaalam and press Play. Adjust tempo between 45 and 90 BPM, click a note to seek, and loop a whole lesson or the current avartanam. Pause preserves your place; Reset returns to the beginning. The drone has an independent toggle.
 
 ## Curriculum conventions and sources
 
 The architecture is `sangeetha_bodhini_plan.md`; there is no separate `plan.md`.
 
-The traditional 14-exercise sequence is checked against [Shivkumar Kalyanaraman's Sarali Varisai reference](https://www.shivkumar.org/music/basics/sarali-varisai.pdf), notation credited there to Rani and Chitraveena Ravikiran. Teachers and editions use different sequences; this identifies the chosen edition rather than claiming a single universal version. Descriptions and UI prose are original.
+The Sarali 14-exercise sequence is checked against [Shivkumar Kalyanaraman's Sarali Varisai reference](https://www.shivkumar.org/music/basics/sarali-varisai.pdf), notation credited there to Rani and Chitraveena Ravikiran. Teachers and editions use different sequences; this identifies the chosen edition rather than claiming a single universal version. Descriptions and UI prose are original.
+
+Janta exercises 1–9 follow the traditional patterns in [Shivkumar Kalyanaraman's Janta Varisai reference](https://www.shivkumar.org/music/basics/janta-varisai.pdf), which credits Rani and Chitraveena Ravikiran. The reference includes additional exercises beyond the nine in this chapter. Exercise 1's printed ascent is completed with its mirrored descent, as shown in the reference's third-speed illustration. Exercises 2–9 move scalar windows in both directions; 6, 7 and 9 preserve the printed karvais. Repeated notes are separate attacks, while commas extend the preceding voice. Playback provides fixed-pitch articulation; vocal sphurita technique and gamakas still require teacher guidance.
 
 - Dataset lowercase symbols are madhya; uppercase are tara. A comma is one unit of continuation (karvai), never a rest. Slashes separate eight-unit first-speed cycles.
 - Obvious case slips in exercises 3 (descending phrase restarts) and 4 (ascent ending) are normalized to upper Sa.
@@ -62,6 +67,10 @@ The traditional 14-exercise sequence is checked against [Shivkumar Kalyanaraman'
 
 ## Audio behavior and verification
 
-Step 1 and its tuning audit were reviewed before Step 2. Live speed changes preserve phrase position and regroup the notation; switching lessons stops playback. All audio stops when the browser tab is hidden. The tanpura is synthesized with the lower-Pa, upper-Sa, Sa, Sa pattern.
+Live kaalam changes preserve phrase position and regroup the notation. Switching exercises or chapters stops and resets the score, while retaining tonic, kaalam, tempo, looping preference and the independent drone. All audio stops when the browser tab is hidden.
+
+The electronic shruti box uses simultaneous Sa (1/1), Pa (3/2) and soft lower Pa (3/4). Two additive reeds per pitch are detuned by ±2 cents and mixed at 56%/44% to retain warmth without complete cancellation. Harmonics include the fundamental, prominent second and third harmonics, and diminishing fifth, seventh and ninth overtones. A 1000 Hz low-pass filter with Q 2.4 shapes the reeds. A 0.2 Hz bellows LFO modulates amplitude and cutoff by 1.2%. A 350 ms attack and 120 ms release avoid abrupt starts/stops. The sound sustains until stopped, with no plucks or looping sample seams. It is synthesized rather than a recording of a particular instrument.
+
+Current automated checks cover 26 tests, including every Janta exercise at all three kaalams, chapter switching, reed detuning/modulation, sustained audio, retuning and source cancellation. Typecheck, production build and lint pass.
 
 See [audio architecture and measured verification](docs/audio-architecture.md) for scheduling, lifecycle and transport details. To run real offline-render and live audio-clock checks, open `http://localhost:5173/tests/audio-browser.html` while Vite runs, then click Run audio checks. This test harness is not included in the production build.

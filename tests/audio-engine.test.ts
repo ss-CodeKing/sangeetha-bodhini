@@ -2,8 +2,10 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { CarnaticAudioEngine } from '../src/audio/CarnaticAudioEngine'
 import type { EngineRuntime } from '../src/audio/CarnaticAudioEngine'
-import { DRONE_STRINGS, noteFrequency, unitDuration } from '../src/audio/transport'
+import { DRONE_NOTES, noteFrequency, unitDuration } from '../src/audio/transport'
 import type { Kaalam } from '../src/types/carnatic'
+import { BELLOWS_DEPTH, BELLOWS_HZ, REED_HARMONICS, REED_RELEASE } from '../src/audio/shrutiVoice'
+import { jantaVarisai } from '../src/data/jantaVarisai'
 
 class Param {
   value = 0
@@ -16,6 +18,7 @@ class Param {
 class Node {
   gain = new Param()
   frequency = new Param()
+  detune = new Param()
   Q = new Param()
   threshold = new Param()
   ratio = new Param()
@@ -28,6 +31,7 @@ class Node {
   ended = false
   onended: (() => void) | null = null
   connect() {}
+  setPeriodicWave() { this.type = 'custom' }
   disconnect() {}
   start(time: number) { this.startTime = time }
   stop(time: number) { this.stopTimes.push(time) }
@@ -40,9 +44,13 @@ class Context {
   outputLatency = 0
   destination = new Node()
   oscillators: Node[] = []
+  gains: Node[] = []
+  filters: Node[] = []
+  waves: Float32Array[] = []
   onstatechange: (() => void) | null = null
-  createGain() { return new Node() }
-  createBiquadFilter() { return new Node() }
+  createGain() { const node = new Node(); this.gains.push(node); return node }
+  createBiquadFilter() { const node = new Node(); this.filters.push(node); return node }
+  createPeriodicWave(_real: Float32Array, imaginary: Float32Array) { this.waves.push(imaginary); return {} }
   createDynamicsCompressor() { return new Node() }
   createAnalyser() { return new Node() }
   createOscillator() { const node = new Node(); this.oscillators.push(node); return node }
@@ -212,19 +220,107 @@ test('lesson and current-avartanam loops wrap on the sample-clock boundary', asy
   engine.dispose()
 })
 
-test('drone uses lower Pa, upper Sa, tonic Sa, tonic Sa and stops independently', async () => {
-  const { engine, advance, fundamentals } = setup()
-  assert.deepEqual(DRONE_STRINGS.map(note => noteFrequency(note, 200)), [150, 400, 200, 200])
+test('shruti box sustains simultaneous reed tones and stops independently', async () => {
+  const { engine, advance, context, fundamentals } = setup()
+  assert.deepEqual(DRONE_NOTES.map(note => noteFrequency(note, 200)), [200, 300, 150])
   engine.configure({ baseHz: 200 })
   await engine.setDrone(true)
-  advance(3)
-  assert.deepEqual(fundamentals().map(node => node.frequency.value), [150, 400, 200, 200])
-  fundamentals().forEach((node, i) => near(node.startTime, 0.025 + i * 0.85))
+  advance(30)
+  assert.deepEqual(fundamentals().map(node => node.frequency.value), [200, 300, 150])
+  fundamentals().forEach(node => { near(node.startTime, 0.025); assert.equal(node.type, 'custom') })
+  assert.deepEqual(context.oscillators.filter(node => node.type === 'custom').map(node => node.detune.value), [-2, 2, -2, 2, -2, 2])
+  assert.deepEqual(context.oscillators.filter(node => node.type === 'sine').map(node => node.frequency.value), [BELLOWS_HZ, BELLOWS_HZ, BELLOWS_HZ])
+  assert.ok(BELLOWS_DEPTH < 0.015)
+  context.filters.forEach(filter => { assert.equal(filter.frequency.value, 1000); assert.equal(filter.Q.value, 2.4) })
+  context.waves.forEach(wave => assert.deepEqual(wave, new Float32Array(REED_HARMONICS)))
+  assert.ok(context.oscillators.every(node => node.stopTimes.length === 0))
+  const envelopes = context.gains.filter(node => node.gain.events.length > 0)
+  assert.equal(envelopes.length, 3)
+  envelopes.forEach((node, index) => {
+    assert.equal(node.gain.events.length, 2) // Only a soft attack, no decay or repeated plucks.
+    assert.deepEqual(node.gain.events.map(event => event.value), [0, index === 2 ? 0.025 : 0.07])
+  })
+  await engine.setDrone(true)
+  assert.equal(fundamentals().length, 3)
+  const droneSources = [...context.oscillators]
   await engine.play()
   engine.pause()
   assert.equal(engine.getSnapshot().drone, true)
+  assert.ok(droneSources.every(node => node.stopTimes.length === 0))
   await engine.setDrone(false)
   assert.equal(engine.getSnapshot().drone, false)
+  assert.ok(droneSources.every(node => node.stopTimes.at(-1) === context.currentTime + REED_RELEASE + 0.005))
+  engine.dispose()
+})
+
+test('changing shruti replaces the sustained drone and stop cancels every source', async () => {
+  const { engine, context, advance, fundamentals } = setup()
+  await engine.setDrone(true)
+  advance(0.5)
+  const oldSources = [...context.oscillators]
+  engine.configure({ baseHz: 220 })
+  assert.ok(oldSources.every(node => node.stopTimes.at(-1) === 0.5 + REED_RELEASE + 0.005))
+  assert.deepEqual(fundamentals().slice(3).map(node => node.frequency.value), [220, 330, 165])
+  advance(10)
+  assert.equal(fundamentals().length, 6)
+  engine.stopAll()
+  assert.ok(context.oscillators.every(node => node.stopTimes.length > 0))
+  engine.dispose()
+})
+
+test('audition plays Sa in all five registers and replaces the previous note', async () => {
+  const { engine, context, fundamentals } = setup()
+  engine.configure({ baseHz: 200 })
+  for (const octave of [-2, -1, 0, 1, 2] as const) {
+    const previous = [...context.oscillators]
+    await engine.audition({ swara: 'S', octave })
+    near(fundamentals().at(-1)!.frequency.value, 200 * 2 ** octave)
+    assert.ok(previous.every(node => node.stopTimes.at(-1) === context.currentTime + 0.02))
+  }
+  engine.dispose()
+})
+
+for (const kaalam of [1, 2, 3] as Kaalam[]) {
+  test('all nine Janta exercises articulate notes and preserve holds at kaalam ' + kaalam, async () => {
+    for (const lesson of jantaVarisai) {
+      const { engine, advance, fundamentals } = setup()
+      engine.selectChapter('janta')
+      engine.selectLesson(lesson.number)
+      engine.configure({ kaalam })
+      await engine.play()
+      const mapping = lesson.kaalams[kaalam]
+      const units = mapping.avartanams.flatMap(cycle => cycle.beats.flatMap(beat => beat.units))
+      advance(units.length * unitDuration(60, kaalam) + 0.2)
+      assert.equal(engine.getSnapshot().status, 'complete')
+      assert.equal(fundamentals().length, units.filter(unit => unit.kind === 'note').length)
+      fundamentals().forEach((voice, index) => near(voice.frequency.value,
+        noteFrequency(units.filter(unit => unit.kind === 'note')[index].note, engine.getSnapshot().baseHz)))
+      engine.dispose()
+    }
+  })
+}
+
+test('chapter changes cancel pending playback, reset the score and retain drone/settings', async () => {
+  const { engine } = setup()
+  engine.selectLesson(14)
+  engine.configure({ kaalam: 3, bpm: 75, loopMode: 'avartanam' })
+  await engine.setDrone(true)
+  const pendingPlay = engine.play()
+  engine.selectChapter('janta')
+  await pendingPlay
+  assert.equal(engine.getSnapshot().status, 'idle')
+  assert.equal(engine.getSnapshot().chapterId, 'janta')
+  assert.equal(engine.getSnapshot().lessonNumber, 1)
+  assert.equal(engine.getSnapshot().unitIndex, 0)
+  assert.equal(engine.getSnapshot().drone, true)
+  assert.equal(engine.getSnapshot().kaalam, 3)
+  assert.equal(engine.getSnapshot().bpm, 75)
+  engine.selectLesson(9)
+  engine.selectLesson(10)
+  assert.equal(engine.getSnapshot().lessonNumber, 9)
+  engine.selectChapter('sarali')
+  engine.selectLesson(14)
+  assert.equal(engine.getSnapshot().lessonNumber, 14)
   engine.dispose()
 })
 

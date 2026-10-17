@@ -9,27 +9,22 @@ export interface Voice {
 // a karvai extends this duration rather than triggering another oscillator.
 export function createWarmVoice(
   context: BaseAudioContext, destination: AudioNode, hz: number,
-  start: number, duration: number, volume: number, drone = false,
+  start: number, duration: number, volume: number,
   onEnd: () => void = () => {},
 ): Voice {
   const envelope = context.createGain()
   const filter = context.createBiquadFilter()
   filter.type = 'lowpass'
-  filter.frequency.setValueAtTime(drone ? 1800 : 2600, start)
+  filter.frequency.setValueAtTime(2600, start)
   filter.Q.value = 0.3
   envelope.connect(filter)
   filter.connect(destination)
-  const attack = Math.min(drone ? 0.035 : 0.025, duration * 0.15)
+  const attack = Math.min(0.025, duration * 0.15)
   envelope.gain.setValueAtTime(0, start)
   envelope.gain.linearRampToValueAtTime(volume, start + attack)
-  if (drone) {
-    envelope.gain.exponentialRampToValueAtTime(Math.max(volume * 0.28, 0.0001), start + duration * 0.3)
-    envelope.gain.exponentialRampToValueAtTime(0.0001, start + duration - 0.04)
-  } else {
-    const release = Math.min(0.065, duration * 0.2)
-    envelope.gain.linearRampToValueAtTime(volume * 0.8, start + attack + Math.min(0.07, duration * 0.15))
-    envelope.gain.setValueAtTime(volume * 0.8, start + duration - release)
-  }
+  const release = Math.min(0.065, duration * 0.2)
+  envelope.gain.linearRampToValueAtTime(volume * 0.8, start + attack + Math.min(0.07, duration * 0.15))
+  envelope.gain.setValueAtTime(volume * 0.8, start + duration - release)
   envelope.gain.linearRampToValueAtTime(0, start + duration)
   const sources: OscillatorNode[] = []
   const gains: GainNode[] = []

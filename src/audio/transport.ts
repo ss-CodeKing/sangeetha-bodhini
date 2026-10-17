@@ -1,11 +1,12 @@
-import { saraliVarisai } from '../data/saraliVarisai'
+import { getChapter } from '../data/curriculum'
 import { frequency, swaras } from '../data/swaras'
-import type { Kaalam, NotationUnit, SwaraNote } from '../types/carnatic'
+import type { ChapterId, Kaalam, NotationUnit, SwaraNote } from '../types/carnatic'
 
 export type LoopMode = 'off' | 'lesson' | 'avartanam'
 export type PlaybackStatus = 'idle' | 'loading' | 'playing' | 'paused' | 'complete'
 export interface PlaybackSnapshot {
   status: PlaybackStatus
+  chapterId: ChapterId
   lessonNumber: number
   kaalam: Kaalam
   bpm: number
@@ -27,8 +28,8 @@ export interface PlaybackSnapshot {
 
 export const notesPerBeat = (kaalam: Kaalam): 1 | 2 | 4 => kaalam === 1 ? 1 : kaalam === 2 ? 2 : 4
 export const unitDuration = (bpm: number, kaalam: Kaalam) => 60 / bpm / notesPerBeat(kaalam)
-export function lessonUnits(lessonNumber: number, kaalam: Kaalam): readonly NotationUnit[] {
-  return saraliVarisai[lessonNumber - 1].kaalams[kaalam].avartanams.flatMap(c => c.beats.flatMap(b => b.units))
+export function lessonUnits(lessonNumber: number, kaalam: Kaalam, chapterId: ChapterId = 'sarali'): readonly NotationUnit[] {
+  return getChapter(chapterId).lessons[lessonNumber - 1].kaalams[kaalam].avartanams.flatMap(c => c.beats.flatMap(b => b.units))
 }
 export function resolveNote(units: readonly NotationUnit[], index: number): SwaraNote {
   for (let i = Math.min(index, units.length - 1); i >= 0; i--) {
@@ -57,9 +58,8 @@ export function cursorAt(position: number, kaalam: Kaalam, length: number) {
   }
 }
 
-// Panchama shruti: lower Pa, upper Sa, middle Sa, tonic Sa.
-// The last two are distinct plucks of the same fundamental, as requested.
-export const DRONE_STRINGS: readonly SwaraNote[] = [
-  { swara: 'P', octave: -1 }, { swara: 'S', octave: 1 },
-  { swara: 'S', octave: 0 }, { swara: 'S', octave: 0 },
+// Sa and its pure fifth, with a soft lower Pa for body.
+export const DRONE_NOTES: readonly SwaraNote[] = [
+  { swara: 'S', octave: 0 }, { swara: 'P', octave: 0 },
+  { swara: 'P', octave: -1 },
 ]

@@ -4,6 +4,8 @@ import { swaras, arohanam, avarohanam, frequency, formatSwara, shrutiKeys, defau
 import { adiTalam, kriyas } from '../src/data/talas'
 import { saraliVarisai, parseNotation } from '../src/data/saraliVarisai'
 import type { Kaalam } from '../src/types/carnatic'
+import { jantaVarisai } from '../src/data/jantaVarisai'
+import { curriculum } from '../src/data/curriculum'
 
 test('12 ascending positions have 16 unique names and exactly the required raga ratios', () => {
   assert.equal(swaras.length, 12)
@@ -55,6 +57,42 @@ test('all 14 lessons preserve holds, octave transitions and complete cycles at e
 
 
 
+
+test('two curriculum chapters preserve all 23 exercises', () => {
+  assert.deepEqual(curriculum.map(chapter => [chapter.id, chapter.lessons.length]), [['sarali', 14], ['janta', 9]])
+})
+
+test('Janta 1–9 preserve reference patterns, holds, directions and complete Adi cycles', () => {
+  const firstRows = [
+    's s r r g g m m', 's s r r g g m m', 's s r r g g r r',
+    's s r s s r s r', 's s r r g s r g', 's s , r r , g g',
+    's , s r , r g g', 's s s r r r g g', 's , r g , s r g',
+  ]
+  const expectedHolds = [0, 0, 0, 0, 0, 20, 20, 0, 20]
+  const expectedLengths = [32, 80, 160, 160, 160, 160, 160, 160, 160]
+  jantaVarisai.forEach((lesson, index) => {
+    assert.equal(lesson.number, index + 1)
+    assert.equal(lesson.units.length, expectedLengths[index])
+    assert.deepEqual(lesson.units.slice(0, 8), parseNotation(firstRows[index]))
+    assert.equal(lesson.units.filter(unit => unit.kind === 'hold').length, expectedHolds[index])
+    assert.deepEqual(lesson.sections.flatMap(section => section.units), lesson.units)
+    assert.deepEqual(lesson.sections[1].units[0], { kind: 'note', note: { swara: 'S', octave: 1 } })
+    assert.deepEqual(lesson.units.at(-1), { kind: 'note', note: { swara: 'S', octave: 0 } })
+    lesson.units.forEach(unit => {
+      if (unit.kind === 'note') assert.ok(arohanam.some(note => note.swara === unit.note.swara && note.octave === unit.note.octave))
+    })
+    for (const kaalam of [1, 2, 3] as Kaalam[]) {
+      const mapping = lesson.kaalams[kaalam]
+      const flattened = mapping.avartanams.flatMap(cycle => {
+        assert.deepEqual(cycle.beats.map(beat => beat.akshara), [1, 2, 3, 4, 5, 6, 7, 8])
+        cycle.beats.forEach(beat => assert.equal(beat.units.length, 2 ** (kaalam - 1)))
+        return cycle.beats.flatMap(beat => beat.units)
+      })
+      assert.deepEqual(flattened, Array.from({ length: mapping.repetitions }, () => lesson.units).flat())
+    }
+  })
+  assert.deepEqual(jantaVarisai[0].units, parseNotation('s s r r g g m m / p p d d n n S S / S S n n d d p p / m m g g r r s s'))
+})
 
 test('shruti covers all 12 pitch classes and defaults to G sharp', () => {
   assert.equal(shrutiKeys.length, 12)
