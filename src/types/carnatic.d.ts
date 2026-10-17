@@ -1,7 +1,7 @@
 export type SwaraId = 'S' | 'R1' | 'R2' | 'R3' | 'G1' | 'G2' | 'G3' | 'M1' | 'M2' | 'P' | 'D1' | 'D2' | 'D3' | 'N1' | 'N2' | 'N3'
 export type Octave = -2 | -1 | 0 | 1 | 2
 export type Kaalam = 1 | 2 | 3
-export type ChapterId = 'sarali' | 'janta'
+export type ChapterId = 'sarali' | 'janta' | 'melsthayi' | 'dhatu'
 export type Akshara = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 export type KriyaId = 'thattu' | 'kanishta' | 'anamika' | 'madhyama' | 'veechu'
 export interface SwaraName { id: SwaraId; name: string }

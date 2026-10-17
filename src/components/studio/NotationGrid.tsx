@@ -11,6 +11,9 @@ export function NotationGrid({ snapshot, onSeek }: { snapshot: PlaybackSnapshot;
   const scrollArea = useRef<HTMLDivElement>(null)
   const playing = snapshot.status === 'playing'
   useEffect(() => {
+    scrollArea.current?.scrollTo({ left: 0, top: 0, behavior: 'instant' })
+  }, [snapshot.chapterId, snapshot.lessonNumber])
+  useEffect(() => {
     const container = scrollArea.current
     const row = activeRow.current
     const note = row?.querySelector<HTMLElement>('[data-active="true"]')

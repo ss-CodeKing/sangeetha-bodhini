@@ -1,7 +1,8 @@
 import { CarnaticAudioEngine } from '../src/audio/CarnaticAudioEngine'
 import { createWarmVoice } from '../src/audio/voice'
 import { createShrutiVoice } from '../src/audio/shrutiVoice'
-import { DRONE_VOICES, noteFrequency, unitDuration } from '../src/audio/transport'
+import { DRONE_VOICES, lessonUnits, noteFrequency, unitDuration } from '../src/audio/transport'
+import { getChapter } from '../src/data/curriculum'
 import { shrutiKeys, defaultShrutiIndex } from '../src/data/swaras'
 import type { Kaalam, SwaraNote } from '../src/types/carnatic'
 
@@ -12,10 +13,10 @@ const check = (condition: boolean, message: string) => { if (!condition) throw n
 const report = (text: string) => { const li = document.createElement('li'); li.textContent = text; results.append(li) }
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-async function offlineCheck(note: SwaraNote) {
+async function offlineCheck(note: SwaraNote, baseHz = shrutiKeys[defaultShrutiIndex].hz) {
   const sampleRate = 48000
   const context = new OfflineAudioContext(1, sampleRate, sampleRate)
-  const hz = noteFrequency(note, shrutiKeys[defaultShrutiIndex].hz)
+  const hz = noteFrequency(note, baseHz)
   createWarmVoice(context, context.destination, hz, 0.02, 0.7, 0.23)
   const buffer = await context.startRendering()
   const samples = buffer.getChannelData(0)
@@ -136,6 +137,35 @@ async function liveDroneCheck() {
   } finally { unsubscribe(); engine.dispose() }
 }
 
+async function offlineCurriculumCheck(chapterId: 'melsthayi' | 'dhatu', kaalam: Kaalam) {
+  const chapter = getChapter(chapterId)
+  let maxPeak = 0, maxStep = 0
+  for (const lesson of chapter.lessons) {
+    const units = lessonUnits(lesson.number, kaalam, chapterId)
+    const step = unitDuration(90, kaalam)
+    const rate = 24000
+    const duration = 0.02 + units.length * step
+    const context = new OfflineAudioContext(1, Math.ceil((duration + 0.2) * rate), rate)
+    units.forEach((unit, index) => {
+      if (unit.kind === 'hold') return
+      let end = index + 1
+      while (end < units.length && units[end].kind === 'hold') end++
+      createWarmVoice(context, context.destination, noteFrequency(unit.note, shrutiKeys.at(-1)!.hz), 0.02 + index * step, (end - index) * step, 0.23)
+    })
+    const samples = (await context.startRendering()).getChannelData(0)
+    let peak = 0, jump = 0
+    for (let index = 1; index < samples.length; index++) {
+      peak = Math.max(peak, Math.abs(samples[index]))
+      jump = Math.max(jump, Math.abs(samples[index] - samples[index - 1]))
+    }
+    check(peak > 0.05 && peak < 0.8 && jump < 0.12, chapter.name + ' lesson ' + lesson.number + ' missing, clipping or discontinuous output')
+    check(samples.subarray(Math.ceil((duration + 0.1) * rate)).every(sample => Math.abs(sample) < 1e-6), 'Lesson leaked after completion')
+    maxPeak = Math.max(maxPeak, peak)
+    maxStep = Math.max(maxStep, jump)
+  }
+  report(chapter.name + ': all ' + chapter.lessons.length + ' exercises rendered at kaalam ' + kaalam + ' / 90 BPM / B3 tonic; peak ' + maxPeak.toFixed(4) + ', max step ' + maxStep.toFixed(4) + '; complete release passes.')
+}
+
 button.addEventListener('click', async () => {
   button.disabled = true
   results.replaceChildren()
@@ -145,6 +175,10 @@ button.addEventListener('click', async () => {
       { swara: 'S', octave: 0 }, { swara: 'R1', octave: 0 }, { swara: 'G2', octave: 0 },
       { swara: 'G3', octave: 0 }, { swara: 'P', octave: -1 }, { swara: 'N2', octave: 0 }, { swara: 'S', octave: 1 },
     ] as SwaraNote[]) await offlineCheck(note)
+    for (const swara of ['S', 'R1', 'G3', 'M1', 'P'] as const) await offlineCheck({ swara, octave: 1 }, shrutiKeys.at(-1)!.hz)
+    for (const chapter of ['melsthayi', 'dhatu'] as const) {
+      for (const kaalam of [1, 2, 3] as Kaalam[]) await offlineCurriculumCheck(chapter, kaalam)
+    }
     for (const key of shrutiKeys) await offlineDroneCheck(key.hz)
     for (const kaalam of [1, 2, 3] as Kaalam[]) await realtimeCheck(kaalam)
     await liveDroneCheck()

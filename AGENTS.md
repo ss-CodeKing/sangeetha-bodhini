@@ -5,7 +5,7 @@
 Sangeetha Bodhini is a React + TypeScript Carnatic learning application built with Vite.
 
 - `src/components/`: Theory, Studio, and shared UI components.
-- `src/data/`: chapter catalog, Sarali/Janta exercises, notation parsing, tuning, and talam definitions.
+- `src/data/`: chapter catalog, Sarali/Janta/Melsthayi/Dhatu exercises, notation parsing, tuning, and talam definitions.
 - `src/audio/`: Web Audio engine, transport calculations, melody voices, and shruti reed synthesis.
 - `src/hooks/`: shared engine lifecycle and talam subscriptions; keep synthesis in `src/audio/`.
 - `src/types/carnatic.d.ts`: shared musical domain types.

@@ -70,7 +70,19 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 - [x] Update both shared drone badges/tooltips to P̣ · Ṡ · S (Panchama Shruti: Mandra Pa · Tara Sa · Madhya Sa).
 - [x] Pass all 30 tests, typecheck, build and lint; browser checks pass for all 12 tonics, ordered lesson labels, 5A/8A headings, 8A live playback with 40 holds, and the updated badge/tooltip.
 
+## Chapters 3 and 4 — exact textbook notation (2026-10-17)
+- [x] Fetch and inspect the requested Melsthayi and Dhatu HTML references; retain all 80 source rows with URLs and text-view line numbers in a regression fixture.
+- [x] Add all five Melsthayi exercises (4/6/8/10/12 printed avartanams), preserving uppercase registers, both upper-Sa karvais, mixed phrases and final descent.
+- [x] Add both Dhatu exercises, each with ten ascending and ten descending source rows.
+- [x] Validate every source row's 4 + 2 + 2 grouping; ignore printed phrase dashes without adding timing units.
+- [x] Add both chapters to the typed catalog and shared Studio selector; update landing copy and documentation for 33 total exercises.
+- [x] Reset score scrolling on chapter/exercise changes; verify transport, playhead, active note and queued voice reset across every chapter pair.
+- [x] Test all new exercises' parsing, registers, holds, beat mappings, exact audio onsets and completion in all three kaalams.
+- [x] Pass upper-Sa–Pa browser pitch checks and render all seven exercises at all three speeds without clipping or release leakage; verify the four chapter options, live playback, dots and smooth navigation reset.
+
+- [x] Pass all 46 tests, typecheck, lint, production build and a separate TypeScript check of test/browser harness files.
+
 ## Remaining scope
 - [ ] User listening review of the synthesized reed timbre on their own speakers/headphones.
 - [ ] Expressive vocal sphurita/gamaka modeling; current Janta playback uses separately articulated fixed pitches.
-- [ ] Additional curriculum chapters beyond Sarali and Janta 1–10 with 5A/8A.
+- [ ] Additional curriculum chapters beyond Sarali, Janta, Melsthayi and Dhatu.

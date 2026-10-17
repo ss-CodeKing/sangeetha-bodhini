@@ -5,7 +5,7 @@ import type { EngineRuntime } from '../src/audio/CarnaticAudioEngine'
 import { DRONE_VOICES, noteFrequency, unitDuration } from '../src/audio/transport'
 import type { Kaalam } from '../src/types/carnatic'
 import { BELLOWS_DEPTH, BELLOWS_HZ, REED_HARMONICS, REED_RELEASE } from '../src/audio/shrutiVoice'
-import { jantaVarisai } from '../src/data/jantaVarisai'
+import { curriculum, getChapter } from '../src/data/curriculum'
 
 class Param {
   value = 0
@@ -284,33 +284,35 @@ test('audition plays Sa in all five registers and replaces the previous note', a
   engine.dispose()
 })
 
-for (const kaalam of [1, 2, 3] as Kaalam[]) {
-  test('all twelve Janta exercises articulate notes and preserve holds at kaalam ' + kaalam, async () => {
-    for (const lesson of jantaVarisai) {
-      const { engine, advance, fundamentals } = setup()
-      engine.selectChapter('janta')
-      engine.selectLesson(lesson.number)
-      engine.configure({ kaalam })
-      await engine.play()
-      const mapping = lesson.kaalams[kaalam]
-      const units = mapping.avartanams.flatMap(cycle => cycle.beats.flatMap(beat => beat.units))
-      const step = unitDuration(60, kaalam)
-      advance(units.length * step + 0.2)
-      assert.equal(engine.getSnapshot().status, 'complete')
-      assert.equal(fundamentals().length, units.filter(unit => unit.kind === 'note').length)
-      let voiceIndex = 0
-      units.forEach((unit, index) => {
-        if (unit.kind === 'hold') return
-        const voice = fundamentals()[voiceIndex++]
-        near(voice.frequency.value, noteFrequency(unit.note, engine.getSnapshot().baseHz))
-        near(voice.startTime, 0.025 + index * step)
-        let end = index + 1
-        while (end < units.length && units[end].kind === 'hold') end++
-        near(voice.stopTimes[0], 0.025 + end * step + 0.01)
-      })
-      engine.dispose()
-    }
-  })
+for (const chapterId of ['janta', 'melsthayi', 'dhatu'] as const) {
+  for (const kaalam of [1, 2, 3] as Kaalam[]) {
+    test(chapterId + ' exercises articulate notes and preserve holds at kaalam ' + kaalam, async () => {
+      for (const lesson of getChapter(chapterId).lessons) {
+        const { engine, advance, fundamentals } = setup()
+        engine.selectChapter(chapterId)
+        engine.selectLesson(lesson.number)
+        engine.configure({ kaalam })
+        await engine.play()
+        const mapping = lesson.kaalams[kaalam]
+        const units = mapping.avartanams.flatMap(cycle => cycle.beats.flatMap(beat => beat.units))
+        const step = unitDuration(60, kaalam)
+        advance(units.length * step + 0.2)
+        assert.equal(engine.getSnapshot().status, 'complete')
+        assert.equal(fundamentals().length, units.filter(unit => unit.kind === 'note').length)
+        let voiceIndex = 0
+        units.forEach((unit, index) => {
+          if (unit.kind === 'hold') return
+          const voice = fundamentals()[voiceIndex++]
+          near(voice.frequency.value, noteFrequency(unit.note, engine.getSnapshot().baseHz))
+          near(voice.startTime, 0.025 + index * step)
+          let end = index + 1
+          while (end < units.length && units[end].kind === 'hold') end++
+          near(voice.stopTimes[0], 0.025 + end * step + 0.01)
+        })
+        engine.dispose()
+      }
+    })
+  }
 }
 
 test('chapter changes cancel pending playback, reset the score and retain drone/settings', async () => {
@@ -360,4 +362,37 @@ test('initial cleanup keeps the transport idle and unavailable audio reports an 
   assert.equal(engine.getSnapshot().status, 'paused')
   assert.equal(engine.getSnapshot().error, 'Web Audio unavailable')
   engine.dispose()
+})
+
+test('every chapter transition resets the audio clock, cursor and active note without queued voices', async () => {
+  for (const from of curriculum) {
+    for (const to of curriculum) {
+      if (from.id === to.id) continue
+      const { engine, context, advance } = setup()
+      engine.selectChapter(from.id)
+      engine.selectLesson(from.lessons.length)
+      engine.configure({ kaalam: 3, loopMode: 'lesson', baseHz: 220 })
+      await engine.play()
+      advance(1.4)
+      const oldSources = [...context.oscillators]
+      engine.selectChapter(to.id)
+      const snapshot = engine.getSnapshot()
+      assert.equal(snapshot.chapterId, to.id)
+      assert.equal(snapshot.lessonNumber, 1)
+      assert.equal(snapshot.status, 'idle')
+      assert.equal(snapshot.position, 0)
+      assert.equal(snapshot.unitIndex, 0)
+      assert.equal(snapshot.beat, 1)
+      assert.equal(snapshot.subdivision, 0)
+      assert.equal(snapshot.avartanam, 1)
+      assert.deepEqual(snapshot.note, to.lessons[0].units[0].kind === 'note' ? to.lessons[0].units[0].note : null)
+      assert.ok(oldSources.every(source => source.stopTimes.at(-1)! <= context.currentTime + 0.02))
+      const count = context.oscillators.length
+      advance(0.5)
+      assert.equal(context.oscillators.length, count)
+      await engine.play()
+      near(context.oscillators[count].startTime, context.currentTime + 0.025)
+      engine.dispose()
+    }
+  }
 })

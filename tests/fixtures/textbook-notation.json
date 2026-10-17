@@ -1,0 +1,373 @@
+{
+  "retrieved": "2026-10-17",
+  "notes": "Notation rows extracted from the requested HTML references. Whitespace normalized; notes, case, commas, bars and phrase dashes retained. Source line numbers refer to the fetched text view.",
+  "chapters": [
+    {
+      "id": "melsthayi",
+      "url": "https://www.shivkumar.org/music/basics/melsthayi-varisai.htm",
+      "exercises": [
+        {
+          "number": 1,
+          "sourceRows": [
+            {
+              "line": 88,
+              "notation": "s r g m | p d | n S ||"
+            },
+            {
+              "line": 89,
+              "notation": "S , , , | S , | , , ||"
+            },
+            {
+              "line": 90,
+              "notation": "d n S R | S n | d p ||"
+            },
+            {
+              "line": 91,
+              "notation": "S n d p | m g | r s ||"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "sourceRows": [
+            {
+              "line": 100,
+              "notation": "s r g m | p d | n S ||"
+            },
+            {
+              "line": 101,
+              "notation": "S , , , | S , | , , ||"
+            },
+            {
+              "line": 102,
+              "notation": "d n S R | S S | R S ||"
+            },
+            {
+              "line": 103,
+              "notation": "S R - S n | d p | m p ||"
+            },
+            {
+              "line": 104,
+              "notation": "d n S R | S n | d p ||"
+            },
+            {
+              "line": 105,
+              "notation": "S n d p | m g | r s ||"
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "sourceRows": [
+            {
+              "line": 118,
+              "notation": "s r g m | p d | n S ||"
+            },
+            {
+              "line": 119,
+              "notation": "S , , , | S , | , , ||"
+            },
+            {
+              "line": 120,
+              "notation": "d n S R | G R | S R ||"
+            },
+            {
+              "line": 121,
+              "notation": "S R - S n | d p | m p ||"
+            },
+            {
+              "line": 122,
+              "notation": "d n S R | S S | R S ||"
+            },
+            {
+              "line": 123,
+              "notation": "S R - S n | d p | m p ||"
+            },
+            {
+              "line": 124,
+              "notation": "d n S R | S n | d p ||"
+            },
+            {
+              "line": 125,
+              "notation": "S n d p | m g | r s ||"
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "sourceRows": [
+            {
+              "line": 137,
+              "notation": "s r g m | p d | n S ||"
+            },
+            {
+              "line": 138,
+              "notation": "S , , , | S , | , , ||"
+            },
+            {
+              "line": 139,
+              "notation": "d n S R | G M | G R ||"
+            },
+            {
+              "line": 140,
+              "notation": "S R - S n | d p | m p ||"
+            },
+            {
+              "line": 141,
+              "notation": "d n S R | G R | S R ||"
+            },
+            {
+              "line": 142,
+              "notation": "S R - S n | d p | m p ||"
+            },
+            {
+              "line": 143,
+              "notation": "d n S R | S S | R S ||"
+            },
+            {
+              "line": 144,
+              "notation": "S R - S n | d p | m p ||"
+            },
+            {
+              "line": 145,
+              "notation": "d n S R | S n | d p ||"
+            },
+            {
+              "line": 146,
+              "notation": "S n d p | m g | r s ||"
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "sourceRows": [
+            {
+              "line": 162,
+              "notation": "s r g m | p d | n S ||"
+            },
+            {
+              "line": 163,
+              "notation": "S , , , | S , | , , ||"
+            },
+            {
+              "line": 164,
+              "notation": "d n S R | G M | P M ||"
+            },
+            {
+              "line": 165,
+              "notation": "G R - S n | d p | m p ||"
+            },
+            {
+              "line": 166,
+              "notation": "d n S R | G M | G R ||"
+            },
+            {
+              "line": 167,
+              "notation": "S R - S n | d p | m p ||"
+            },
+            {
+              "line": 168,
+              "notation": "d n S R | G R | S R ||"
+            },
+            {
+              "line": 169,
+              "notation": "S R - S n | d p | m p ||"
+            },
+            {
+              "line": 170,
+              "notation": "d n S R | S S | R S ||"
+            },
+            {
+              "line": 171,
+              "notation": "S R - S n | d p | m p ||"
+            },
+            {
+              "line": 172,
+              "notation": "d n S R | S n | d p ||"
+            },
+            {
+              "line": 173,
+              "notation": "S n d p | m g | r s ||"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dhatu",
+      "url": "https://www.shivkumar.org/music/basics/dhatu-varisai.htm",
+      "exercises": [
+        {
+          "number": 1,
+          "sourceRows": [
+            {
+              "line": 89,
+              "notation": "s m g m | r g | s r ||"
+            },
+            {
+              "line": 90,
+              "notation": "s g r g | s r | g m ||"
+            },
+            {
+              "line": 91,
+              "notation": "r p m p | g m | r g ||"
+            },
+            {
+              "line": 92,
+              "notation": "r m g m | r g | m p ||"
+            },
+            {
+              "line": 93,
+              "notation": "g d p d | m p | g m ||"
+            },
+            {
+              "line": 94,
+              "notation": "g p m p | g m | p d ||"
+            },
+            {
+              "line": 95,
+              "notation": "m n d n | p d | m p ||"
+            },
+            {
+              "line": 96,
+              "notation": "m d p d | m p | d n ||"
+            },
+            {
+              "line": 97,
+              "notation": "p S n S | d n | p d ||"
+            },
+            {
+              "line": 98,
+              "notation": "p n d n | p d | n S ||"
+            },
+            {
+              "line": 99,
+              "notation": "S p d p | n d | S n ||"
+            },
+            {
+              "line": 100,
+              "notation": "S d n d | S n | d p ||"
+            },
+            {
+              "line": 101,
+              "notation": "n m p m | d p | n d ||"
+            },
+            {
+              "line": 102,
+              "notation": "n p d p | n d | p m ||"
+            },
+            {
+              "line": 103,
+              "notation": "d g m g | p m | d p ||"
+            },
+            {
+              "line": 104,
+              "notation": "d m p m | d p | m g ||"
+            },
+            {
+              "line": 105,
+              "notation": "p r g r | m g | p m ||"
+            },
+            {
+              "line": 106,
+              "notation": "p g m g | p m | g r ||"
+            },
+            {
+              "line": 107,
+              "notation": "m s r s | g r | m g ||"
+            },
+            {
+              "line": 108,
+              "notation": "m r g r | m g | r s ||"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "sourceRows": [
+            {
+              "line": 118,
+              "notation": "s r s g | r g | r m ||"
+            },
+            {
+              "line": 119,
+              "notation": "s m g r | s r | g m ||"
+            },
+            {
+              "line": 120,
+              "notation": "r g r m | g m | g p ||"
+            },
+            {
+              "line": 121,
+              "notation": "r p m g | r g | m p ||"
+            },
+            {
+              "line": 122,
+              "notation": "g m g p | m p | m d ||"
+            },
+            {
+              "line": 123,
+              "notation": "g d p m | g m | p d ||"
+            },
+            {
+              "line": 124,
+              "notation": "m p m d | p d | p n ||"
+            },
+            {
+              "line": 125,
+              "notation": "m n d p | m p | d n ||"
+            },
+            {
+              "line": 126,
+              "notation": "p d p n | d n | d S ||"
+            },
+            {
+              "line": 127,
+              "notation": "p S n d | p d | n S ||"
+            },
+            {
+              "line": 128,
+              "notation": "S n S d | n d | n p ||"
+            },
+            {
+              "line": 129,
+              "notation": "S p d n | S n | d p ||"
+            },
+            {
+              "line": 130,
+              "notation": "n d n p | d p | d m ||"
+            },
+            {
+              "line": 131,
+              "notation": "n m p d | n d | p m ||"
+            },
+            {
+              "line": 132,
+              "notation": "d p d m | p m | p g ||"
+            },
+            {
+              "line": 133,
+              "notation": "d g m p | d p | m g ||"
+            },
+            {
+              "line": 134,
+              "notation": "p m p g | m g | m r ||"
+            },
+            {
+              "line": 135,
+              "notation": "p r g m | p m | g r ||"
+            },
+            {
+              "line": 136,
+              "notation": "m g m r | g r | g s ||"
+            },
+            {
+              "line": 137,
+              "notation": "m s r g | m g | r s ||"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

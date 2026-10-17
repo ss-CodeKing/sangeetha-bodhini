@@ -1,10 +1,15 @@
 import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
+import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { swaras, arohanam, avarohanam, frequency, formatSwara, shrutiKeys, defaultShrutiIndex } from '../src/data/swaras'
 import { adiTalam, kriyas } from '../src/data/talas'
 import { saraliVarisai, parseNotation } from '../src/data/saraliVarisai'
-import type { Kaalam } from '../src/types/carnatic'
+import type { ChapterId, Kaalam, NotationUnit, SwaraId, SwaraNote } from '../src/types/carnatic'
+import { parseAdiRow } from '../src/data/notation'
+import { noteFrequency } from '../src/audio/transport'
+import { melsthayiVarisai } from '../src/data/melsthayiVarisai'
+import { dhatuVarisai } from '../src/data/dhatuVarisai'
 import { jantaVarisai } from '../src/data/jantaVarisai'
 import { curriculum } from '../src/data/curriculum'
 
@@ -59,8 +64,8 @@ test('all 14 lessons preserve holds, octave transitions and complete cycles at e
 
 
 
-test('two curriculum chapters preserve all 26 exercises in printed order', () => {
-  assert.deepEqual(curriculum.map(chapter => [chapter.id, chapter.lessons.length]), [['sarali', 14], ['janta', 12]])
+test('four curriculum chapters preserve all 33 exercises in printed order', () => {
+  assert.deepEqual(curriculum.map(chapter => [chapter.id, chapter.lessons.length]), [['sarali', 14], ['janta', 12], ['melsthayi', 5], ['dhatu', 2]])
   assert.deepEqual(jantaVarisai.map(lesson => lesson.label), ['1', '2', '3', '4', '5', '5A', '6', '7', '8', '8A', '9', '10'])
 })
 
@@ -217,4 +222,84 @@ test('all twelve unrounded A440 anchors and octave transpositions match referenc
   near(frequency(1, baseHz, -1), 103.82617439498628)
   near(frequency(1, baseHz, 0), 207.65234878997256)
   near(frequency(1, baseHz, 1), 415.3046975799451)
+})
+
+const sourceFixture = JSON.parse(readFileSync(new URL('./fixtures/textbook-notation.json', import.meta.url), 'utf8')) as {
+  chapters: { id: ChapterId; url: string; exercises: { number: number; sourceRows: { notation: string }[] }[] }[]
+}
+const notationLetters: Partial<Record<SwaraId, string>> = { S: 's', R1: 'r', G3: 'g', M1: 'm', P: 'p', D1: 'd', N3: 'n' }
+function encodeUnits(units: readonly NotationUnit[]) {
+  return units.map(unit => unit.kind === 'hold' ? ',' : unit.note.octave === 1
+    ? notationLetters[unit.note.swara]!.toUpperCase() : notationLetters[unit.note.swara]!)
+}
+
+for (const chapter of sourceFixture.chapters) {
+  for (const exercise of chapter.exercises) {
+    test(chapter.id + ' ' + exercise.number + ' matches every fetched source row and 4+2+2 grouping', () => {
+      const catalogChapter = curriculum.find(item => item.id === chapter.id)!
+      const lesson = catalogChapter.lessons[exercise.number - 1]
+      assert.equal(catalogChapter.source, chapter.url)
+      assert.deepEqual(lesson.notation.split('\n'), exercise.sourceRows.map(row => row.notation))
+      const expectedTokens = exercise.sourceRows.flatMap(row => {
+        const groups = row.notation.replace(/\|\|$/, '').split('|')
+        const tokens = groups.map(group => group.trim().split(/\s+/).filter(token => token !== '-'))
+        assert.deepEqual(tokens.map(group => group.length), [4, 2, 2])
+        return tokens.flat()
+      })
+      assert.deepEqual(encodeUnits(lesson.units), expectedTokens)
+      assert.deepEqual(lesson.sections.flatMap(section => section.units), lesson.units)
+      assert.deepEqual(lesson.arohanam, arohanam)
+      assert.deepEqual(lesson.avarohanam, avarohanam)
+      const expectedRows = chapter.id === 'melsthayi' ? [4, 6, 8, 10, 12][exercise.number - 1] : 20
+      assert.equal(lesson.units.length, expectedRows * 8)
+      assert.equal(lesson.units.filter(unit => unit.kind === 'hold').length, chapter.id === 'melsthayi' ? 6 : 0)
+      assert.deepEqual(lesson.units.at(-1), { kind: 'note', note: { swara: 'S', octave: 0 } })
+      for (const kaalam of [1, 2, 3] as Kaalam[]) {
+        const mapping = lesson.kaalams[kaalam]
+        const perBeat = 2 ** (kaalam - 1)
+        const mapped = mapping.avartanams.flatMap(cycle => {
+          assert.deepEqual(cycle.beats.map(beat => beat.akshara), [1, 2, 3, 4, 5, 6, 7, 8])
+          cycle.beats.forEach(beat => assert.equal(beat.units.length, perBeat))
+          assert.deepEqual([cycle.beats.slice(0, 4).length, cycle.beats.slice(4, 6).length, cycle.beats.slice(6).length], [4, 2, 2])
+          return cycle.beats.flatMap(beat => beat.units)
+        })
+        assert.equal(mapped.length, mapping.avartanams.length * 8 * perBeat)
+        assert.deepEqual(mapped, Array.from({ length: mapping.repetitions }, () => lesson.units).flat())
+        if (kaalam === 1) {
+          assert.equal(mapping.repetitions, 1)
+          assert.deepEqual(mapping.avartanams.map(cycle => encodeUnits(cycle.beats.flatMap(beat => beat.units))), exercise.sourceRows.map(row => row.notation.split(/\s+/).filter(token => !['|', '||', '-'].includes(token))))
+        }
+      }
+    })
+  }
+}
+
+test('Melsthayi retains both four-unit upper-Sa attacks and reaches Ri/Ri/Ga/Ma/Pa', () => {
+  const maxima = ['R1', 'R1', 'G3', 'M1', 'P']
+  melsthayiVarisai.forEach((lesson, index) => {
+    assert.deepEqual(lesson.units.slice(8, 16), parseNotation('S , , , S , , ,'))
+    const highest = lesson.units.filter(unit => unit.kind === 'note')
+      .reduce((best, unit) => noteFrequency(unit.note, 200) > noteFrequency(best, 200) ? unit.note : best, { swara: 'S', octave: 0 } as SwaraNote)
+    assert.deepEqual(highest, { swara: maxima[index], octave: 1 })
+    assert.deepEqual(lesson.sections[0].units, parseNotation('s r g m p d n S'))
+    assert.deepEqual(lesson.sections.at(-1)!.units, parseNotation('S n d p m g r s'))
+  })
+  assert.equal(dhatuVarisai.length, 2)
+})
+
+test('upper-register parsing, diacritics and frequencies preserve the textbook register', () => {
+  const notes = parseNotation('S R G M P')
+  const ratios = [1, 16 / 15, 5 / 4, 4 / 3, 3 / 2]
+  notes.forEach((unit, index) => {
+    assert.equal(unit.kind, 'note')
+    if (unit.kind !== 'note') return
+    assert.equal(unit.note.octave, 1)
+    assert.equal(noteFrequency(unit.note, 200), 200 * 2 * ratios[index])
+    assert.ok(formatSwara(unit.note).includes('\u0307'))
+  })
+  assert.deepEqual(parseAdiRow('S R - S n | d p | m p ||'), parseNotation('S R S n d p m p'))
+  assert.throws(() => parseAdiRow('s r g | m p | d n S ||'))
+  assert.throws(() => parseAdiRow('s r g m p d n S'))
+  assert.throws(() => parseAdiRow(', r g m | p d | n S ||'))
+  assert.throws(() => parseAdiRow('s r g x | p d | n S ||'))
 })
