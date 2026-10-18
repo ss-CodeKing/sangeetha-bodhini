@@ -72,7 +72,7 @@ Chapters 3 and 4 transcribe all rows from the [Melsthayi reference](https://www.
 - Octave offsets are -2 to +2; displayed dots go below/above. Geethams also include mandra notes; printed register marks are retained.
 - Tuning uses the selected 12-position just-intonation profile checked against Sambamoorthy, Book IV, Table V: R3/G2 = 6/5, D3/N2 = 9/5, and M2 = 45/32. Mayamalavagowla is unchanged. Western A440 anchors retain full precision, with display-only rounding. See [the tuning audit](docs/tuning-audit.md) for all ratios, historical naming differences, sources and octave checks. These fixed pitches do not model gamakas or claim universal performance intonation.
 - Adi Talam is Chatusra Jathi Triputa: one four-count laghu and two two-count dhrithams. The finger illustrations are schematic; the names and text describe the movement.
-- The heritage section uses Wikimedia images: a Purandara Dasa statue photograph, a historical Thyagaraja painting, and India Post stamps for Dikshitar and Syama Sastri. Sources and licences appear on the page and in `public/portraits/CREDITS.md`.
+- The heritage section uses commemorative stamps for Purandara Dasa, Thyagaraja, Dikshitar and Syama Sastri. Each image links to its Wikimedia source; attribution and licences are retained in `public/portraits/CREDITS.md`.
 
 ## Audio behavior and verification
 
@@ -119,3 +119,5 @@ The Studio's **The melody in motion** canvas sits directly above the notation. I
 A warm amber Hermite curve joins written pitches. Repeated attacks receive a subtle dip; karvais breathe gently without a fresh attack. This is a vocal-style illustration of the score, not microphone pitch detection or a transcription of performed gamakas; the audio synthesis remains unchanged. The golden bead reads the engine's output-compensated AudioContext position on each animation frame. The window scrolls continuously and displays fewer beats at Madhyama Kalam and Dhurita Kalam to retain note detail.
 
 Pause freezes the bead at the audible position and clears its trail. Reset and chapter/lesson changes return it to the origin; seeking and loop wraps relocate it to the matching score position without a stale trail. Live tempo, speed and tonic controls remain synchronized. Canvas resolution follows its container and device pixel ratio, with animation, subscriptions and resize observation cleaned up on unmount. Synchronization is limited by display refresh and device latency; microsecond display accuracy is not physically achievable.
+
+Studio keeps notation references in the curriculum sidebar. Ragam information uses larger text without repeated source links or transcription notes. The compact Shruti card groups tonic, volume and start/stop controls. Heritage portraits use four commemorative stamps, each linked to its source; attribution is retained in `public/portraits/CREDITS.md`.

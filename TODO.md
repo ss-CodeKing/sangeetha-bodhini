@@ -119,3 +119,8 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 - [x] Handle pause, reset, seek, loop, lesson/chapter changes and lifecycle cleanup.
 - [x] Complete 101 regression tests, typecheck, lint and build; verify browser playback at all speeds, pause/reset/seek/loop, upper registers and a 390px viewport.
 - [x] Review the final diff and commit the pitch contour implementation.
+
+## Browser review refinements
+- [x] Compact Shruti controls, slightly enlarge ragam text and remove repeated composition/footer links and transcription details.
+- [x] Remove the Sankeerna Eka version suffix and simplify heritage alt text/source navigation.
+- [x] Replace Purandara Dasa and Thyagaraja portraits with sourced stamps; retain repository image credits.

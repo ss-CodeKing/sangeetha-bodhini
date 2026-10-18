@@ -162,11 +162,9 @@
 .score-counts, .notation-row { grid-template-columns: repeat(var(--beats, 8), minmax(0, 1fr)); }
 .sahityam { display: block; font-size: 10px; line-height: 1.5; margin-top: 7px; overflow-wrap: anywhere; }
 .notation-note:has(.sahityam) { align-self: stretch; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.raga-scale { margin: -8px 0 20px; padding: 12px 15px; border: 1px solid #e6d7bd; border-radius: 7px; background: #fcf7ec; font-size: 11px; color: #806443; line-height: 1.9; }
+.raga-scale { margin: -8px 0 20px; padding: 12px 15px; border: 1px solid #e6d7bd; border-radius: 7px; background: #fcf7ec; font-size: 13px; color: #806443; line-height: 1.9; }
 .raga-scale strong { color: #754a30; margin-right: 6px; }
 .raga-scale a { color: var(--color-maroon); }
-.raga-scale details { margin-top: 5px; }
-.raga-scale summary { cursor: pointer; }
 .tracker-angas span { overflow: hidden; text-overflow: ellipsis; }
 .tracker-count { min-width: 0; }
 

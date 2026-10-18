@@ -329,11 +329,6 @@ h4 { font-size: 13px; font-weight: 600; color: #5b3b27; }
 .portrait-frame img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .master figcaption h3 { font-size: 15px; line-height: 1.4; }
 .master figcaption > span { display: block; font-size: 8px; letter-spacing: 1px; margin-top: 6px; }
-.image-credits { margin-top: 18px; font-size: 11px; color: #785c3e; line-height: 1.8; }
-.image-credits summary { cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-.image-credits ul { padding-left: 18px; margin-block: 12px; }
-.image-credits a { text-decoration: underline; }
-.image-credits p { font-size: 10px; }
 @media (max-width: 760px) {
   .masters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 25px 16px; }
   .portrait-frame { max-width: 150px; height: 180px; }
@@ -344,3 +339,23 @@ h4 { font-size: 13px; font-weight: 600; color: #5b3b27; }
 .shruti-volume { margin-top: 14px; }
 .shruti-volume label { display: flex; justify-content: space-between; gap: 16px; }
 .shruti-volume input { display: block; width: 100%; margin: 10px 0; accent-color: var(--color-terracotta, #a54f38); }
+
+/* Keep tonic, volume and toggle in one short control row. */
+.shruti-card, .shruti-card.compact-drone { display: grid; grid-template-columns: 40px minmax(0, 1fr); padding: 16px 18px; gap: 10px 14px; }
+.shruti-card .shruti-symbol { height: 40px; width: 40px; }
+.shruti-card .shruti-copy { min-width: 0; }
+.shruti-card .shruti-copy h3 { font-size: 18px; }
+.shruti-card .shruti-copy p { margin-top: 3px; line-height: 1.5; }
+.shruti-card .drone-notes { margin-top: 5px; font-size: 15px; }
+.shruti-card .drone-notes > span { display: inline; margin-left: 6px; font-size: 8px; }
+.shruti-card .shruti-select { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(150px, 1fr) minmax(110px, 0.8fr) auto; gap: 16px; align-items: end; width: auto; }
+.shruti-key-control { display: grid; gap: 6px; }
+.shruti-card .shruti-select select { width: 100%; padding: 9px; font-size: 12px; }
+.shruti-card .shruti-volume { margin: 0; }
+.shruti-card .shruti-volume input { margin: 12px 0; }
+.shruti-card .drone-toggle { margin: 0; white-space: nowrap; }
+@media (max-width: 480px) {
+  .shruti-card .shruti-select { grid-template-columns: minmax(0, 1fr) minmax(100px, 0.75fr); gap: 10px 14px; }
+  .shruti-card .drone-toggle { grid-column: 1 / -1; }
+  .shruti-card .drone-notes > span { display: block; margin-left: 0; }
+}

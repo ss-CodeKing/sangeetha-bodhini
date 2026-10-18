@@ -44,7 +44,7 @@ function App() {
       </> : <Studio audio={audio} shruti={shruti} onShrutiChange={changeShruti} onTheory={() => changePage('theory')} />}
       <Heritage />
     </main>
-    <footer className="footer"><a className="footer-brand" href="#top"><Flower2 size={19} /> Sangeetha Bodhini</a><span>Learn with intention. Practice with joy.</span><a href="https://www.shivkumar.org/music/basics/sarali-varisai.htm" target="_blank" rel="noreferrer">Lesson notation reference ↗</a></footer>
+    <footer className="footer"><a className="footer-brand" href="#top"><Flower2 size={19} /> Sangeetha Bodhini</a><span>Learn with intention. Practice with joy.</span></footer>
   </div>
 }
 export default App
