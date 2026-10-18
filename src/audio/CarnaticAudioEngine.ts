@@ -29,6 +29,7 @@ export class CarnaticAudioEngine {
   private runtime: EngineRuntime
   private context: AudioContext | null = null
   private destination: GainNode | null = null
+  private droneGain: GainNode | null = null
   private analyser: AnalyserNode | null = null
   private samples = new Float32Array(256)
   private listeners = new Set<() => void>()
@@ -47,7 +48,7 @@ export class CarnaticAudioEngine {
   private auditionRequest = 0
   private state: PlaybackSnapshot = {
     status: 'idle', chapterId: 'sarali', lessonNumber: 1, kaalam: 1, bpm: 60,
-    baseHz: shrutiKeys[defaultShrutiIndex].hz, loopMode: 'off', drone: false,
+    baseHz: shrutiKeys[defaultShrutiIndex].hz, loopMode: 'off', drone: false, droneVolume: 1,
     unitIndex: 0, position: 0, beat: 1, subdivision: 0, avartanam: 1,
     beatProgress: 0, note: { swara: 'S', octave: 0 },
     hz: shrutiKeys[defaultShrutiIndex].hz, outputLevel: 0,
@@ -113,6 +114,9 @@ export class CarnaticAudioEngine {
       compressor.connect(this.analyser)
       this.analyser.connect(this.context.destination)
       this.destination = master
+      this.droneGain = this.context.createGain()
+      this.droneGain.gain.value = this.state.droneVolume
+      this.droneGain.connect(master)
       this.context.onstatechange = () => {
         if (this.context && this.context.state !== 'running' && this.state.status === 'playing') {
           this.pause()
@@ -219,6 +223,16 @@ export class CarnaticAudioEngine {
     }
     if (patch.baseHz !== undefined) this.cancel(this.auditionVoices)
   }
+  setDroneVolume = (volume: number) => {
+    if (!Number.isFinite(volume)) return
+    const droneVolume = Math.max(0, Math.min(1, volume))
+    if (this.droneGain) {
+      const now = this.renderNow()
+      this.droneGain.gain.cancelAndHoldAtTime(now)
+      this.droneGain.gain.linearRampToValueAtTime(droneVolume, now + 0.03)
+    }
+    this.publish({ droneVolume })
+  }
   setDrone = async (enabled: boolean) => {
     const request = ++this.droneRequest
     if (!enabled) {
@@ -274,11 +288,11 @@ export class CarnaticAudioEngine {
     }
   }
   private startDrone() {
-    if (!this.context || !this.destination) return
+    if (!this.context || !this.droneGain) return
     const start = this.renderNow() + START_LEAD
     DRONE_VOICES.forEach(({ note, volume, detuneCents }) => {
       let voice: Voice
-      voice = createShrutiVoice(this.context!, this.destination!, noteFrequency(note, this.state.baseHz), start,
+      voice = createShrutiVoice(this.context!, this.droneGain!, noteFrequency(note, this.state.baseHz), start,
         volume, detuneCents, () => this.droneVoices.delete(voice))
       this.droneVoices.add(voice)
     })
@@ -317,6 +331,8 @@ export class CarnaticAudioEngine {
       void context.close().catch(() => {})
     }
     this.context = null
+    this.droneGain?.disconnect()
+    this.droneGain = null
     this.destination = null
     this.analyser = null
   }

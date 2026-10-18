@@ -3,7 +3,7 @@ export type Octave = -2 | -1 | 0 | 1 | 2
 export type Kaalam = 1 | 2 | 3
 export type ChapterId = 'sarali' | 'janta' | 'melsthayi' | 'dhatu' | 'alankaras' | 'geethams'
 export type Akshara = number
-export type KriyaId = 'thattu' | 'kanishta' | 'anamika' | 'madhyama' | 'tarjani' | 'veechu'
+export type KriyaId = 'thattu' | 'kanishta' | 'anamika' | 'madhyama' | 'tarjani' | 'angushta' | 'veechu'
 export interface SwaraName { id: SwaraId; name: string }
 export interface Swarasthana {
   position: number

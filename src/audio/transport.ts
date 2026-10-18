@@ -16,6 +16,7 @@ export interface PlaybackSnapshot {
   baseHz: number
   loopMode: LoopMode
   drone: boolean
+  droneVolume: number
   unitIndex: number
   position: number
   beat: number

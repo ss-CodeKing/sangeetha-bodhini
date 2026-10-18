@@ -42,7 +42,7 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 ## Direct playback and kalam labels (complete)
 - [x] Play swaras directly when clicking explorer notes; remove the separate Play swara button.
 - [x] Audition Sa from all five sthayi cards, including repeated selections.
-- [x] Display Prathama, Dwithiya and Thrithiya kaalam in lesson controls and metadata.
+- [x] Display Vilamba, Madhyama and Dhurita Kalam in lesson controls and metadata.
 
 ## Initial electronic shruti box and Chapter 2 (superseded by corrections below)
 - [x] Add a separate additive reed voice with fundamental, second, third and gently diminishing odd overtones.
@@ -108,3 +108,5 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 - [x] Complete real browser audio/UI checks: all 17 new lessons at all three speeds, all eight tala layouts, all nine Geetham lyric scores, clean chapter reset and no browser errors.
 - [x] Final Git review and commit; no blocking findings, whitespace checks clean.
 - [ ] Teacher review of missing/inconsistent register styling in the Geetham source pages; implement performed reprise cues only after agreeing the desired rendition.
+
+- [x] Add shared live Shruti volume and correct Mishra Jhampa / Sankeerna Eka finger counts.

@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { swaras, arohanam, avarohanam, frequency, formatSwara, shrutiKeys, defaultShrutiIndex } from '../src/data/swaras'
-import { adiTalam, kriyas } from '../src/data/talas'
+import { adiTalam, kriyas, talas } from '../src/data/talas'
 import { saraliVarisai, parseNotation } from '../src/data/saraliVarisai'
 import type { ChapterId, Kaalam, NotationUnit, SwaraId, SwaraNote } from '../src/types/carnatic'
 import { parseAdiRow } from '../src/data/notation'
@@ -30,7 +30,7 @@ test('Adi cycle contains the complete 4 + 2 + 2 gesture sequence', () => {
   assert.deepEqual(adiTalam.angas.map(a => a.beats.length), [4, 2, 2])
   assert.deepEqual(adiTalam.beats.map(b => b.kriya), ['thattu', 'kanishta', 'anamika', 'madhyama', 'thattu', 'veechu', 'thattu', 'veechu'])
   assert.deepEqual(adiTalam.angas.flatMap(a => a.beats), [1,2,3,4,5,6,7,8])
-  assert.equal(kriyas.length, 6)
+  assert.equal(kriyas.length, 7)
 })
 
 test('all 14 lessons preserve holds, octave transitions and complete cycles at every speed', () => {
@@ -308,7 +308,6 @@ test('upper-register parsing, diacritics and frequencies preserve the textbook r
 
 import { alankaras } from '../src/data/alankaras'
 import { geethams } from '../src/data/geethams'
-import { talas } from '../src/data/talas'
 import { ragas, swaraRatios } from '../src/data/ragas'
 import { lessonTala } from '../src/data/lessonMetadata'
 import { parseRagaNotation, parseTalaRow } from '../src/data/composition'
@@ -414,3 +413,9 @@ for (const lesson of [...alankaras, ...geethams]) {
     }
   })
 }
+
+test('long laghus include the thumb before restarting finger counts', () => {
+  assert.deepEqual(talas.jhampa.beats.map(beat => beat.kriya), ['thattu', 'kanishta', 'anamika', 'madhyama', 'tarjani', 'angushta', 'kanishta', 'thattu', 'thattu', 'veechu'])
+  assert.deepEqual(talas.sankeernaEka.beats.map(beat => beat.kriya), ['thattu', 'kanishta', 'anamika', 'madhyama', 'tarjani', 'angushta', 'kanishta', 'anamika', 'madhyama'])
+  for (const tala of Object.values(talas)) assert.ok(tala.beats.every(beat => kriyas.some(kriya => kriya.id === beat.kriya)))
+})

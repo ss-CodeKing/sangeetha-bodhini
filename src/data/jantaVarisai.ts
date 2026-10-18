@@ -6,7 +6,7 @@ import { arohanam, avarohanam } from './swaras'
 // patterns in https://www.shivkumar.org/music/basics/janta-varisai.htm.
 // Lowercase is madhya; uppercase S is tara Sa. Commas are held subdivisions.
 // Every source row is eight units. A 16-unit phrase fills eight aksharas in
-// Dwithiya kaalam; the same units regroup at first and third kaalam.
+// Madhyama Kalam; the same units regroup at first and third kaalam.
 const ascending = 's r g m p d n S'.split(' ')
 const descending = [...ascending].reverse()
 type Step = number | ','

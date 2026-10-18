@@ -426,3 +426,25 @@ test('non-Adi cursor and avartanam loops follow the active tala at every kaalam'
     }
   }
 })
+
+test('shruti volume is retained before startup and ramps live without restarting reeds', async () => {
+  const { engine, context } = setup()
+  engine.setDroneVolume(0.4)
+  assert.equal(context.gains.length, 0)
+  await engine.setDrone(true)
+  const gain = context.gains[1]
+  assert.equal(gain.gain.value, 0.4)
+  const voices = context.oscillators.length
+  engine.setDroneVolume(0)
+  assert.deepEqual(gain.gain.events.at(-1), { kind: 'linear', value: 0, time: 0.03 })
+  engine.configure({ baseHz: 220 })
+  assert.equal(engine.getSnapshot().droneVolume, 0)
+  engine.setDroneVolume(0.7)
+  assert.equal(context.oscillators.length, voices * 2)
+  assert.equal(engine.getSnapshot().drone, true)
+  engine.setDroneVolume(NaN)
+  assert.equal(engine.getSnapshot().droneVolume, 0.7)
+  engine.setDroneVolume(2)
+  assert.equal(engine.getSnapshot().droneVolume, 1)
+  engine.dispose()
+})

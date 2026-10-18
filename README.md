@@ -53,7 +53,7 @@ The project uses Vite + React + TypeScript, Tailwind v4's Vite plugin, Lucide Re
 
 The chapter labels are enlarged. Arohanam/avarohanam diagrams explain pitch direction, and the kaalam guide compares 1, 2 and 4 swaras per steady beat. Double octave dots are rendered side by side using explicit visual marks. Shruti offers all 12 chromatic tonics from C3 to B3 (including flat aliases), defaulting to G♯3 / A♭3 (207.65 Hz).
 
-Click any swarasthana button to hear that pitch immediately; click a sthayi card to hear Sa in that register (Anumandra, Mandra, Madhya, Tara or Ati-Tara). Clicking a selected card replays it. Toggle raga highlights, step through the eight kriyas, and change the tonic. Use Start shruti box for the sustained drone. In Practice Studio, choose Sarali (14), Janta (12), Melsthayi (5) or Dhatu (2), select an exercise, choose Prathama, Dwithiya or Thrithiya kaalam and press Play. Adjust tempo between 45 and 90 BPM, click a note to seek, and loop a whole lesson or the current avartanam. Pause preserves your place; Reset returns to the beginning. The drone has an independent toggle.
+Click any swarasthana button to hear that pitch immediately; click a sthayi card to hear Sa in that register (Anumandra, Mandra, Madhya, Tara or Ati-Tara). Clicking a selected card replays it. Toggle raga highlights, step through the eight kriyas, and change the tonic. Use Start shruti box for the sustained drone. In Practice Studio, choose Sarali (14), Janta (12), Melsthayi (5) or Dhatu (2), select an exercise, choose Vilamba, Madhyama or Dhurita Kalam and press Play. Adjust tempo between 45 and 90 BPM, click a note to seek, and loop a whole lesson or the current avartanam. Pause preserves your place; Reset returns to the beginning. The drone has an independent toggle.
 
 ## Curriculum conventions and sources
 
@@ -109,3 +109,5 @@ The Geetham HTML convention differs from the exercise pages: plain capitals are 
 Merged lyric syllables are split only where needed for beat alignment: Padumanabha's ksha-ka, Analekara's sthra-pu, Vara Veena's nchi-tha, and Kamalajadala's ma-la / naa-extension. Kamalajadala's final D P–M dash separates a phrase without adding a beat. The raw source fixture preserves these original forms. Parenthesized textual return cues are documented but not automatically expanded into a performed reprise.
 
 Swara and lyric tokens share one clickable highlighted cell; holds continue the preceding synthesized voice across tala boundaries. Composer attributions absent from the notation pages are cross-checked against linked karnATik references; Analekara remains unspecified. Ragam scales, composer metadata, tala formula and composition-specific source notes appear above the tracker.
+
+Shruti volume is adjustable from 0–100% in Theory and Studio, independently of lesson playback. Long laghus count Angushta (thumb) after Tarjani.
