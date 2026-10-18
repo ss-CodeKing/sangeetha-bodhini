@@ -1,9 +1,7 @@
 import { getChapter } from '../data/curriculum'
 import { frequency } from '../data/swaras'
-import type { ChapterId, Kaalam, NotationUnit, SwaraNote } from '../types/carnatic'
-
 import { ragas, swaraRatios } from '../data/ragas'
-import type { RagaId } from '../types/carnatic'
+import type { ChapterId, Kaalam, NotationUnit, RagaId, SwaraNote } from '../types/carnatic'
 
 export type LoopMode = 'off' | 'lesson' | 'avartanam'
 export type PlaybackStatus = 'idle' | 'loading' | 'playing' | 'paused' | 'complete'

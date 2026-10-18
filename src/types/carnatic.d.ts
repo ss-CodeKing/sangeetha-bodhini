@@ -38,7 +38,7 @@ export interface CurriculumLesson {
   sections: readonly { label: string; units: readonly NotationUnit[] }[]
   notation: string
   units: readonly NotationUnit[]
-  // Ragam reference scales; mixed exercises 10–14 are not labelled pure ascent/descent.
+  // Ragam reference scales; mixed Sarali exercises 10–14 retain phrase sections.
   arohanam: readonly SwaraNote[]
   avarohanam: readonly SwaraNote[]
   kaalams: Readonly<Record<Kaalam, KaalamMapping>>
@@ -60,8 +60,6 @@ export interface Tala {
   angas: readonly { name: string; symbol: string; beats: readonly Akshara[] }[]
   beats: readonly { akshara: Akshara; kriya: KriyaId }[]
 }
-
-
 export type RagaId = 'mayamalavagowla' | 'malahari' | 'mohanam' | 'suddhaSaveri' | 'kalyani' | 'arabhi' | 'bhairavi'
 export interface Raga {
   id: RagaId

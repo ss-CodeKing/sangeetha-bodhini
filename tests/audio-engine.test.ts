@@ -12,7 +12,6 @@ class Param {
   events: { kind: string; value: number; time: number }[] = []
   setValueAtTime(value: number, time: number) { this.value = value; this.events.push({ kind: 'set', value, time }) }
   linearRampToValueAtTime(value: number, time: number) { this.events.push({ kind: 'linear', value, time }) }
-  exponentialRampToValueAtTime(value: number, time: number) { this.events.push({ kind: 'exponential', value, time }) }
   cancelAndHoldAtTime(time: number) { this.events.push({ kind: 'cancel', value: this.value, time }) }
 }
 class Node {

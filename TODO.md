@@ -1,126 +1,46 @@
-# Sangeetha Bodhini
-Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
+# Sangeetha Bodhini completion record
 
-## Step 1 — foundations (complete)
-- [x] Read architecture and verify WSL Node/npm.
-- [x] Scaffold Vite, React, TypeScript, Tailwind, Lucide and Framer Motion.
-- [x] Configure palette and typography tokens.
-- [x] Define reusable Carnatic types.
-- [x] Add 12 pitch positions / 16 names and relative ratios.
-- [x] Add Adi Talam anatomy, eight beats and five gestures.
-- [x] Add 14 Sarali Varisai lessons, holds and eight-beat mappings for three speeds.
-- [x] Build responsive Theory page: pitch explorer, gestures, sthayis, shruti setup and heritage tribute.
-- [x] Document sources, notation and local run instructions.
-- [x] Verify data, TypeScript, lint, build and running Vite server.
-- [x] User review of data and Introduction page; tuning audit accepted.
+All six planned chapters and the supporting Theory/Studio features are complete. This checklist records the final implementation; Git history retains the earlier iteration notes.
 
-## Step 2 — practice studio (complete)
-- [x] Web Audio synthesis and swara audition; drone upgraded to an electronic shruti box below.
-- [x] Look-ahead scheduler, talam clock and 45–90 BPM controls.
-- [x] Studio lesson selector and notation grid.
-- [x] Three-kaalam playback with synchronized notes and kriyas.
-- [x] Pause/reset, speed changes and lesson/avartanam loops.
-- [x] Browser audio/timing verification and static deployment readiness.
+## Completed curriculum and pedagogy
 
+- [x] Chapter 1: 14 Sarali Varisai exercises.
+- [x] Chapter 2: 12 Janta exercises, printed 1–10 with 5A and 8A.
+- [x] Chapter 3: five Melsthayi exercises, preserving upper-register notes and karvais.
+- [x] Chapter 4: two Dhatu exercises in book order.
+- [x] Chapter 5: eight Sapta Tala Alankaras with exact anga groupings.
+- [x] Chapter 6: nine Geethams with aligned swara/sahityam and source provenance.
+- [x] Audited Just Intonation, seven ragam profiles and all 12 tonic keys.
+- [x] Theory pitch audition, five sthayis, scale directions, kaalam explanation and hand-gesture guide.
+- [x] Attributed local heritage stamps and original Tanpura illustration.
 
+## Completed audio and Studio
 
-## Introduction review refinements
-- [x] Enlarge first-step navigation and section numbers.
-- [x] Add ascending/descending scale diagrams and explanations.
-- [x] Explain three kaalams with an interactive subdivision comparison.
-- [x] Render both octave dots horizontally above/below the swara.
-- [x] Offer all 12 shruti keys with G♯3 as the default.
-- [x] Replace symbolic silhouettes with attributed internet images.
+- [x] AudioContext-clock scheduling, holds, separate repeated attacks and all three kaalams.
+- [x] Multi-tala beat/kriya tracking, including thumb counts for long laghus.
+- [x] Play/pause/reset, seek, live tempo/kaalam/tonic changes and lesson/avartanam loops.
+- [x] Safe chapter/lesson reset, source cancellation and hidden-tab audio shutdown.
+- [x] Sustained additive Panchama shruti box with pure/detuned tara reeds, mandra Pa and madhya Sa.
+- [x] Shared independent Shruti volume and Theory/Studio engine lifecycle.
+- [x] Responsive high-DPI PitchWaveCanvas with output-clock tracking and lifecycle cleanup.
+- [x] Complete-cycle mappings, printed Janta labels, octave dots and synchronized lyric highlighting.
 
-## Tuning audit
-- [x] Check the selected 12-position JI profile against Sambamoorthy's 22-shruti chart.
-- [x] Correct R3/G2 to 6/5 and D3/N2 to 9/5; document M2 and historical naming variants.
-- [x] Verify Mayamalavagowla through Tara Sa at 2/1.
-- [x] Calculate full-precision C3–B3 anchors from A440; retain G♯3 default.
-- [x] Add ratio, frequency and octave regression tests plus source notes.
+## Release housekeeping (2026-10-18)
 
-## Direct playback and kalam labels (complete)
-- [x] Play swaras directly when clicking explorer notes; remove the separate Play swara button.
-- [x] Audition Sa from all five sthayi cards, including repeated selections.
-- [x] Display Vilamba, Madhyama and Dhurita Kalam in lesson controls and metadata.
+- [x] Audit source references, types, imports, fixtures, assets and dependency cycles.
+- [x] Remove two superseded portraits; retain attribution for every displayed stamp.
+- [x] Reconcile README, architecture, tuning notes and completion record with implemented behavior.
+- [x] Make static assets work at root and subdirectory deployment URLs; expand Git ignores.
+- [x] Run lint, expanded app/config/test typechecking, 101 tests, production build, dependency advisory checks and real browser audio/production verification. See [release audit](docs/release-audit.md).
 
-## Initial electronic shruti box and Chapter 2 (superseded by corrections below)
-- [x] Add a separate additive reed voice with fundamental, second, third and gently diminishing odd overtones.
-- [x] Add ±2 cent double reeds, a resonant 1000 Hz low-pass filter (Q 2.4), and 0.2 Hz bellows modulation at 1.2% depth.
-- [x] Sustain Sa and Pa with a softer lower Pa; add smooth attack, stop and retuning ramps.
-- [x] Introduce shared curriculum types, chapter catalog, notation parsing and kaalam mapping.
-- [x] Preserve Chapter 1's 14 Sarali exercises and add Chapter 2's 9 sourced Janta exercises.
-- [x] Preserve paired attacks, triple-note patterns and karvais in ascending and descending sections.
-- [x] Add Studio chapter navigation, chapter-aware score and transport; reset safely when changing chapters.
-- [x] Update landing-page curriculum copy, chapter source links and README.
-- [x] Add tests for every Janta exercise in all three kaalams, chapter switching and reed lifecycle.
-- [x] Run 26 automated tests, typecheck, production build and lint.
-- [x] Complete browser audio/UI verification: all 12 tonics sustain without clipping, five octave cards replay, both chapters navigate correctly, Janta playback advances, and the drone stops independently. Measurements are recorded in docs/audio-architecture.md.
+## Optional future scope
 
-## Chapter 2 corrections and Panchama drone (2026-10-17)
-- [x] Follow the explicit 12-item sequence: 1, 2, 3, 4, 5, 5A, 6, 7, 8, 8A, 9, 10. The requested numeric total of 11 conflicts with the named list; all named exercises are retained.
-- [x] Reorder 3/4/5 from former 4/5/3; verify complete note sequences against commit a067154.
-- [x] Add 5A's reverse symmetric four-note windows in both directions.
-- [x] Preserve Lessons 6, 7 and 8 exactly, including notes, registers and karvais.
-- [x] Add 8A's supplied held/paired/triple patterns, five ascending windows through tara Sa and symmetric descent.
-- [x] Add the complete textbook leap-pattern Lesson 9 and move previous 9 unchanged to 10.
-- [x] Keep printed lesson labels separate from playback ordinals; show 5A and 8A in the selector and active heading.
-- [x] Regroup every exercise into complete eight-beat cycles at 1/2/4 units per beat; verify every onset and hold duration without timing drift.
-- [x] Change sustained voicing to mandra Pa, pure tara Sa, tara Sa at +3.5 cents, and madhya Sa; rebalance reed levels and harmonics.
-- [x] Update both shared drone badges/tooltips to P̣ · Ṡ · S (Panchama Shruti: Mandra Pa · Tara Sa · Madhya Sa).
-- [x] Pass all 30 tests, typecheck, build and lint; browser checks pass for all 12 tonics, ordered lesson labels, 5A/8A headings, 8A live playback with 40 holds, and the updated badge/tooltip.
+These are outside the completed release and are not implemented features:
 
-## Chapters 3 and 4 — exact textbook notation (2026-10-17)
-- [x] Fetch and inspect the requested Melsthayi and Dhatu HTML references; retain all 80 source rows with URLs and text-view line numbers in a regression fixture.
-- [x] Add all five Melsthayi exercises (4/6/8/10/12 printed avartanams), preserving uppercase registers, both upper-Sa karvais, mixed phrases and final descent.
-- [x] Add both Dhatu exercises, each with ten ascending and ten descending source rows.
-- [x] Validate every source row's 4 + 2 + 2 grouping; ignore printed phrase dashes without adding timing units.
-- [x] Add both chapters to the typed catalog and shared Studio selector; update landing copy and documentation for 33 total exercises.
-- [x] Reset score scrolling on chapter/exercise changes; verify transport, playhead, active note and queued voice reset across every chapter pair.
-- [x] Test all new exercises' parsing, registers, holds, beat mappings, exact audio onsets and completion in all three kaalams.
-- [x] Pass upper-Sa–Pa browser pitch checks and render all seven exercises at all three speeds without clipping or release leakage; verify the four chapter options, live playback, dots and smooth navigation reset.
+- Teacher-led resolution of ambiguous Geetham register styling and performed reprise cues. Current notation preserves the documented source decisions.
+- Expressive sphurita/gamaka audio modeling. Current synthesis uses fixed pitches; the smooth canvas contour is visual only.
+- Additional curriculum beyond the six completed chapters.
 
-- [x] Pass all 46 tests, typecheck, lint, production build and a separate TypeScript check of test/browser harness files.
+## Release actions
 
-- [x] Use the Sarali and Janta HTML reference pages for Chapter 1/2 notation links, footer and README.
-
-- [x] Swap Dhatu exercises to match the book: alternating steps/skips first, single skips/zigzag returns second; preserve every note and renumber playback lessons.
-
-## Remaining scope
-- [x] User listening review of the synthesized reed timbre on their own speakers/headphones.
-- [x] Expressive vocal sphurita/gamaka modeling; current Janta playback uses separately articulated fixed pitches.
-- [ ] Additional curriculum chapters beyond the six implemented chapters.
-
-## Chapters 5–6 and multi-ragam / multi-tala architecture (2026-10-17)
-
-- [x] Fetch all ten supplied HTML references; retain raw swara/lyric text and bold upper-register markup in a review fixture.
-- [x] Add eight Alankarams, retaining all 76 source rows; use only Sankeerna Eka Version 1.
-- [x] Add all nine Geethams in the requested order, with written source notation, composer metadata, swara variants, holds and aligned sahityam.
-- [x] Add seven ragam profiles and audited ratio lookup; preserve asymmetric scales and explicit Bhairavi D1/D2.
-- [x] Generalize cycle mapping, audio cursor, avartanam loops, score angas and kriyas for 4/6/7/8/9/10/14 beats.
-- [x] Add index-finger counts and longer laghus; derive all hand counters from the audio-output clock.
-- [x] Highlight lyric syllables and swaras together across all three kaalams.
-- [x] Add six-chapter navigation, composition source links, scales, tala formula and transcription notes.
-- [x] Reset melody/audition queues, playhead, tempo (60 BPM) and looping on chapter/exercise changes.
-- [x] Confirm source Dhruva for Sri Ramachandra with the user; document source tala/scale-header discrepancies and explicit lyric splits.
-- [x] Pass 95 unit tests, including every new source row, lyric alignment, scale ratios, complete mappings, scheduler onsets/holds and non-Adi avartanam loops.
-- [x] Pass typecheck, lint, production build and separate test/harness TypeScript checking.
-- [x] Complete real browser audio/UI checks: all 17 new lessons at all three speeds, all eight tala layouts, all nine Geetham lyric scores, clean chapter reset and no browser errors.
-- [x] Final Git review and commit; no blocking findings, whitespace checks clean.
-- [ ] Teacher review of missing/inconsistent register styling in the Geetham source pages; implement performed reprise cues only after agreeing the desired rendition.
-
-- [x] Add shared live Shruti volume and correct Mishra Jhampa / Sankeerna Eka finger counts.
-
-## Continuous Studio pitch contour
-- [x] Add PitchWaveVisualizer / PitchWaveCanvas above the notation grid with high-DPI responsive drawing.
-- [x] Add ragam/register pitch racks, Carnatic labels, tala/anga boundaries and cycle markers.
-- [x] Draw smooth amber Hermite curves, repeated-note articulation, hold breathing, gradient fill and a decaying playhead trail.
-- [x] Follow the output-compensated audio clock between React updates; adapt the window to all three Kalam speeds.
-- [x] Handle pause, reset, seek, loop, lesson/chapter changes and lifecycle cleanup.
-- [x] Complete 101 regression tests, typecheck, lint and build; verify browser playback at all speeds, pause/reset/seek/loop, upper registers and a 390px viewport.
-- [x] Review the final diff and commit the pitch contour implementation.
-
-## Browser review refinements
-- [x] Compact Shruti controls, slightly enlarge ragam text and remove repeated composition/footer links and transcription details.
-- [x] Remove the Sankeerna Eka version suffix and simplify heritage alt text/source navigation.
-- [x] Replace Purandara Dasa and Thyagaraja portraits with sourced stamps; retain repository image credits.
+Review the final working tree, commit the cleanup, push to GitHub and select a hosting provider using [the deployment guide](docs/deployment.md). These actions remain separate from the completed implementation.

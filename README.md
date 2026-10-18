@@ -4,7 +4,7 @@ An interactive Carnatic music foundation for students and teachers. The Theory p
 
 ## Run locally in WSL
 
-Node.js 22.12+ (verified: 22.22.1) and npm (verified: 9.2.0). pnpm is optional and was not installed.
+Use Node.js 22.12+ and npm inside WSL (verified with Node 22.22.1 and npm 9.2.0). Keep Linux-installed `node_modules` inside WSL.
 
 ```bash
 cd /home/sudarsan_s/projects/sangeetha_bodhini
@@ -15,7 +15,7 @@ npm run dev
 Open the localhost URL printed by Vite, normally http://localhost:5173. WSL localhost forwarding allows access from Windows. Stop with Ctrl+C. The lockfile pins the installed versions; use `npm ci` for reproducible clean installs.
 
 ```bash
-npm test
+npm run test
 npm run test:data
 npm run test:audio
 npm run typecheck
@@ -24,18 +24,33 @@ npm run build
 npm run preview
 ```
 
+## Completed curriculum
+
+| Chapter | Content | Lessons |
+| --- | --- | --- |
+| 1 | Sarali Varisai | 14 |
+| 2 | Janta Varisai: 1–10 with 5A and 8A | 12 |
+| 3 | Melsthayi Varisai | 5 |
+| 4 | Dhatu Varisai | 2 |
+| 5 | Sapta Tala Alankaras | 8 |
+| 6 | Geethams with Swara & Sahityam | 9 |
+
+The electronic Shruti box uses additive synthesis for Panchama Shruti ($P_{mandra} \cdot \dot{S} \cdot S$). Seven ragam profiles use a 12-position / 16-name Just Intonation subset of the 22-shruti framework; the engine does not implement 22 independently selectable pitches. The dynamic multi-tala visual metronome follows the audio clock with live kriya/mudra tracking. Vilamba, Madhyama and Durita Kaalam (spelled “Dhurita Kalam” in the UI) place 1, 2 and 4 notation units per beat.
+
+The high-DPI continuous pitch visualizer, `<PitchWaveCanvas />`, animates with `requestAnimationFrame`, targeting the display refresh rate (typically 60 fps). It illustrates written pitches; it does not detect microphone pitch or synthesize gamakas.
+
 ## Architecture and scope
 
 - `src/types/carnatic.d.ts`: shared domain types.
 - `src/data/swaras.ts`: 12 positions, 16 names, raga scales, relative ratios, shruti keys.
-- `src/data/talas.ts`: Adi plus Dhruva, Matya, Rupaka, Jhampa, Triputa, Ata and two Eka jatis; generated angas and six gesture types.
+- `src/data/talas.ts`: Adi plus Dhruva, Matya, Rupaka, Jhampa, Triputa, Ata and two Eka jatis; generated angas and seven kriya types.
 - `src/data/curriculum.ts`: shared chapter catalog and lookup; chapter identity is carried by the audio transport and score.
 - `src/data/saraliVarisai.ts`: Chapter 1, all 14 Sarali exercises with holds and directional or mixed sections.
 - `src/data/jantaVarisai.ts`: Chapter 2, 12 Janta exercises labelled 1–10 plus 5A and 8A, with paired/triple attacks, holds and explicit directional sections.
 - `src/data/melsthayiVarisai.ts`: Chapter 3, five exact textbook exercises reaching upper Pa, including upper-Sa holds.
 - `src/data/dhatuVarisai.ts`: Chapter 4, both exact textbook step/skip sequences and descending phrases.
 - `src/data/notation.ts`, `textbook.ts` and `composition.ts`: foundation/source parsers, raga-aware swara variants, mandra/tara notation, hold durations, strict tala-bar validation, and complete variable-length cycles at all three kaalams.
-- `src/data/ragas.ts` and `lessonMetadata.ts`: seven asymmetric scale profiles, audited JI ratios, and foundation defaults.
+- `src/data/ragas.ts` and `lessonMetadata.ts`: seven scale profiles with separate ascent/descent, audited JI ratios, and foundation defaults.
 - `src/data/alankaras.ts` / `alankaraScores.json`: Chapter 5, eight source exercises; Sankeerna Eka uses Version 1 only.
 - `src/data/geethams.ts` / `geethamScores.json`: Chapter 6, nine ordered compositions, metadata, source notes and one aligned lyric token per notation unit.
 - `tests/fixtures/advanced-notation.json`: raw source swaras/sahityam and HTML-derived registers. `scripts/fetch-curriculum.py` refreshes the review fixture using Python 3 and curl in WSL; production transcriptions require review before updating.
@@ -51,13 +66,13 @@ npm run preview
 
 The project uses Vite + React + TypeScript, Tailwind v4's Vite plugin, Lucide React, Framer Motion and the Vite template's Oxlint. Fonts use local Palatino/Georgia and Segoe UI/system fallbacks, so rendering has no font network dependency.
 
-The chapter labels are enlarged. Arohanam/avarohanam diagrams explain pitch direction, and the kaalam guide compares 1, 2 and 4 swaras per steady beat. Double octave dots are rendered side by side using explicit visual marks. Shruti offers all 12 chromatic tonics from C3 to B3 (including flat aliases), defaulting to G♯3 / A♭3 (207.65 Hz).
+Arohanam/avarohanam diagrams explain pitch direction, and the kaalam guide compares 1, 2 and 4 swaras per steady beat. Double octave dots are rendered side by side using explicit visual marks. Shruti offers all 12 chromatic tonics from C3 to B3 (including flat aliases), defaulting to G♯3 / A♭3 (207.65 Hz).
 
-Click any swarasthana button to hear that pitch immediately; click a sthayi card to hear Sa in that register (Anumandra, Mandra, Madhya, Tara or Ati-Tara). Clicking a selected card replays it. Toggle raga highlights, step through the eight kriyas, and change the tonic. Use Start shruti box for the sustained drone. In Practice Studio, choose Sarali (14), Janta (12), Melsthayi (5) or Dhatu (2), select an exercise, choose Vilamba, Madhyama or Dhurita Kalam and press Play. Adjust tempo between 45 and 90 BPM, click a note to seek, and loop a whole lesson or the current avartanam. Pause preserves your place; Reset returns to the beginning. The drone has an independent toggle.
+Click any swarasthana button to hear that pitch immediately; click a sthayi card to hear Sa in that register (Anumandra, Mandra, Madhya, Tara or Ati-Tara). Clicking a selected card replays it. Toggle raga highlights, step through the eight kriyas, and change the tonic. Use Start shruti box for the sustained drone. In Practice Studio, choose any of the six chapters listed above, select an exercise, choose Vilamba, Madhyama or Dhurita Kalam and press Play. Adjust tempo between 45 and 90 BPM, click a note to seek, and loop a whole lesson or the current avartanam. Pause preserves your place; Reset returns to the beginning. The drone has an independent toggle.
 
 ## Curriculum conventions and sources
 
-The architecture is `sangeetha_bodhini_plan.md`; there is no separate `plan.md`.
+See [the implemented architecture](sangeetha_bodhini_plan.md), [audio architecture](docs/audio-architecture.md), and [deployment guide](docs/deployment.md).
 
 The Sarali 14-exercise sequence is checked against [Shivkumar Kalyanaraman's Sarali Varisai reference](https://www.shivkumar.org/music/basics/sarali-varisai.htm), notation credited there to Rani and Chitraveena Ravikiran. Teachers and editions use different sequences; this identifies the chosen edition rather than claiming a single universal version. Descriptions and UI prose are original.
 
@@ -80,7 +95,7 @@ Live kaalam changes preserve phrase position and regroup the notation. Switching
 
 The electronic shruti box uses four additive reeds: mandra Pa (3/4), pure tara Sa (2/1), tara Sa sharpened by 3.5 cents, and madhya Sa (1/1). Their gain levels are 0.075, 0.045, 0.035 and 0.06 respectively, balancing bass body, upper-tonic shimmer and the centered tonic. The badge reads P̣ · Ṡ · S (Panchama Shruti: Mandra Pa · Tara Sa · Madhya Sa). Harmonics include the fundamental, prominent second and third harmonics, and diminishing fifth, seventh and ninth overtones. A 1000 Hz low-pass filter with Q 2.4 shapes the reeds. A 0.2 Hz bellows LFO modulates amplitude and cutoff by 1.2%. A 350 ms attack and 120 ms release avoid abrupt starts/stops. The sound sustains until stopped, with no plucks or looping sample seams. It is synthesized rather than a recording of a particular instrument.
 
-Current automated checks cover 95 tests, including all Janta, Melsthayi, Dhatu, Alankaram and Geetham lessons at all three kaalams, chapter switching, reed detuning/modulation, sustained audio, retuning and source cancellation. Typecheck, production build and lint pass.
+Current automated checks cover 101 tests, including all Janta, Melsthayi, Dhatu, Alankaram and Geetham lessons at all three kaalams, chapter switching, reed detuning/modulation, sustained audio, retuning and source cancellation. Typecheck, production build and lint pass.
 
 See [audio architecture and measured verification](docs/audio-architecture.md) for scheduling, lifecycle and transport details. To run real offline-render and live audio-clock checks, open `http://localhost:5173/tests/audio-browser.html` while Vite runs, then click Run audio checks. This test harness is not included in the production build.
 
@@ -108,7 +123,7 @@ The Geetham HTML convention differs from the exercise pages: plain capitals are 
 
 Merged lyric syllables are split only where needed for beat alignment: Padumanabha's ksha-ka, Analekara's sthra-pu, Vara Veena's nchi-tha, and Kamalajadala's ma-la / naa-extension. Kamalajadala's final D P–M dash separates a phrase without adding a beat. The raw source fixture preserves these original forms. Parenthesized textual return cues are documented but not automatically expanded into a performed reprise.
 
-Swara and lyric tokens share one clickable highlighted cell; holds continue the preceding synthesized voice across tala boundaries. Composer attributions absent from the notation pages are cross-checked against linked karnATik references; Analekara remains unspecified. Ragam scales, composer metadata, tala formula and composition-specific source notes appear above the tracker.
+Swara and lyric tokens share one clickable highlighted cell; holds continue the preceding synthesized voice across tala boundaries. Composer attributions absent from the notation pages are cross-checked against linked karnATik references; Analekara remains unspecified. Ragam scales, composer metadata and tala formula appear above the tracker. Composition-specific source notes remain in the reviewed datasets and this documentation; notation references appear in the curriculum sidebar.
 
 Shruti volume is adjustable from 0–100% in Theory and Studio, independently of lesson playback. Long laghus count Angushta (thumb) after Tarjani.
 
@@ -121,3 +136,9 @@ A warm amber Hermite curve joins written pitches. Repeated attacks receive a sub
 Pause freezes the bead at the audible position and clears its trail. Reset and chapter/lesson changes return it to the origin; seeking and loop wraps relocate it to the matching score position without a stale trail. Live tempo, speed and tonic controls remain synchronized. Canvas resolution follows its container and device pixel ratio, with animation, subscriptions and resize observation cleaned up on unmount. Synchronization is limited by display refresh and device latency; microsecond display accuracy is not physically achievable.
 
 Studio keeps notation references in the curriculum sidebar. Ragam information uses larger text without repeated source links or transcription notes. The compact Shruti card groups tonic, volume and start/stop controls. Heritage portraits use four commemorative stamps, each linked to its source; attribution is retained in `public/portraits/CREDITS.md`.
+
+## Static deployment
+
+Run `npm ci`, `npm run lint`, `npm run typecheck`, `npm run test`, and `npm run build` in WSL. Publish only `dist/`. The relative Vite base and base-aware portrait paths support root hosting and subdirectories. Theory/Studio navigation uses React state and in-page anchors; there are no pathname routes requiring host rewrites. No backend, API keys, external fonts, audio samples or runtime data fetches are required.
+
+See [the release audit](docs/release-audit.md) and [deployment and release checks](docs/deployment.md) for Vercel, Netlify, Cloudflare Pages, subdirectory smoke tests and the Git review workflow.
