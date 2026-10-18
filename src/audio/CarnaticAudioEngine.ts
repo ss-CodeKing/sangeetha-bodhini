@@ -43,6 +43,7 @@ export class CarnaticAudioEngine {
   private scheduleCursor = 0
   private rangeStart = 0
   private rangeEnd = 16
+  private playbackRevision = 0
   private playRequest = 0
   private droneRequest = 0
   private auditionRequest = 0
@@ -58,6 +59,10 @@ export class CarnaticAudioEngine {
   constructor(runtime: EngineRuntime = browserRuntime) { this.runtime = runtime }
   subscribe = (listener: () => void) => { this.listeners.add(listener); return () => { this.listeners.delete(listener) } }
   getSnapshot = () => this.state
+  // Read the output-compensated AudioContext clock between store updates.
+  // No publishing, timers or React state updates in the canvas animation loop.
+  getPlaybackPosition = () => this.position()
+  getPlaybackRevision = () => this.playbackRevision
 
   private get lesson() { return getChapter(this.state.chapterId).lessons[this.state.lessonNumber - 1] }
   private get units() { return lessonUnits(this.state.lessonNumber, this.state.kaalam, this.state.chapterId) }
@@ -144,6 +149,7 @@ export class CarnaticAudioEngine {
     this.rangeEnd = this.state.loopMode === 'avartanam' ? this.rangeStart + cycle : this.units.length
   }
   private rebase(position: number) {
+    ++this.playbackRevision
     this.cancel(this.melodyVoices)
     this.updateRange(Math.min(position, this.units.length - 1))
     this.anchorPosition = Math.max(this.rangeStart, Math.min(position, this.rangeEnd - 1e-7))
@@ -202,6 +208,7 @@ export class CarnaticAudioEngine {
   }
   seek = (unitIndex: number) => {
     if (!Number.isFinite(unitIndex)) return
+    ++this.playbackRevision
     const position = Math.max(0, Math.min(unitIndex, this.units.length - 1))
     if (this.state.status === 'playing') this.rebase(position)
     else { this.pausedPosition = position; this.updateRange(position); this.publish({ status: 'paused', position }) }

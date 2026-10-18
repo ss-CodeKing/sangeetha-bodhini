@@ -111,3 +111,11 @@ Merged lyric syllables are split only where needed for beat alignment: Padumanab
 Swara and lyric tokens share one clickable highlighted cell; holds continue the preceding synthesized voice across tala boundaries. Composer attributions absent from the notation pages are cross-checked against linked karnATik references; Analekara remains unspecified. Ragam scales, composer metadata, tala formula and composition-specific source notes appear above the tracker.
 
 Shruti volume is adjustable from 0–100% in Theory and Studio, independently of lesson playback. Long laghus count Angushta (thumb) after Tarjani.
+
+## Continuous pitch contour
+
+The Studio's **The melody in motion** canvas sits directly above the notation. It draws the active ragam's ascending and descending pitch vocabulary, including any lower or upper registers required by the exercise. Octave dots and swara subscripts label logarithmically spaced pitch racks. Beat dividers follow the active tala, with anga labels and cycle markers.
+
+A warm amber Hermite curve joins written pitches. Repeated attacks receive a subtle dip; karvais breathe gently without a fresh attack. This is a vocal-style illustration of the score, not microphone pitch detection or a transcription of performed gamakas; the audio synthesis remains unchanged. The golden bead reads the engine's output-compensated AudioContext position on each animation frame. The window scrolls continuously and displays fewer beats at Madhyama Kalam and Dhurita Kalam to retain note detail.
+
+Pause freezes the bead at the audible position and clears its trail. Reset and chapter/lesson changes return it to the origin; seeking and loop wraps relocate it to the matching score position without a stale trail. Live tempo, speed and tonic controls remain synchronized. Canvas resolution follows its container and device pixel ratio, with animation, subscriptions and resize observation cleaned up on unmount. Synchronization is limited by display refresh and device latency; microsecond display accuracy is not physically achievable.

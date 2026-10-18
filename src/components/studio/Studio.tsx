@@ -7,6 +7,7 @@ import { ShrutiDrone } from '../common/ShrutiDrone'
 import { LessonSelector } from './LessonSelector'
 import { AudioControls } from './AudioControls'
 import { TalamTracker } from './TalamTracker'
+import { PitchWaveVisualizer } from './PitchWaveVisualizer'
 import { NotationGrid } from './NotationGrid'
 import './studio.css'
 
@@ -25,6 +26,7 @@ export function Studio({ audio, shruti, onShrutiChange, onTheory }: {
       <TalamTracker snapshot={snapshot} />
       <AudioControls audio={audio} />
       <div className="playback-status" role="status">{snapshot.status === 'playing' ? 'Playing' : snapshot.status === 'paused' ? 'Paused · ready when you are' : snapshot.status === 'complete' ? 'Well practiced. Play again when you are ready.' : snapshot.status === 'loading' ? 'Preparing your sound…' : 'Choose your speed, then press Play.'}<span className="sound-meter" aria-label="Audio output level"><i style={{ transform: 'scaleX(' + Math.min(1, snapshot.outputLevel * 12) + ')' }} /></span></div>
+      <PitchWaveVisualizer audio={audio} />
       <NotationGrid snapshot={snapshot} onSeek={engine.seek} />
       <ShrutiDrone audio={audio} shruti={shruti} onShrutiChange={onShrutiChange} compact />
       <p className="studio-help">Pause keeps your place; Reset returns to the beginning. Change kaalam to regroup the current phrase at a new speed. Selecting a chapter or lesson stops playback and resets tempo to 60 BPM. Audio pauses when you leave this tab.</p>

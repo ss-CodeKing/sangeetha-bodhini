@@ -110,3 +110,12 @@ Architecture: `sangeetha_bodhini_plan.md` (`plan.md` is absent).
 - [ ] Teacher review of missing/inconsistent register styling in the Geetham source pages; implement performed reprise cues only after agreeing the desired rendition.
 
 - [x] Add shared live Shruti volume and correct Mishra Jhampa / Sankeerna Eka finger counts.
+
+## Continuous Studio pitch contour
+- [x] Add PitchWaveVisualizer / PitchWaveCanvas above the notation grid with high-DPI responsive drawing.
+- [x] Add ragam/register pitch racks, Carnatic labels, tala/anga boundaries and cycle markers.
+- [x] Draw smooth amber Hermite curves, repeated-note articulation, hold breathing, gradient fill and a decaying playhead trail.
+- [x] Follow the output-compensated audio clock between React updates; adapt the window to all three Kalam speeds.
+- [x] Handle pause, reset, seek, loop, lesson/chapter changes and lifecycle cleanup.
+- [x] Complete 101 regression tests, typecheck, lint and build; verify browser playback at all speeds, pause/reset/seek/loop, upper registers and a 390px viewport.
+- [x] Review the final diff and commit the pitch contour implementation.

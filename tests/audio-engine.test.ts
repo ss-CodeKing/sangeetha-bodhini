@@ -448,3 +448,44 @@ test('shruti volume is retained before startup and ramps live without restarting
   assert.equal(engine.getSnapshot().droneVolume, 1)
   engine.dispose()
 })
+
+test('canvas clock reads fractional audio position without publishing and freezes on pause', async () => {
+  const { engine, context } = setup()
+  await engine.play()
+  const snapshot = engine.getSnapshot()
+  context.currentTime = 0.148456
+  near(engine.getPlaybackPosition(), 0.123456)
+  assert.equal(engine.getSnapshot(), snapshot)
+  context.baseLatency = 0.03
+  context.outputLatency = 0.02
+  near(engine.getPlaybackPosition(), 0.073456)
+  engine.pause()
+  const paused = engine.getPlaybackPosition()
+  context.currentTime += 1
+  near(engine.getPlaybackPosition(), paused)
+  const revision = engine.getPlaybackRevision()
+  engine.seek(paused + 0.1)
+  assert.ok(engine.getPlaybackRevision() > revision)
+  near(engine.getPlaybackPosition(), paused + 0.1)
+  engine.reset()
+  assert.equal(engine.getPlaybackPosition(), 0)
+  engine.dispose()
+})
+
+test('canvas clock follows loop wraps and live kaalam rebasing', async () => {
+  const { engine, context, advance } = setup()
+  engine.configure({ loopMode: 'avartanam' })
+  await engine.play()
+  advance(8.15)
+  near(engine.getPlaybackPosition(), 0.125)
+  for (const kaalam of [2, 3, 1] as Kaalam[]) {
+    const position = engine.getPlaybackPosition()
+    engine.configure({ kaalam })
+    near(engine.getPlaybackPosition(), position)
+    context.currentTime += 0.125
+    near(engine.getPlaybackPosition(), position + 0.1 / unitDuration(60, kaalam))
+  }
+  engine.selectChapter('alankaras')
+  assert.equal(engine.getPlaybackPosition(), 0)
+  engine.dispose()
+})

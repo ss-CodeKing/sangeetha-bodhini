@@ -419,3 +419,32 @@ test('long laghus include the thumb before restarting finger counts', () => {
   assert.deepEqual(talas.sankeernaEka.beats.map(beat => beat.kriya), ['thattu', 'kanishta', 'anamika', 'madhyama', 'tarjani', 'angushta', 'kanishta', 'anamika', 'madhyama'])
   for (const tala of Object.values(talas)) assert.ok(tala.beats.every(beat => kriyas.some(kriya => kriya.id === beat.kriya)))
 })
+
+import { contourAt, contourPitches, pitchLevel, pitchRacks, visibleBeats } from '../src/components/studio/pitchContour'
+
+test('pitch contour is continuous at transitions and distinguishes attacks from held notes', () => {
+  const units = parseNotation('s s , r')
+  const pitches = contourPitches(units)
+  assert.equal(pitches[1], pitches[2])
+  assert.ok(contourAt(pitches, units, 1.2) < pitches[1] - 0.1)
+  assert.ok(Math.abs(contourAt(pitches, units, 2.2) - pitches[2]) < 0.02)
+  for (const boundary of [1, 1.45, 2, 3]) {
+    assert.ok(Math.abs(contourAt(pitches, units, boundary - 1e-6) - contourAt(pitches, units, boundary + 1e-6)) < 0.0001)
+  }
+  assert.equal(pitchLevel({ swara: 'S', octave: 1 }) - pitchLevel({ swara: 'S', octave: 0 }), 12)
+})
+
+test('pitch racks include descending-only swaras and every exercise register', () => {
+  const malahari = pitchRacks(ragas.malahari, parseRagaNotation('s g S', 'malahari'))
+  assert.ok(malahari.some(note => note.swara === 'G3' && note.octave === 0))
+  for (const chapter of curriculum) for (const lesson of chapter.lessons) {
+    const racks = pitchRacks(ragas[lesson.ragaId ?? 'mayamalavagowla'], lesson.units)
+    for (const unit of lesson.units) if (unit.kind === 'note') {
+      assert.ok(racks.some(note => note.swara === unit.note.swara && note.octave === unit.note.octave))
+    }
+    assert.ok(racks.some(note => note.swara === 'S' && note.octave === 0))
+    assert.ok(racks.some(note => note.swara === 'S' && note.octave === 1))
+  }
+  assert.ok(visibleBeats(900, 1, 8) > visibleBeats(900, 4, 8))
+  assert.ok(visibleBeats(320, 4, 10) >= 2)
+})
